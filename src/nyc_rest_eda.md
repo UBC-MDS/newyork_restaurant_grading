@@ -1,6 +1,12 @@
 Exploratory Data Analysis of the NYC Restaurant Inspections Data Set
 ==========================
 
+DSCI 522 Project - Group 18
+
+Team Members: Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
+
+--
+
 # Summary of the Data
 
 The data set, DOHMH New York City Restaurant Inspection Results, used in this project is sourced from NYC OpenData Portal. It was retrieved from the `tidytuesday` repository by Thomas Mock, and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.). The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
@@ -21,7 +27,7 @@ There is a large class imbalance (79.8% of inspections are graded as A, thankful
 
 # Splitting the Data
 
-Prior to the rest of the analysis, we will divide the data such that 75% of the inspections will be used to train our model(s) and 25% will be for testing to assess performance on unseen restaurants and determine whether our model will generalize well.
+Prior to the rest of the analysis, we will divide the data such that 75% of the inspections will be used to train our model(s) and 25% will be for testing to assess performance on unseen restaurants.
 
 | Data Partition | Grade A | Grade F |
 |---------------:|--------:|--------:|

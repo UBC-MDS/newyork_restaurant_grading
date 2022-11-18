@@ -16,7 +16,9 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 2. Navigate to the repository
 
-    ```cd newyork_restaurant_grading```
+    ```
+    cd newyork_restaurant_grading
+    ```
 
 3. Create the environment
 
@@ -24,10 +26,13 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 Assuming that the environment was created successfully, you can activate the environment as follows:
 
-    ```conda activate nyc_rest```
+    ```
+    conda activate nyc_rest
+    ```
 
 ## Dependencies
 
+Note: more packages are likely to be added in future updates/milestones.
 - Python 3.9.13 and Python packages:
   - ipykernel
   - matplotlib>=3.2.2
