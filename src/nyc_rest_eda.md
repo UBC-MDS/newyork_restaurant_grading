@@ -38,13 +38,34 @@ Considering the data attributes, we would expect the score and critical flag ass
 
 Figure 1. Histograms and density plots of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
 
+It seems that Grade F restaurants are associated with higher scores on average, though some Grade F inspections also received low scores (nearly 10,000 are < 20). We can interpret the score as being higher for more severe/critical health violations, but there does not seem to be a standard cut-off for when a restaurant is considered Grade A or not.
+
 ![Violations Plot](nyc_rest_eda_figures/violation_stack.png)
 
-Figure 2. Proportion of restaurants that received critical (red) and non-critical (blue) violations. Violations that are unclassified received a 'Not Applicable' flag (green).
+Figure 2. Proportion of restaurants that received critical (red) and non-critical (blue) violations by grade. Violations that are unclassified received a 'Not Applicable' flag (green).
+
+We observe a similar relationship with the assignment of critical flags. Grade F restaurants receive proportionately more critical flags as expected, though almost 50% of Grade A restaurants had critical violations during their inspection! It is not clear what the threshold for a "critical" violation is, thus it will be interesting to see whether our model(s) can identify if the severity of a violation actually matters for grading.
 
 ![Borough Plot](nyc_rest_eda_figures/boro_bars.png)
 
-Figure 3. Number of inspections performed in each NYC borough. The 'Missing' category contains 8 records.
+Figure 3. Number of inspections performed in each NYC borough by grade, where green represents Grade A and orange represents Grade F. The 'Missing' category contains 8 records which are all Grade A.
+
+Each of the NYC boroughs contain mostly Grade A restaurants, thus we should be able to safely eat in any area. We can see that most of the inspections were conducted in Manhattan, which also has the most Grade F restaurants compared to all the other boroughs.
+
+|Cuisine Description|Count of Records|
+|------------------:|---------------:|
+|American|                                                            25312|
+|Chinese|                                                             11476|
+|Cafe/Coffee/Tea|                                                      5832|
+|Pizza|                                                                5049|
+|Italian|                                                              4610|
+|Latin (Cuban, Dominican, Puerto Rican, South & Central American)|     4566|
+|Mexican|                                                              4275|
+|Japanese|                                                             3891|
+|Caribbean|                                                            3506|
+|Bakery|                                                               3427|
+
+Table 3. Number of inspections performed for the top 10 most common cuisine types.
 
 # References
 
