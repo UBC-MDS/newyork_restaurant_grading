@@ -14,16 +14,27 @@ There are 300,000 restaurants in the data set, but only 151,451 of them have a v
 |A (Grade A)|B (Grade B)|C (Grade C)|Z (Grade Pending)|P (Grade Pending issued on re-opening following an initial inspection that resulted in a closure)|
 |----------:|----------:|----------:|----------------:|----------------:|
 |119647|19215|5888|3316|1819|
+
 Table 1. Counts of restaurants belonging to each class.
 
-There is a large class imbalance (79.8% of restaurants are graded as A, thankfully), thus we have decided to conduct our analysis as a binary classification problem where we are interested in determining whether a restaurant passes or fails according to our standards - grade A vs everything else (grade F)!
+There is a large class imbalance (79.8% of restaurants are graded as A, thankfully). Thus, we have decided to conduct our analysis as a binary classification problem where we are interested in determining whether a restaurant passes or fails according to our standards - grade A vs everything else (grade F)!
 
-# Splitting the data into train and test sets
+# Splitting the Data
+
+Prior to the rest of the analysis, we will divide the data such that 75% of the restaurants will be used to train our model(s) and 25% will be for testing to assess performance on unseen restaurants.
 
 | Data Partition | Grade A | Grade F |
 |---------------:|--------:|--------:|
 |Train           |89789    |22624    |
 |Test            |29858    |7614     |
+
+Table 2. Counts of restaurants belonging to each class in the training and testing sets.
+
+# Exploring the Training Set
+
+![](newyork_restaurant_grading/src/nyc_eda_figures/score_dists.png)
+
+Trying to see if this renders.
 
 # References
 
