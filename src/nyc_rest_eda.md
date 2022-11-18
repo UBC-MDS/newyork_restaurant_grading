@@ -32,7 +32,7 @@ Table 2. Counts of restaurants belonging to each class in the training and testi
 
 # Exploring the Training Set
 
-![](newyork_restaurant_grading/src/nyc_eda_figures/score_dists.png)
+![](src/nyc_eda_figures/score_dists.png)
 
 Trying to see if this renders.
 
