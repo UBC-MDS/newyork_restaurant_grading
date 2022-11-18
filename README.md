@@ -16,7 +16,7 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 2. Navigate to the repository
 
-    ```cd newyork_restaurant_grading
+    ```cd newyork_restaurant_grading```
 
 3. Create the environment
 
