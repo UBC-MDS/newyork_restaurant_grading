@@ -16,6 +16,16 @@ opt = docopt(__doc__)
 
 def main(input_url, output_file):
 
+  """This function takes an input URL and 
+    downloads the data locally
+
+    Parameters
+    ----------
+    string : input_url
+        The input URL which contains the data
+    string : output_file
+        The output file which will have the downloaded data   
+    """ 
   try: 
     response = requests.get(input_url)
     if response.status_code == 200:
