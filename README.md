@@ -26,9 +26,7 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 Assuming that the environment was created successfully, you can activate the environment as follows:
 
-    ```
-    conda activate nyc_rest
-    ```
+```conda activate nyc_rest```
 
 ## Dependencies
 
