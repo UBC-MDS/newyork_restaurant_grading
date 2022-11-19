@@ -7,6 +7,9 @@ Options:
 --input_url=<input_url>        The url which is hosting the data that we are trying to download. This must be in CSV format.
 --output_file=<output_file>    Path of the output file which will contain the CSV data once downloaded(File name must be included).
 
+Command to run the script:
+python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raws/nyc_restaurants.csv"
+
 """
  
 import requests
