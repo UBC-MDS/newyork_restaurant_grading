@@ -17,9 +17,13 @@ It contains the violation citations from every inspection conducted for restaura
 
 There are 300,000 inspections logged in the data set, but only 151,451 of them have a value assigned to the `grade` column. 149,885 of them have been assigned grades as follows:
 
-|A (Grade A)|B (Grade B)|C (Grade C)|Z (Grade Pending)|P (Grade Pending issued on re-opening following an initial inspection that resulted in a closure)|
-|----------:|----------:|----------:|----------------:|----------------:|
-|119647|19215|5888|3316|1819|
+|Grade|Number of Inspections|
+|----------:|--------------:|
+|A (Grade A)|119647|
+|B (Grade B)|19215|
+|C (Grade C)|5888|
+|Z (Grade Pending)|3316|
+|P (Grade Pending issued on re-opening following an initial inspection that resulted in a closure)|1819|
 
 **Table 1.** Counts of inspections belonging to each class.
 
@@ -42,7 +46,7 @@ Prior to the rest of the analysis, we will divide the data such that 75% of the 
 
 Considering the data attributes, we would expect the score and critical flag assigned to an inspection would be good predictors of whether the restaurant will be graded A or not. Thus, we have plotted their distributions by class to investigate whether our assumptions are true:
 
-![Score Distributions](nyc_rest_eda_figures/score_dists.png)
+![Score Boxplot](nyc_rest_eda_figures/score_boxplot.png)
 
 **Figure 1.** Histograms and density plots of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
 
