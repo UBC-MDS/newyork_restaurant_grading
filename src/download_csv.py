@@ -1,10 +1,15 @@
 """This script downloads the data from the web(given URL) and writes it to the local file system.
+   This has been developed based on the script available at - https://github.com/ttimbers/breast_cancer_predictor/blob/master/src/download_data.py
 
 Usage: download_csv.py --input_url=<input_url> --output_file=<output_file>
 
 Options:
 --input_url=<input_url>        The url which is hosting the data that we are trying to download. This must be in CSV format.
 --output_file=<output_file>    Path of the output file which will contain the CSV data once downloaded(File name must be included).
+
+Command to run the script:
+python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raws/nyc_restaurants.csv"
+
 """
  
 import requests
@@ -26,6 +31,8 @@ def main(input_url, output_file):
     string : output_file
         The output file which will have the downloaded data   
     """ 
+
+  # Check if the website is existing or not
   try: 
     response = requests.get(input_url)
     if response.status_code == 200:
@@ -37,15 +44,17 @@ def main(input_url, output_file):
     print("Exception occurred :" + ex)
     exit()
 
+  # Read the data from the URL 
   try:  
     data = pd.read_csv(input_url)
   except Exception as ex:
     print("Exception occurred :" + ex)
     exit()
   
+  # Check if the directory exists. If it doesn't create new folder and download the data
   try:
-    isFileExist = os.path.isdir(os.path.dirname(output_file))
-    if not isFileExist:
+    isDirExist = os.path.isdir(os.path.dirname(output_file))
+    if not isDirExist:
       print("Directory does not exist! Creating the path!")
       os.makedirs(os.path.dirname(output_file))
     
