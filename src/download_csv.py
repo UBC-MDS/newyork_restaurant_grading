@@ -53,8 +53,8 @@ def main(input_url, output_file):
   
   # Check if the directory exists. If it doesn't create new folder and download the data
   try:
-    isFileExist = os.path.isdir(os.path.dirname(output_file))
-    if not isFileExist:
+    isDirExist = os.path.isdir(os.path.dirname(output_file))
+    if not isDirExist:
       print("Directory does not exist! Creating the path!")
       os.makedirs(os.path.dirname(output_file))
     
