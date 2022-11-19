@@ -81,7 +81,7 @@ The majority of restaurants in NYC serve American food, followed by Chinese food
 
 **Figure 4.** Number of inspections designated under each violation code. Bars are coloured by grade where orange is Grade F and green is Grade A.
 
-Interestingly, there does not seem to be specific codes that are uniquely associated with either Grade A nor F. This is why it will be necessary to parse the violation descriptions for certain language that may be independent from an inspection's code. If we can find what words may be common to both classes, we can extract the grading for a restaurant based on its description and other feature values.
+Interestingly, there does not seem to be specific codes that are uniquely associated with either Grade A nor F. This is why it will be necessary to parse the violation descriptions for certain language that may be independent from an inspection's code. If we can find what words may be common to each class (vermin, roaches, washing, etc.), we can extract the grading for a restaurant based on its description and other feature values.
 
 ## Additional Figures
 
