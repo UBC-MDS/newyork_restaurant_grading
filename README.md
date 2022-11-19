@@ -1,8 +1,10 @@
-# Prediction for the Grading of New York City Restaurant
+# Predicting the Grade of Restaurants in New York City
 
-  - authors (ordered alphabetically by last name) from Group 18:
-    Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
-  
+- Authors (ordered alphabetically by last name) from Group 18:
+    - Nikita Susan Easow
+    - Sneha Sunil
+    - Edward (Yukun) Zhang
+    - Lauren Zung
 
 A data analysis project for DSCI 522 (Data Science workflows); a
 course in the Master of Data Science program at the University of
