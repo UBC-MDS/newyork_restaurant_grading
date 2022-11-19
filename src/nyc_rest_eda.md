@@ -48,7 +48,7 @@ Considering the data attributes, we would expect the score and critical flag ass
 
 ![Score Boxplot](nyc_rest_eda_figures/score_boxplot.png)
 
-**Figure 1.** Histograms and density plots of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
+**Figure 1.** Boxplot of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
 
 It seems that Grade F restaurants are associated with higher scores on average, though some Grade F inspections also received low scores (nearly 10,000 are < 20). We can interpret the score as being higher for more severe/critical health violations, but there does not seem to be a standard cut-off for when a restaurant is considered Grade A or not.
 
