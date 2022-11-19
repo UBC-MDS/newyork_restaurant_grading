@@ -59,7 +59,7 @@ This will be updated once the project is finished.
 
 ## Usage
 
-To replicate this analysis, clone this GitHub repository and download the environment found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/src/environment.yaml) to install the necessary [dependencies](#dependencies).
+To replicate this analysis, clone this GitHub repository and download the environment found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/environment.yaml) to install the necessary [dependencies](#dependencies).
 
 1. Clone the repository
     ```
