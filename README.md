@@ -75,7 +75,6 @@ restaurants and if a restaurant can be accurately predicted as "bad", then we ca
 Moreover, if we are able to generalize our model for other large cities across the world, 
 then this data analysis report would have great values for local residents and tourists. 
 
-
 ## Report
 
 This will be updated once the project is finished. 
