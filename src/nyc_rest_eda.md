@@ -44,7 +44,7 @@ Prior to the rest of the analysis, we will divide the data such that 75% of the 
 
 # Exploring the Training Set
 
-Considering the data attributes, we would expect the score and critical flag assigned to an inspection would be good predictors of whether the restaurant will be graded A or not. Thus, we have plotted their distributions by class to investigate whether our assumptions are true:
+Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. Thus, we have plotted their distributions by class to investigate whether our assumptions are true:
 
 ![Score Boxplot](nyc_rest_eda_figures/score_boxplot.png)
 
