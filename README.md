@@ -1,4 +1,4 @@
-# The Prediction of New York City Restaurant Grading 
+# Prediction for the Grading of New York City Restaurant
 
   - authors (ordered alphabetically by last name) from Group 18:
     Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
@@ -62,13 +62,15 @@ We observe a similar relationship with the assignment of critical flags. Grade F
 though almost 50% of Grade A restaurants had critical violations during their inspection! 
 It is not clear what the threshold for a "critical" violation is, thus it will be interesting to see whether our model(s) can identify if the severity of a violation actually matters for grading.
 
-For more details about all the figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/src)
+For more details about all the figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src).
 
 We plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on),
 and then collect and compare the results across multiple error measurement metrics 
 and visualize the modeling results as tables and graphs to generate the report. 
+To better share and improve the quality of our analysis, we would also incorporate the confusion matrix and PR curve analysis in our report 
+and summarize the final robust version of the report in a single PDF/md file. 
 
-This project has very meaningful implications since as consumers, we care about the overall safety of the 
+Overall, this project has very meaningful implications since as consumers, we care about the overall safety of the 
 restaurants and if a restaurant can be accurately predicted as "bad", then we can safely avoid eating there.
 Moreover, if we are able to generalize our model for other large cities across the world, 
 then this data analysis report would have great values for local residents and tourists. 
@@ -143,7 +145,12 @@ Note: more packages are likely to be added in future updates/milestones.
 
 ## License
 
-From the LICENSE.md file.
+The New York City Restaurant dataset was adapted from tidytuesday dataset
+made available under the license **Creative Commons Zero v1.0 Universal** 
+which was originally taken from the Department of Health and Mental Hygiene (DOHMH)
+owned by NYC OpenData.
+
+For more details about the License of this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/LICENSE).
 
 ## References
 
