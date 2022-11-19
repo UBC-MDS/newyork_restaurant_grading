@@ -1,1 +1,1 @@
-# newyork_restaurant_grading
+# Prediction for the Grading of New York City Restaurant
