@@ -4,7 +4,7 @@ Usage: download_csv.py --input_url=<input_url> --output_file=<output_file>
 
 Options:
 --input_url=<input_url>        The url which is hosting the data that we are trying to download. This must be in CSV format.
---output_file=<output_file>    Path of the output file which will contain the CSV data once downloaded.
+--output_file=<output_file>    Path of the output file which will contain the CSV data once downloaded(File name must be included).
 """
  
 import requests
@@ -36,7 +36,7 @@ def main(input_url, output_file):
   try:
     isFileExist = os.path.isdir(os.path.dirname(output_file))
     if not isFileExist:
-      print("File path does not exist! Creating the path!")
+      print("Directory does not exist! Creating the path!")
       os.makedirs(os.path.dirname(output_file))
     
     data.to_csv(output_file, index = False)
