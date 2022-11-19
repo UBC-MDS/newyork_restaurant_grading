@@ -12,6 +12,15 @@ URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.g
 
 ## Project Proposal
 
+With the development of the metropolitan areas and large cities, more and more people tend to eat outside more frequently and the overall safety of restaurants becomes very important. After all, we are what eat, and as data scientists, we are interested in finding a quantitative way to predict the overall quality of a certain restaurant. If a restaurant can be accurately predicted as "bad", then we can safely avoid eating there. Given the New York City Restaurant Inspection Results dataset, we would like to focus our study on predicting the restaurant grading in New York City based on our target of grading standards. Then if possible, we plan to further explore and see whether our model can generalize for other large cities across the world or not and this data analysis project would have great values for local residents and tourists. 
+
+Besides this main research question, we would also plan to address some interesting sub_questions 
+such as the following: 
+  - Which cuisines is more likely to be graded A in NYC?
+  - Which cuisine is more likely to be graded F in NYC?
+  - Which borough in NYC seems to have the best restaurants?
+  - Which borough in NYC seem to have the most restaurants with the most code violations?
+  
 We choose the large dataset DOHMH New York City Restaurant Inspection Results sourced from 
 NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
 and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.).
@@ -23,57 +32,16 @@ and type of cuisine, as well as the details about their inspection
 (e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). 
 The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
 
-As data scientists, we are interested in predicting the restaurant grading in New York City
-based on our target of adjusted grading standards (Grade A and Grade F). During the exploratory data analysis (EDA)
-process, we notice the target inherently has a large class imbalance property so we formulate our predictive problem 
-as a binary classification by combining Grade B/C as Grade F and drop the restaurants with "pending" grades from our analysis.
-As we can see from the the below table, there are 300,000 inspections logged in the data set, but only 151,451 of them have a value assigned to the grade column. 
-149,885 of them have been assigned grades as the following table:
+To address our main predictive question above, we plan to build a predictive classification model. At first, we split our data into a training and test set (train-test ratio 75%:25%) and perform exploratory data analysis (EDA) to assess whether there is a strong class imbalance issue for our target grading. The target class counts will be presented as a table and used to identify the existence of the class imbalance problem.
+If we have a large class imbalance, we might try to perform our analysis as a binary classification problem by 
+combining Grade B/C as Grade F to reduce the class imbalance issue. 
 
-|Grade|Number of Inspections|
-|----------:|--------------:|
-|A (Grade A)|119647|
-|B (Grade B)|19215|
-|C (Grade C)|5888|
-|Z (Grade Pending)|3316|
-|P (Grade Pending issued closure)|1819|
+Furthermore, we would like to graphically explore the relations between features and the target in order to choose our features properly. Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. 
+Thus, we plan to plot their distributions in box plots and bar plots by grading class to investigate whether our assumptions are true or not. If these selected features do not contribute very much to predict our target grading, then we might consider to drop these features and re-modify our models. 
 
-**Table 1.** Counts of inspections belonging to each class.
+For more details about all the EDA figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.md).
 
-Additionally, from the above table we have restaurants with "pending" grades. 
-We will keep these out of our analysis to use as deployment data, where we will see if we can categorize them as either A or F based on their feature values.
-
-Furthermore, we would like to graphically explore the relations between features and the target in order to choose our features properly. 
-Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. 
-Thus, we have plotted their distributions by class to investigate whether our assumptions are true or not:
-
-![score_boxplot](src/nyc_rest_eda_figures/score_boxplot.png)
-
-**Figure 1.** Boxplot of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
-
-It seems that Grade F restaurants are associated with higher scores on average, though some Grade F inspections also received low scores (nearly 10,000 are < 20). 
-We can interpret the score as being higher for more severe/critical health violations, but there does not seem to be a standard cut-off for when a restaurant is considered Grade A or not.
-
-![violation stack bar](src/nyc_rest_eda_figures/violation_stack.png)
-
-**Figure 2.** Proportion of restaurants that received critical (red) and non-critical (blue) violations by grade. Violations that are unclassified received a 'Not Applicable' flag (green).
-
-We observe a similar relationship with the assignment of critical flags. Grade F restaurants receive proportionately more critical flags as expected, 
-though almost 50% of Grade A restaurants had critical violations during their inspection! 
-It is not clear what the threshold for a "critical" violation is, thus it will be interesting to see whether our model(s) can identify if the severity of a violation actually matters for grading.
-
-For more details about all the figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src).
-
-We plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on),
-and then collect and compare the results across multiple error measurement metrics 
-and visualize the modeling results as tables and graphs to generate the report. 
-To better share and improve the quality of our analysis, we would also incorporate the confusion matrix and PR curve analysis in our report 
-and summarize the final robust version of the report in a single PDF/md file. 
-
-Overall, this project has very meaningful implications since as consumers, we care about the overall safety of the 
-restaurants and if a restaurant can be accurately predicted as "bad", then we can safely avoid eating there.
-Moreover, if we are able to generalize our model for other large cities across the world, 
-then this data analysis report would have great values for local residents and tourists. 
+After the EDA, we plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on), and optimize the corresponding hyperparameters in cross validation to generate the best fitted models. Then we will collect and compare the results across multiple error measurement metrics and visualize the modeling results as a table to generate the report. To better share and improve the quality of our analysis, we would also incorporate the overall accuracy, confusion matrix and PR curve analysis in our report and summarize the final robust version of the report in a single PDF/md file.
 
 ## Report
 
