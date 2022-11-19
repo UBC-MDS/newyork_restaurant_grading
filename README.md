@@ -14,16 +14,18 @@ URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.g
 
 Since the start of the pandemic, hundreds of new restaurants have opened across New York City after the state announced the return of indoor dining (Eater NY, 2020). As government restrictions lift and the hospitality industry opens its doors once again, more and more people are choosing to dine out. Considering the uncertainty of the current time, the overall safety of restaurants has become of paramount importance. Health regulations have become stricter, and it will likely be necessary for health inspectors to reassess the standards that they apply for grading. Although they can differ by state, the general scheme applied by health agencies is as follows:
 
-> GRADE A: The restaurant is clean, up to code, and free of violations.
-> GRADE B: The restaurant has some issues that must be fixed.
-> GRADE C: The restaurant is a public risk and on verge of closure.
-> Source: SmartSense, 2018
+>>>
+GRADE A: The restaurant is clean, up to code, and free of violations.
+GRADE B: The restaurant has some issues that must be fixed.
+GRADE C: The restaurant is a public risk and on verge of closure.
+(Source: SmartSense, 2018)
+>>>
 
 As data scientists, we are interested in whether we can accurately assess the overall quality of a restaurant. If a restaurant can be predicted as "good" or "bad" (in our case, Grade A vs Grade B/C), then we can make appropriate recommendations to others. As we currently have access to data on restaurants in New York City, we would like to focus our analysis on predicting the grading for NYC locations, with aims to expand to other metropolitan areas in the future. We feel that this project could bring value to local residents or tourists who are troubled with deciding on where they'd like to eat.
 
 Besides this main research question, our analysis may also address some interesting sub-questions such as the following: 
-  - Which cuisines is more likely to be graded A in NYC?
-  - Which cuisine is more likely to be graded B or C) in NYC?
+  - Which cuisines are more likely to be graded A in NYC?
+  - Which cuisines are more likely to be graded B or C in NYC?
   - Which borough in NYC seems to have the best restaurants?
   - Which borough in NYC seems to have the most restaurants with the most severe violations?
   
@@ -34,28 +36,23 @@ The original data set can be found [here](https://data.cityofnewyork.us/Health/D
 
 It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) and type of cuisine, as well as the details about their inspection (e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review. A comprehensive dictionary of the data can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11#data-dictionary).
 
-To address our main predictive question above, we plan to construct a predictive classification model. First, we will split our data into training and testing sets (train-test ratio 75:25). We will then perform exploratory data analysis (EDA) on the training set to assess whether there is a need for our model, as well as address the possible concerns with our target, `grade`. The target class counts will be presented as a table and used to identify the existence of the class imbalance problem. If we have a large class imbalance, we might try to perform our analysis as a binary classification problem by 
-combining Grade B/C as Grade F to reduce the class imbalance issue. 
+To address our main predictive question above, we plan to construct a predictive classification model. First, we will split our data into training and testing sets (train-test ratio 75:25). We will then perform exploratory data analysis (EDA) on the training set to assess whether there is a need for our model, as well as address the possible concerns with our target, `grade`. The target class counts will be presented as a table and used to identify the existence of a class imbalance problem. If the class imbalance is significant, we will perform our analysis as a binary classification problem by 
+combining Grade B/C as Grade F to mitigate the severity. 
 
-Furthermore, we would like to graphically explore the relations between features and the target in order to choose our features properly. Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. 
-Thus, we plan to plot their distributions in box plots and bar plots by grading class to investigate whether our assumptions are true or not. If these selected features do not contribute very much to predict our target grading, then we might consider to drop these features and re-modify our models. 
+Furthermore, we would like to graphically explore the relations between the features and the target to determine how to handle our data prior to modeling. Considering the attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. Thus, we plan to plot their distributions by grading class to investigate whether our assumptions are true or not. If these selected features do not seem to relevant our target, then we may consider to dropping them before continuing on with the project. Furthermore, we will identify features that contain unique identifiers so that they will not be considered for downstream analysis.
 
-For more details about all the EDA figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
+The complete EDA including the above figures and tables can be found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
 
-After the EDA, we plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on), and optimize the corresponding hyperparameters in cross validation to generate the best fitted models. Then we will collect and compare the results across multiple error measurement metrics and visualize the modeling results as a table to generate the report. To better share and improve the quality of our analysis, we would also incorporate the overall accuracy, confusion matrix and PR curve analysis in our report and summarize the final robust version of the report in a single PDF/md file.
+Following the EDA, we plan to train different supervised machine learning classifiers (KNN, Logistic Regression, SVM, etc.) to determine the best model, and optimize the corresponding hyperparameters via cross validation to strengthen our predictions. Then we will collect and compare the results across multiple error measurement metrics (accuracy, recall, precision, F1 score) and report our findings as a table indicating our performance with different classifiers. To better share and improve the quality of our analysis, we will also incorporate a confusion matrix, precision-recall curve and ROC curve in our report and summarize the final version as a shareable PDF/markdown file.
 
 ## Report
 
-This will be updated once the project is finished. 
+This will be updated once the project is finished.
 
 ## Usage
 
-There is one suggested way to run this analysis:
+To replicate this analysis, clone this GitHub repository and download the environment found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/src/environment.yaml) to install the necessary [dependencies](#dependencies).
 
-To replicate the analysis, clone this GitHub repository, install the
-[dependencies](##Dependencies) listed below, and run the following
-command at the command line/terminal from the root directory of this
-project:
 1. Clone the repository
     ```
     git clone git@github.com:UBC-MDS/newyork_restaurant_grading.git
@@ -85,7 +82,6 @@ project:
 
     ```python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raw/nyc_restaurants.csv"```
 
- 
 
 ## Dependencies
 
