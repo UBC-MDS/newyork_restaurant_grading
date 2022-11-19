@@ -16,14 +16,17 @@ Since the start of the pandemic, hundreds of new restaurants have opened across 
 
 >>>
 GRADE A: The restaurant is clean, up to code, and free of violations.
+<br/>
 GRADE B: The restaurant has some issues that must be fixed.
+<br/>
 GRADE C: The restaurant is a public risk and on verge of closure.
+<br/>
 (Source: SmartSense, 2018)
 >>>
 
 As data scientists, we are interested in whether we can accurately assess the overall quality of a restaurant. If a restaurant can be predicted as "good" or "bad" (in our case, Grade A vs Grade B/C), then we can make appropriate recommendations to others. As we currently have access to data on restaurants in New York City, we would like to focus our analysis on predicting the grading for NYC locations, with aims to expand to other metropolitan areas in the future. We feel that this project could bring value to local residents or tourists who are troubled with deciding on where they'd like to eat.
 
-> **Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?"
+> **Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?"**
 
 Besides this main research question, our analysis may also address some interesting sub-questions such as the following: 
   - Which cuisines are more likely to be graded A in NYC?
