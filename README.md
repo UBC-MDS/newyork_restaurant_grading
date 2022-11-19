@@ -28,6 +28,11 @@ process, we notice the target inherently has a large class imbalance property so
 as a binary classification by combining Grade B/C as Grade F and drop the restaurants with "pending" grades from our analysis.
 
 EDA one plot + one table here.
+|A (Grade A)|B (Grade B)|C (Grade C)|Z (Grade Pending)|P (Grade Pending issued on re-opening following an initial inspection that resulted in a closure)|
+|----------:|----------:|----------:|----------------:|----------------:|
+|119647|19215|5888|3316|1819|
+
+**Table 1.** Counts of inspections belonging to each class.
 
 We plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on),
 and then collect and compare the results across multiple error measurement metrics 
