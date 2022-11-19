@@ -1,6 +1,7 @@
 # The Prediction of New York City Restaurant Grading 
 
-  - authors: Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
+  - authors (ordered alphabetically by last name) from Group 18:
+    Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
   
 
 A data analysis project for DSCI 522 (Data Science workflows); a
@@ -26,13 +27,42 @@ As data scientists, we are interested in predicting the restaurant grading in Ne
 based on our target of adjusted grading standards (Grade A and Grade F). During the exploratory data analysis (EDA)
 process, we notice the target inherently has a large class imbalance property so we formulate our predictive problem 
 as a binary classification by combining Grade B/C as Grade F and drop the restaurants with "pending" grades from our analysis.
+As we can see from the the below table, there are 300,000 inspections logged in the data set, but only 151,451 of them have a value assigned to the grade column. 
+149,885 of them have been assigned grades as the following table:
 
-EDA one plot + one table here.
-|A (Grade A)|B (Grade B)|C (Grade C)|Z (Grade Pending)|P (Grade Pending issued on re-opening following an initial inspection that resulted in a closure)|
-|----------:|----------:|----------:|----------------:|----------------:|
-|119647|19215|5888|3316|1819|
+|Grade|Number of Inspections|
+|----------:|--------------:|
+|A (Grade A)|119647|
+|B (Grade B)|19215|
+|C (Grade C)|5888|
+|Z (Grade Pending)|3316|
+|P (Grade Pending issued closure)|1819|
 
 **Table 1.** Counts of inspections belonging to each class.
+
+Additionally, from the above table we have restaurants with "pending" grades. 
+We will keep these out of our analysis to use as deployment data, where we will see if we can categorize them as either A or F based on their feature values.
+
+Furthermore, we would like to graphically explore the relations between features and the target in order to choose our features properly. 
+Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. 
+Thus, we have plotted their distributions by class to investigate whether our assumptions are true or not:
+
+![score_boxplot](src/nyc_rest_eda_figures/score_boxplot.png)
+
+**Figure 1.** Boxplot of the distribution of inspection scores across grades. Green represents Grade A restaurants and orange represents Grade F (below Grade A) restaurants.
+
+It seems that Grade F restaurants are associated with higher scores on average, though some Grade F inspections also received low scores (nearly 10,000 are < 20). 
+We can interpret the score as being higher for more severe/critical health violations, but there does not seem to be a standard cut-off for when a restaurant is considered Grade A or not.
+
+![violation stack bar](src/nyc_rest_eda_figures/violation_stack.png)
+
+**Figure 2.** Proportion of restaurants that received critical (red) and non-critical (blue) violations by grade. Violations that are unclassified received a 'Not Applicable' flag (green).
+
+We observe a similar relationship with the assignment of critical flags. Grade F restaurants receive proportionately more critical flags as expected, 
+though almost 50% of Grade A restaurants had critical violations during their inspection! 
+It is not clear what the threshold for a "critical" violation is, thus it will be interesting to see whether our model(s) can identify if the severity of a violation actually matters for grading.
+
+For more details about all the figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/src)
 
 We plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on),
 and then collect and compare the results across multiple error measurement metrics 
@@ -60,7 +90,9 @@ project:
     ```
     git clone git@github.com:UBC-MDS/newyork_restaurant_grading.git
     ```
+    
     or
+    
     ```
     git clone https://github.com/UBC-MDS/newyork_restaurant_grading.git
     ```
@@ -79,11 +111,16 @@ project:
 
     ```conda activate nyc_rest```
 
-Need to add a data download command here!
+4. Download the data
+
+    ```python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raw/nyc_restaurants.csv"```
 
  
 
 ## Dependencies
+
+Note: more packages are likely to be added in future updates/milestones.
+
   - Channels:
       - conda-forge
       - defaults
