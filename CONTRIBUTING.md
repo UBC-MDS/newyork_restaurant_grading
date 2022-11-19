@@ -1,4 +1,4 @@
-# Contributing to the Newyork Restaurant Grading project
+# Contributing to the New York Restaurant Grading project
 
 We welcome all contributions to this project! If you find any bugs that need to be fixed or think of new features that can help improve this project, please read the following guidelines.
 
