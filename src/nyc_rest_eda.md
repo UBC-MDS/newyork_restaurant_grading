@@ -1,9 +1,9 @@
 Exploratory Data Analysis of the NYC Restaurant Inspections Data Set
 ==========================
 
-## DSCI 522 Project - Group 18
+### DSCI 522 Project - Group 18
 
-#### Team Members: Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
+##### Team Members: Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
 
 # Summary of the Data
 
@@ -71,9 +71,10 @@ Each of the NYC boroughs contain mostly Grade A restaurants, thus we should be a
 
 **Table 3.** Number of inspections performed for the top 10 most common cuisine types.
 
-The majority of restaurants in NYC serve American food, followed by Chinese food. The data set also includes food locations that are not necessarily "restaurants" (cafes, bakeries, etc.).
+The majority of restaurants in NYC serve American food, followed by Chinese food. The data set also includes food locations that are not necessarily "restaurants" (cafes, bakeries, etc.). 
 
-# Additional Figures
+## Additional Figures
+
 Supplementary charts can be found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/src/nyc_rest_eda.ipynb) on other attributes that were not discussed above.
 
 # References

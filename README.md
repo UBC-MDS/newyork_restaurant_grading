@@ -32,16 +32,17 @@ Assuming that the environment was created successfully, you can activate the env
 
 Note: more packages are likely to be added in future updates/milestones.
 - Python 3.9.13 and Python packages:
-  - ipykernel
-  - matplotlib>=3.2.2
-  - scikit-learn>=1.0
-  - pandas>=1.3.*
-  - requests>=2.24.0
-  - graphviz
-  - python-graphviz
-  - python==3.9.*
-  - ipykernel
-  - ipython>=7.15
-  - vega_datasets
-  - altair_saver
-  - selenium<4.3.0
+    - docopt=0.6.2
+    - ipykernel
+    - ipython>=7.15
+    - vega_datasets
+    - altair_saver
+    - selenium<4.3.0
+    - matplotlib>=3.2.2
+    - scikit-learn>=1.0
+    - pandas>=1.3.*
+    - requests>=2.24.0
+    - pip:
+      - joblib==1.1.0
+      - mglearn
+      - psutil>=5.7.2
