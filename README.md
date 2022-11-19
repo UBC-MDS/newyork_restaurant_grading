@@ -11,6 +11,17 @@ URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.g
 
 ## Project Proposal
 
+We choose the large dataset DOHMH New York City Restaurant Inspection Results sourced from 
+NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
+and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.).
+The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
+It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. 
+Each row represents a restaurant that has been assessed by a health inspector, 
+including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) 
+and type of cuisine, as well as the details about their inspection 
+(e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). 
+The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
+
 As data scientists, we are interested in predicting the restaurant grading in New York City
 based on our target of adjusted grading standards (Grade A and Grade F). During the exploratory data analysis (EDA)
 process, we notice the target inherently has a large class imbalance property so we formulate our predictive problem 
@@ -27,16 +38,6 @@ restaurants and if a restaurant can be accurately predicted as "bad", then we ca
 Moreover, if we are able to generalize our model for other large cities across the world, 
 then this data analysis report would have great values for local residents and tourists. 
 
-We choose the large dataset DOHMH New York City Restaurant Inspection Results sourced from 
-NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
-and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.).
-The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
-It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. 
-Each row represents a restaurant that has been assessed by a health inspector, 
-including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) 
-and type of cuisine, as well as the details about their inspection 
-(e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). 
-The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
 
 ## Report
 
@@ -72,6 +73,8 @@ project:
     Assuming that the environment was created successfully, you can activate the environment as follows:
 
     ```conda activate nyc_rest```
+
+Need to add a data download command here!
 
  
 
