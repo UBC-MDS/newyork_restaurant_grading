@@ -12,34 +12,35 @@ URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.g
 
 ## Project Proposal
 
-With the development of the metropolitan areas and large cities, more and more people tend to eat outside more frequently and the overall safety of restaurants becomes very important. After all, we are what eat, and as data scientists, we are interested in finding a quantitative way to predict the overall quality of a certain restaurant. If a restaurant can be accurately predicted as "bad", then we can safely avoid eating there. Given the New York City Restaurant Inspection Results dataset, we would like to focus our study on predicting the restaurant grading in New York City based on our target of grading standards. Then if possible, we plan to further explore and see whether our model can generalize for other large cities across the world or not and this data analysis project would have great values for local residents and tourists. 
+Since the start of the pandemic, hundreds of new restaurants have opened across New York City after the state announced the return of indoor dining (Eater NY, 2020). As government restrictions lift and the hospitality industry opens its doors once again, more and more people are choosing to dine out. Considering the uncertainty of the current time, the overall safety of restaurants has become of paramount importance. Health regulations have become stricter, and it will likely be necessary for health inspectors to reassess the standards that they apply for grading. Although they can differ by state, the general scheme applied by health agencies is as follows:
 
-Besides this main research question, we would also plan to address some interesting sub_questions 
-such as the following: 
+> GRADE A: The restaurant is clean, up to code, and free of violations.
+> GRADE B: The restaurant has some issues that must be fixed.
+> GRADE C: The restaurant is a public risk and on verge of closure.
+> Source: SmartSense, 2018
+
+As data scientists, we are interested in whether we can accurately assess the overall quality of a restaurant. If a restaurant can be predicted as "good" or "bad" (in our case, Grade A vs Grade B/C), then we can make appropriate recommendations to others. As we currently have access to data on restaurants in New York City, we would like to focus our analysis on predicting the grading for NYC locations, with aims to expand to other metropolitan areas in the future. We feel that this project could bring value to local residents or tourists who are troubled with deciding on where they'd like to eat.
+
+Besides this main research question, our analysis may also address some interesting sub-questions such as the following: 
   - Which cuisines is more likely to be graded A in NYC?
-  - Which cuisine is more likely to be graded F in NYC?
+  - Which cuisine is more likely to be graded B or C) in NYC?
   - Which borough in NYC seems to have the best restaurants?
-  - Which borough in NYC seem to have the most restaurants with the most code violations?
+  - Which borough in NYC seems to have the most restaurants with the most severe violations?
   
-We choose the large dataset DOHMH New York City Restaurant Inspection Results sourced from 
+We choose the dataset, DOHMH New York City Restaurant Inspection Results sourced from 
 NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
 and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.).
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
-It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. 
-Each row represents a restaurant that has been assessed by a health inspector, 
-including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) 
-and type of cuisine, as well as the details about their inspection 
-(e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). 
-The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
 
-To address our main predictive question above, we plan to build a predictive classification model. At first, we split our data into a training and test set (train-test ratio 75%:25%) and perform exploratory data analysis (EDA) to assess whether there is a strong class imbalance issue for our target grading. The target class counts will be presented as a table and used to identify the existence of the class imbalance problem.
-If we have a large class imbalance, we might try to perform our analysis as a binary classification problem by 
+It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) and type of cuisine, as well as the details about their inspection (e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review. A comprehensive dictionary of the data can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11#data-dictionary).
+
+To address our main predictive question above, we plan to construct a predictive classification model. First, we will split our data into training and testing sets (train-test ratio 75:25). We will then perform exploratory data analysis (EDA) on the training set to assess whether there is a need for our model, as well as address the possible concerns with our target, `grade`. The target class counts will be presented as a table and used to identify the existence of the class imbalance problem. If we have a large class imbalance, we might try to perform our analysis as a binary classification problem by 
 combining Grade B/C as Grade F to reduce the class imbalance issue. 
 
 Furthermore, we would like to graphically explore the relations between features and the target in order to choose our features properly. Considering the data attributes, we would expect the score and critical flag assigned to an inspection to be good predictors of whether the restaurant will be graded A or not. 
 Thus, we plan to plot their distributions in box plots and bar plots by grading class to investigate whether our assumptions are true or not. If these selected features do not contribute very much to predict our target grading, then we might consider to drop these features and re-modify our models. 
 
-For more details about all the EDA figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.md).
+For more details about all the EDA figures and tables in this project, please click [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
 
 After the EDA, we plan to fit several supervised machine learning classification models (KNN, Logistic Regression, SVM and so on), and optimize the corresponding hyperparameters in cross validation to generate the best fitted models. Then we will collect and compare the results across multiple error measurement metrics and visualize the modeling results as a table to generate the report. To better share and improve the quality of our analysis, we would also incorporate the overall accuracy, confusion matrix and PR curve analysis in our report and summarize the final robust version of the report in a single PDF/md file.
 
@@ -123,17 +124,29 @@ For more details about the License of this project, please click [here](https://
 
 <div id="refs" class="references hanging-indent">
 
-<div id="ref-Dua2019">
+<div id="ref-Mock2022">
 
 Mock, T (2022). Tidy Tuesday: A weekly data project aimed at the R ecosystem. https://github.com/rfordatascience/tidytuesday.
 
 </div>
 
-<div id="ref-Streetetal">
+<div id="ref-NYCOpen">
 
 NYC Open Data Portal (2022). DOHMH New York City Restaurant Inspection Results.
 https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data
 
 </div>
+    
+<div id="ref-SmartSense">
+    
+SmartSense. (2018, August 17). Restaurant letter grading: What does a B really mean? Connected Insights Blog. Retrieved November 19, 2022, from https://blog.smartsense.co/restaurant-letter-grading#:~:text=GRADE%20A%3A%20The%20restaurant%20is,and%20on%20verge%20of%20closure. 
 
+</div>
+    
+<div id="ref-EaterNY">
+    
+Staff, E. (2020, June 10). A running list of new restaurants that opened during the pandemic. Eater NY. Retrieved November 19, 2022, from https://ny.eater.com/2020/6/10/21270665/nyc-new-restaurant-openings-coronavirus 
+
+</div>
+    
 </div>
