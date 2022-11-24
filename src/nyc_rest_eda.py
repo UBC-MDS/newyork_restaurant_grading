@@ -40,11 +40,12 @@ def main(train_set, visual_dir):
     train_set : csv file
         The relative path that contains the training data, as a string
     visual_dir : visualization directory
-        The relative path that will contain the EDA plots
+        The relative path that will contain the EDA plots, as a string
 
     """
     # read in the training data
     train_df = pd.read_csv(train_set)
+
     # Check if the directory exists. If it doesn't create new folder and download the data
     try:
         isDirExist = os.path.isdir(os.path.dirname(visual_dir))
@@ -154,6 +155,9 @@ def top_cuisine_table(train, path):
     return dfi.export(top_10_cuisine_df, path)
 
 def violation_code_bars(train, path):
+    """
+    
+    """
     bar_plot = (
         alt.Chart(
         train_df,
