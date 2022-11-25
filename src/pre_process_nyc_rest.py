@@ -66,6 +66,7 @@ def main(input_file, output_train_file, output_test_file):
     
     train_df.to_csv(output_train_file, index = False)
     test_df.to_csv(output_test_file, index = False)
+    
 
 if __name__ == "__main__":
     main(opt["--input_file"], opt["--output_train_file"], opt["--output_test_file"])
