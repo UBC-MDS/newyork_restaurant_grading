@@ -67,6 +67,8 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
     ```conda activate nyc_rest```
 
+Run the following commands at the command line/terminal from the root directory of this project:
+
 4. Download the data
 
     ```python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raw/nyc_restaurants.csv"```
