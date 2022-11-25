@@ -60,6 +60,16 @@ def main(train_set, visual_dir):
     """
     Creates and saves all tables and figures from the EDA
 
+    Includes:
+    TABLES
+        - Counts of each class in the training set
+        - Most common cuisine descriptions in the training set
+    FIGURES
+        - Boxplot of the distribution of grades by score
+        - Stacked bar chart of the critical flags by grade
+        - Grouped bar chart of the boroughs in NYC and counts of inspections by grade
+        - Stacked bar chart of the violation codes by grade
+
     Parameters
     ----------
     train_set : csv file
