@@ -72,10 +72,10 @@ def main(train_set, visual_dir):
 
     Parameters
     ----------
-    train_set : csv file
-        The relative path that contains the training data, as a string
-    visual_dir : visualization directory
-        The relative path that will contain the EDA plots, as a string
+    train_set : string
+        The relative path (.csv) that contains the training data, as a string
+    visual_dir : string
+        The name of the directory that will contain the EDA plots, as a string
 
     """
     # Check if the visualization directory exists; if it doesn't, create new folder
