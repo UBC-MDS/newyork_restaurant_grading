@@ -65,17 +65,17 @@ def main(train_set, visual_dir):
         - Counts of each class in the training set
         - Most common cuisine descriptions in the training set
     FIGURES
-        - Boxplot of the distribution of grades by score
-        - Stacked bar chart of the critical flags by grade
-        - Grouped bar chart of the boroughs in NYC and counts of inspections by grade
+        - Boxplot of the distribution of scores by grade
+        - Stacked bar chart of the critical flags by grade (normalized)
+        - Grouped bar chart of the boroughs in NYC and number of inspections performed in each by grade
         - Stacked bar chart of the violation codes by grade
 
     Parameters
     ----------
     train_set : string
-        The relative path (.csv) that contains the training data, as a string
+        The relative path (.csv) that contains the training datag
     visual_dir : string
-        The name of the directory that will contain the EDA plots, as a string
+        The name of the directory that will contain the EDA plots and tables
 
     """
     # Check if the visualization directory exists; if it doesn't, create new folder
