@@ -42,3 +42,9 @@ def main(input_file, output_train_file, output_test_file):
     nyc_mod_target_df = nyc_drop_na_df.query("grade == ['A', 'B', 'C']")
     nyc_mod_target_df.loc[nyc_mod_target_df['grade'] != 'A', 'grade'] = 'F'
     nyc_mod_target_df['grade'].value_counts()
+    
+    nyc_mod_zipcode_df = nyc_mod_target_df.copy()
+    nyc_mod_zipcode_df['zipcode'] = nyc_mod_target_df['zipcode'].apply(int).apply(str)
+    top_20_zipcode = ['10019', '10003', '10036', '10013', '10001', '10002', '10016', '10022', '10011', '11201', 
+                  '11354', '10012', '11220', '10014', '11372', '10017', '10018', '11215', '11211', '10009' ]
+    nyc_mod_zipcode_df.loc[nyc_mod_zipcode_df.query("zipcode != @top_20_zipcode").index, 'zipcode'] = 'other_zipcode'
