@@ -102,7 +102,7 @@ def main(train_set, visual_dir):
     train_df = pd.read_csv(train_set)
 
     # Creates a table of the counts of Grade A and F in the training set
-    class_table = pd.DataFrame(train_df['grade'].value_counts(), columns=['Number of Inspections'])
+    class_table = train_df['grade'].value_counts().rename_axis('Grades').reset_index(name='Number of Inspection')
     class_table = class_table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
     dfi.export(class_table, visual_dir + "/class_table.png")
 
