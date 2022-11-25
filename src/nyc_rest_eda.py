@@ -185,31 +185,31 @@ def main(train_set, visual_dir):
     save_chart(vc_bar_plot, visual_dir + "/violation_code_bars.png", 2)
 
     # Run tests to verify that the visuals saved
-    class_table_exists(visual_dir + "/class_table.png")
-    score_boxplot_exists(visual_dir + "/score_boxplot.png")
-    flag_plot_exists(visual_dir + "/critical_flag_stacked.png")
-    borough_bar_plot_exists(visual_dir + "/borough_bars.png")
-    cuisine_table_exists(visual_dir + "/top_cuisines.png")
-    violation_plot_exists(visual_dir + '/violation_code_bars.png')
+    class_table_exists(visual_dir)
+    score_boxplot_exists(visual_dir)
+    flag_plot_exists(visual_dir)
+    borough_bar_plot_exists(visual_dir)
+    cuisine_table_exists(visual_dir)
+    violation_plot_exists(visual_dir)
 
 ### TESTS
 def class_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the class table in the visualizations folder." 
+    assert os.path.isfile(file_path + "/class_table.png"), "Could not find the class table in the visualizations folder." 
 
 def score_boxplot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the score boxplot in the visualizations folder." 
+    assert os.path.isfile(file_path + "/score_boxplot.png"), "Could not find the score boxplot in the visualizations folder." 
 
 def flag_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the critical flag chart in the visualizations folder." 
+    assert os.path.isfile(file_path + "/critical_flag_stacked.png"), "Could not find the critical flag chart in the visualizations folder." 
 
 def borough_bar_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the borough bar plot in the visualizations folder." 
+    assert os.path.isfile(file_path + "/borough_bars.png"), "Could not find the borough bar plot in the visualizations folder." 
 
 def cuisine_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the top 10 cuisine table in the visualizations folder." 
+    assert os.path.isfile(file_path + "/top_cuisines.png"), "Could not find the top 10 cuisine table in the visualizations folder." 
 
 def violation_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the violation codes chart in the visualizations folder." 
+    assert os.path.isfile(file_path + '/violation_code_bars.png'), "Could not find the violation codes chart in the visualizations folder." 
 
 # Call main
 if __name__ == "__main__":
