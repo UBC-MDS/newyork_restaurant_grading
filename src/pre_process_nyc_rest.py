@@ -58,5 +58,16 @@ def main(input_file, output_train_file, output_test_file):
     nyc_mod_violation_code_df = nyc_mod_violation_des_df.copy()
     nyc_mod_violation_code_df.loc[nyc_mod_violation_code_df[nyc_mod_violation_code_df['violation_code'].map(nyc_mod_violation_code_df['violation_code'].value_counts()) < 1000].index, 'violation_code'] = 'Other_violation_code'
     
+    nyc_final_df = nyc_mod_violation_code_df
+    nyc_final_df.head()
+
+    # Train & test split
+    train_df, test_df = train_test_split(nyc_final_df, test_size=0.25, random_state=123)
+    
+    train_df.to_csv(output_train_file, index = False)
+    test_df.to_csv(output_test_file, index = False)
+
+if __name__ == "__main__":
+    main(opt["--input_file"], opt["--output_train_file"], opt["--output_test_file"])
     
     
