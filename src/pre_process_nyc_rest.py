@@ -13,3 +13,14 @@ Command to run the script:
 python src/pre_process_nyc_rest.py --input_file="./data/raw/nyc_restaurants.csv" --output_train_file="./data/processed/train_df.csv" --output_test_file="./data/processed/test_df.csv"
 
 """
+
+import requests
+import os.path
+from docopt import docopt
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.compose import ColumnTransformer, make_column_transformer
+from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
+from sklearn.feature_extraction.text import CountVectorizer
+from scipy.sparse import csr_matrix
