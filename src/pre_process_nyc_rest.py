@@ -38,3 +38,7 @@ def main(input_file, output_train_file, output_test_file):
     nyc_drop_na_df.info()
     nyc_drop_na_df.head()
     nyc_drop_na_df.describe(include='all')
+    
+    nyc_mod_target_df = nyc_drop_na_df.query("grade == ['A', 'B', 'C']")
+    nyc_mod_target_df.loc[nyc_mod_target_df['grade'] != 'A', 'grade'] = 'F'
+    nyc_mod_target_df['grade'].value_counts()
