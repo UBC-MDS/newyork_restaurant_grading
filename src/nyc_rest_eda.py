@@ -10,7 +10,7 @@ Usage: src/nyc_rest_eda.py --train_set=<train_set> --visual_dir=<visual_dir>
 
 Options:
 --train_set=<train_set>           Path to the training data (in data/preprocessed)
---visual_dir=<visual_dir>         Path to the output directory for the tables and plots (src/nyc_rest_eda_visuals)
+--visual_dir=<visual_dir>         Path to the output directory for the tables and plots (src/nyc_rest_eda_script_visuals)
 
 Command to run the script:
 python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir="src/nyc_rest_eda_script_visuals"
