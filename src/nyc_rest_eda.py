@@ -104,7 +104,7 @@ def main(train_set, visual_dir):
             titleFontSize=18
         )
     )
-    save_chart(score_boxplot, visual_dir + "/score_boxplot.png")
+    save_chart(score_boxplot, visual_dir + "/score_boxplot.png", 2)
 
     # Creates stacked bar chart of the proportion of restaurants that received
     # Critical, Non-critical and Not Applicable flags
@@ -123,7 +123,7 @@ def main(train_set, visual_dir):
             titleFontSize=18
         )
     )
-    save_chart(flag_bar_chart, visual_dir + "/critical_flag_stacked.png")
+    save_chart(flag_bar_chart, visual_dir + "/critical_flag_stacked.png", 2)
 
     # Creates a grouped bar chart of the number of inspections performed in each
     # NYC borough, sorted by grade
@@ -144,7 +144,7 @@ def main(train_set, visual_dir):
             titleFontSize=18
         )
     )
-    save_chart(boro_bar_chart, visual_dir + "/borough_bars.png")
+    save_chart(boro_bar_chart, visual_dir + "/borough_bars.png", 2)
 
     # Creates a table of the top 10 cuisine types in the training set, in descending
     # order by frequency
@@ -172,7 +172,7 @@ def main(train_set, visual_dir):
             titleFontSize=18
         )
     )
-    save_chart(vc_bar_plot, visual_dir + "/violation_code_bars.png")
+    save_chart(vc_bar_plot, visual_dir + "/violation_code_bars.png", 2)
 
     # Run tests to verify that the visuals saved
     class_table_exists(visual_dir + "/class_table.png")
