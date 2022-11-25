@@ -4,7 +4,7 @@
 """Creates new tables and plots of the training data from the DOHMH New York City Restaurant Inspection Results as part of the project's exploratory data analysis.
 Saves the tables and plots as png files.
 
-Data source:
+Data source: https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv
 
 Usage: src/nyc_rest_eda.py --train_set=<train_set> --visual_dir=<visual_dir>
 
@@ -46,7 +46,7 @@ def main(train_set, visual_dir):
     # read in the training data
     train_df = pd.read_csv(train_set)
 
-    # Check if the directory exists. If it doesn't create new folder and download the data
+    # Check if the directory exists; if it doesn't create new folder
     try:
         isDirExist = os.path.isdir(os.path.dirname(visual_dir))
         if not isDirExist:
@@ -62,32 +62,15 @@ def main(train_set, visual_dir):
     flags_stacked_bar_chart(train_df, visual_dir + "/critical_flag_stacked.png")
     borough_bars(train_df, visual_dir + "/borough_bars.png")
     top_cuisine_table(train_df, visual_dir + "/top_cuisines.png")
+    violation_code_bars(train_df, visual_dir + "/violation_code_bars.png")
 
     # Run tests to verify that the visuals saved
     class_table_exists(visual_dir + "/data_partition_table.png")
     score_boxplot_exists(visual_dir + "/score_boxplot.png")
     flag_plot_exists(visual_dir + "/critical_flag_stacked.png")
     borough_bar_plot_exists(visual_dir + "/borough_bars.png")
-
-# Call main
-if __name__ == "__main__":
-    main(opt["--train_set"], opt["--visual_dir"])
-
-### TESTS
-def class_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the class table in the visualizations folder." 
-
-def score_boxplot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the score boxplot in the visualizations folder." 
-
-def flag_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the critical flag chart in the visualizations folder." 
-
-def borough_bar_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the borough bar plot in the visualizations folder." 
-
-def cuisine_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the top 10 cuisine table in the visualizations folder." 
+    cuisine_table_exists(visual_dir + "/top_cuisines.png")
+    violation_plot_exists(visual_dir + '/violation_code_bars.png')
 
 ### HELPER FUNCTIONS
 def class_table(train, path):
@@ -95,7 +78,7 @@ def class_table(train, path):
     Creates a table of the counts of Grade A and F in the training set
     """
     table = pd.DataFrame(train['grade'].value_counts(), columns=['Number of Inspections'])
-    table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
+    table = table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
     return dfi.export(table, path)
 
 def score_boxplot(train, path):
@@ -108,10 +91,15 @@ def score_boxplot(train, path):
         alt.Y('grade', title='Grade'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade')
         ).properties(
-        title="Distribution of Scores by Grade",
-        height=300,
-        width=500
-        ).configure_title(anchor='start')
+            title="Distribution of Scores by Grade",
+            height=300,
+            width=500
+        ).configure_title(
+            anchor='start'
+        ).configure_axis(
+            labelFontSize=20,
+            titleFontSize=20
+        )
     )
     return save_chart(boxplot, path)
 
@@ -125,7 +113,13 @@ def flags_stacked_bar_chart(train, path):
         alt.X('count()', stack='normalize', title='Proportion of Restaurants'),
         alt.Y('grade', title='Grade'),
         alt.Color('critical_flag', scale=alt.Scale(scheme='set1'), title='Critical Flag', sort='-x')
-        ).properties(title='Severity of Violations', height=200)
+        ).properties(
+            title='Severity of Violations',
+            height=200
+        ).configure_axis(
+            labelFontSize=20,
+            titleFontSize=20
+        )
     )
     return save_chart(bar_chart, path)
 
@@ -140,7 +134,14 @@ def borough_bars(train, path):
         alt.Y('count()'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade', legend=None),
         alt.Column('boro', title=None, sort=["BRONX", "BROOKLYN", "MANHATTAN", "QUEENS", "STATEN ISLAND", "Missing"])
-        ).properties(height=300, width=100, title='Number of Inspections Conducted by NYC Borough')
+        ).properties(
+            height=300,
+            width=100,
+            title='Number of Inspections Conducted by NYC Borough'
+        ).configure_axis(
+            labelFontSize=20,
+            titleFontSize=20
+        )
     )
     return save_chart(bar_chart, path)
 
@@ -152,22 +153,30 @@ def top_cuisine_table(train, path):
     top_10_cuisine_df = pd.DataFrame(train['cuisine_description'].value_counts()[:10])
     top_10_cuisine_df.index.name = 'Cuisine Description'
     top_10_cuisine_df.columns = ['Count of Records']
+    top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 3. Number of inspections performed for the top 10 most common cuisine types.')
     return dfi.export(top_10_cuisine_df, path)
 
 def violation_code_bars(train, path):
     """
-    
+    Creates a bar plot of the number of inspections categorized under each violation code,
+    sorted by grade
     """
     bar_plot = (
         alt.Chart(
-        train_df,
+        train,
         ).mark_bar().encode(
         alt.X('violation_code', sort='-y', axis=alt.Axis(labelAngle=0), title='Violation Code'),
         alt.Y('count()'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade')
         ).properties(
-            title='Violation Codes by Grade', height=500
-        ).configure_title(anchor='start')
+            title='Violation Codes by Grade',
+            height=500
+        ).configure_title(
+            anchor='start'
+        ).configure_axis(
+            labelFontSize=20,
+            titleFontSize=20
+        )
     )
     return save_chart(bar_plot, path)
 
@@ -194,3 +203,26 @@ def save_chart(chart, filename, scale_factor=1):
             f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
     else:
         raise ValueError("Only svg and png formats are supported")
+
+# Call main
+if __name__ == "__main__":
+    main(opt["--train_set"], opt["--visual_dir"])
+
+### TESTS
+def class_table_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the class table in the visualizations folder." 
+
+def score_boxplot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the score boxplot in the visualizations folder." 
+
+def flag_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the critical flag chart in the visualizations folder." 
+
+def borough_bar_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the borough bar plot in the visualizations folder." 
+
+def cuisine_table_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the top 10 cuisine table in the visualizations folder." 
+
+def violation_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the violation codes chart in the visualizations folder." 
