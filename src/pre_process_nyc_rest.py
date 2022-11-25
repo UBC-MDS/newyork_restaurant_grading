@@ -24,3 +24,17 @@ from sklearn.compose import ColumnTransformer, make_column_transformer
 from sklearn.preprocessing import OneHotEncoder, OrdinalEncoder
 from sklearn.feature_extraction.text import CountVectorizer
 from scipy.sparse import csr_matrix
+
+opt = docopt(__doc__)
+
+def main(input_file, output_train_file, output_test_file):
+
+    nyc_df = pd.read_csv(input_file)
+    nyc_df.info()
+
+
+    # Clean and modify the data
+    nyc_drop_na_df = nyc_df.dropna()
+    nyc_drop_na_df.info()
+    nyc_drop_na_df.head()
+    nyc_drop_na_df.describe(include='all')
