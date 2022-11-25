@@ -13,7 +13,7 @@ Options:
 --visual_dir=<visual_dir>         Path to the output directory for the tables and plots (src/nyc_rest_eda_visuals)
 
 Command to run the script:
-python src/nyc_rest_eda.py --train_set='../data/processed/train_set.csv' --visual_dir="./nyc_rest_eda_visuals"
+python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir="src/nyc_rest_eda_script_visuals"
 """
 
 # Import libraries and packages
@@ -55,6 +55,25 @@ def save_chart(chart, filename, scale_factor=1):
     else:
         raise ValueError("Only svg and png formats are supported")
 
+### TESTS
+def class_table_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the class table in the visualizations folder." 
+
+def score_boxplot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the score boxplot in the visualizations folder." 
+
+def flag_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the critical flag chart in the visualizations folder." 
+
+def borough_bar_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the borough bar plot in the visualizations folder." 
+
+def cuisine_table_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the top 10 cuisine table in the visualizations folder." 
+
+def violation_plot_exists(file_path):
+    assert os.path.isfile(file_path), "Could not find the violation codes chart in the visualizations folder." 
+
 # Define main function
 def main(train_set, visual_dir):
     """
@@ -68,20 +87,20 @@ def main(train_set, visual_dir):
         The relative path that will contain the EDA plots, as a string
 
     """
-    # read in the training data
-    train_df = pd.read_csv(train_set)
-
     # Check if the directory exists; if it doesn't create new folder
     try:
-        isDirExist = os.path.isdir(os.path.dirname(visual_dir))
+        isDirExist = os.path.isdir(visual_dir)
         if not isDirExist:
-            print("Directory does not exist! Creating the path!")
-            os.makedirs(os.path.dirname(visual_dir))
+            print("Directory does not exist. Creating a new folder...")
+            os.makedirs(visual_dir)
     
     except Exception as ex:
         print("Exception occurred :" + ex)
         exit()
     
+    # read in the training data
+    train_df = pd.read_csv(train_set)
+
     # Creates a table of the counts of Grade A and F in the training set
     class_table = pd.DataFrame(train_df['grade'].value_counts(), columns=['Number of Inspections'])
     class_table = class_table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
@@ -170,7 +189,7 @@ def main(train_set, visual_dir):
     save_chart(vc_bar_plot, visual_dir + "/violation_code_bars.png")
 
     # Run tests to verify that the visuals saved
-    class_table_exists(visual_dir + "/data_partition_table.png")
+    class_table_exists(visual_dir + "/class_table.png")
     score_boxplot_exists(visual_dir + "/score_boxplot.png")
     flag_plot_exists(visual_dir + "/critical_flag_stacked.png")
     borough_bar_plot_exists(visual_dir + "/borough_bars.png")
@@ -180,22 +199,3 @@ def main(train_set, visual_dir):
 # Call main
 if __name__ == "__main__":
     main(opt["--train_set"], opt["--visual_dir"])
-
-### TESTS
-def class_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the class table in the visualizations folder." 
-
-def score_boxplot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the score boxplot in the visualizations folder." 
-
-def flag_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the critical flag chart in the visualizations folder." 
-
-def borough_bar_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the borough bar plot in the visualizations folder." 
-
-def cuisine_table_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the top 10 cuisine table in the visualizations folder." 
-
-def violation_plot_exists(file_path):
-    assert os.path.isfile(file_path), "Could not find the violation codes chart in the visualizations folder." 
