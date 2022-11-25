@@ -12,7 +12,8 @@ British Columbia.
 
 URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.git
 
-## Project Proposal
+## Project Summary
+### **TO-DO:** Edit once the ML analysis has been completed.
 
 Since the start of the pandemic, hundreds of new restaurants have opened across New York City after the state announced the return of indoor dining (Eater NY, 2020). As government restrictions lift and the hospitality industry opens its doors once again, more and more people are choosing to dine out. Considering the uncertainty of the current time, the overall safety of restaurants has become of paramount importance. Health regulations have become stricter, and it will likely be necessary for health inspectors to reassess the standards that they apply for grading. Although they can differ by state, the general scheme applied by health agencies is as follows:
 
@@ -26,7 +27,7 @@ GRADE C: The restaurant is a public risk and on verge of closure.
 (Source: SmartSense, 2018)
 >>>
   
-We choose the dataset, DOHMH New York City Restaurant Inspection Results sourced from 
+We chose the dataset, DOHMH New York City Restaurant Inspection Results sourced from 
 NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
 and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-1.).
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
@@ -72,13 +73,15 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 4. Process the data
 
-    ```python```
+    ```python src/pre_process_nyc_rest.py --input_file="./data/raw/nyc_restaurants.csv" --output_train_file="./data/processed/train_df.csv" --output_test_file="./data/processed/test_df.csv"```
 
 5. Create exploratory data analysis figures and tables
 
-    ```python src/nyc_rest_eda.py --train_set='../data/processed/train_set.csv' --visual_dir="./nyc_rest_eda_visuals"```
+    ```python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir="src/nyc_rest_eda_script_visuals"```
 
 6. Run the machine learning analysis and export models
+
+    ```python```
 
 7. Render the final report
     ```Rscript -e "rmarkdown::render()"```
