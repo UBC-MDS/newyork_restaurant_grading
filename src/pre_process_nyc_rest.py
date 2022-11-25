@@ -1,4 +1,4 @@
-# author: Edward Yukun ZHang
+# author: Edward Yukun Zhang
 # date: 2022-11-24
 
 """Cleans, splits and pre-processes the New York City Restaurant Grading from "https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv"
@@ -45,7 +45,6 @@ def main(input_file, output_train_file, output_test_file):
         
     # Read the data from input
     nyc_df = pd.read_csv(input_file)
-
 
     # Clean and drop the NA values (without affecting the imbalance probelm too much)
     nyc_drop_na_df = nyc_df.dropna()
