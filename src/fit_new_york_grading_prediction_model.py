@@ -4,7 +4,7 @@
 """
 Takes the preprocessed training and test data and does cross validation with logistic regression and svm classifier - finds logistic regression to be the better model and does hyperparameter tuning to get the best hyperparameters. It then fits this trained model on the unseen data (test dataset).
    
-Usage: fit_new_york_grading_prediction_model.py --train_data=<train_input_file> --test_data=<test_input_file> --output_dir=<output_directory>
+Usage: src/fit_new_york_grading_prediction_model.py --train_data=<train_input_file> --test_data=<test_input_file> --output_dir=<output_directory>
 Options:
 --train_data=<train_input_file>       Path of the input file that contains the train data
 --test_data=<test_input_file>         Path of the input file that contains the test data
@@ -13,12 +13,14 @@ Command to run the script:
 python src/fit_new_york_grading_prediction_model.py --train_data="./data/processed/train_df.csv" --test_data="./data/processed/test_df.csv" --output_dir="./results/"
 """
 
+# REFERENCE : code to plot PR curve referred from 573 lecture 1 notes
+
 from docopt import docopt
 import pandas as pd
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import f1_score
-from sklearn.metrics import make_scorer, recall_score
+from sklearn.metrics import make_scorer, recall_score, precision_score
 from sklearn.svm import SVC
 from sklearn.model_selection import RandomizedSearchCV
 from sklearn.utils.fixes import loguniform
@@ -29,28 +31,34 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.model_selection import cross_validate
 from sklearn.dummy import DummyClassifier
 import pickle
+import matplotlib.pyplot as plt
+from sklearn.metrics import precision_recall_curve
+import os
 
 opt = docopt(__doc__)
 
-def main(train_data_file, test_data_file, output_dir_path):
+def main(train_data, test_data, output_dir):
+    output_dir = output_dir[0]
+    if not os.path.exists(output_dir):
+        os.makedirs(output_dir)
     """
     Takes the preprocessed training and test data and does cross validation with logistic regression and svm classifier - finds logistic regression to be the better model and does hyperparameter tuning to get the best hyperparameters. It then fits this trained model on the unseen data (test dataset).
     
     Parameters
     ----------
-    string : train_data_file
+    string : train_data
         Relative path of the file that contains the preprocessed training data
-    string : test_data_file
+    string : test_data
         Relative path of the file which contains the preprocessed testing data
-    string : output_dir_path
+    string : output_dir
         Relative path of the directory where results will be share
     
     """ 
     # read train and test data from csv files
 
-    print("Reading data from CSV files...")
-    train_df = pd.read_csv(train_data_file)
-    test_df = pd.read_csv(test_data_file)
+    print("Reading data from CSV files...", train_data, test_data)
+    train_df = pd.read_csv(train_data[0])
+    test_df = pd.read_csv(test_data[0])
 
     # split features and target for train and test data
 
@@ -64,13 +72,13 @@ def main(train_data_file, test_data_file, output_dir_path):
     # camis: dropped, these are unique identifiers
     # dba: dropped
     # boro: OHE on categorical variable 
-    # zipcode: OHE (taking 20 most frequent zipcodes, everything else is made 'Others')
-    # cuisine_description: OHE (taking 35 most frequent cuisine_description, everything else into 'Others'; based on threshold of 600 records)
+    # zipcode: OHE on categorical variable
+    # cuisine_description: OHE on categorical variable
     # inspection_date: dropped, not relevant
-    # action: OHE, only 5 categories
-    # violation_code: OHE (top 30, everything else into 'Others'; based on most frequent)
-    # violation_description: text with CountVectorizer(); maybe n-gram
-    # critical_flag: OHE
+    # action: OHE on categorical variable
+    # violation_code: OHE on categorical variable
+    # violation_description: text with CountVectorizer()
+    # critical_flag: OHEon categorical variable
     # score: passthrough feature
     # inspection_type: dropped, not relevant - may introduce noise
 
@@ -82,8 +90,8 @@ def main(train_data_file, test_data_file, output_dir_path):
     # column transformer
     preprocessor = make_column_transformer( 
         ("passthrough", passthrough_features),  
-        (OneHotEncoder(handle_unknown="ignore", sparse=False), categorical_features),  
-        (CountVectorizer(stop_words="english"), text_features),
+        (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=20), categorical_features),  
+        (CountVectorizer(stop_words="english", max_features=2000), text_features),
         ("drop", drop_features)
     )
     
@@ -108,7 +116,7 @@ def main(train_data_file, test_data_file, output_dir_path):
     len_vocab_1 = len(pipe_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
 
     # hyper parameter tuning for logistic regression model using randomizedsearchcv
-    print("\n Performing hyper parameter tuning for logistic regression model using randomizedsearchcv...")
+    print("\nPerforming hyper parameter tuning for logistic regression model using randomizedsearchcv...")
     param_dist = {'logisticregression__C': loguniform(1e-3, 1e3),
     'columntransformer__countvectorizer__max_features': randint(1, len_vocab_1),
     'logisticregression__class_weight':['balanced', None]}
@@ -123,11 +131,11 @@ def main(train_data_file, test_data_file, output_dir_path):
     # transform data using parameters found from randomized cross validation
     preprocessor = make_column_transformer( 
         ("passthrough", passthrough_features),  
-        (OneHotEncoder(handle_unknown="ignore", sparse=False), categorical_features),  
+        (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=20), categorical_features),  
         (CountVectorizer(max_features=best_parameters["columntransformer__countvectorizer__max_features"], stop_words="english"), text_features),
         ("drop", drop_features)
     )
-    pipe_lr_best = make_pipeline(preprocessor, LogisticRegression(C=best_parameters["logisticregression__C"], class_weight=best_parameters["logisticregression__class_weight"], random_state=123, max_iter=1000))
+    pipe_lr_best = make_pipeline(preprocessor, LogisticRegression(C=best_parameters["logisticregression__C"], class_weight=best_parameters["logisticregression__class_weight"], random_state=123, max_iter=2000))
 
     # cross validation on the best logistic regression model
 
@@ -144,14 +152,33 @@ def main(train_data_file, test_data_file, output_dir_path):
     # score the best model on the test data
     score = pipe_lr_best.score(X_test, y_test)
     print("Score on test data : ", score)
+
+    # create and save PR curve for the best model
+
+    print("\nCreating and saving PR curve plot...")
+    precision, recall, thresholds = precision_recall_curve(
+    y_test, pipe_lr.predict_proba(X_test)[:, 1], pos_label="F"
+    )
+    plt.plot(precision, recall, label="logistic regression: PR curve")
+    plt.xlabel("Precision")
+    plt.ylabel("Recall")
+    plt.plot(
+        precision_score(y_test, pipe_lr.predict(X_test), pos_label="F"),
+        recall_score(y_test, pipe_lr.predict(X_test), pos_label="F"),
+        "or",
+        markersize=10,
+        label="threshold 0.5",
+    )
+    plt.legend(loc="best");
+    plt.savefig(output_dir + 'logistic_regression_PR_curve.png')
     
     # saving the model
     filename = 'finalized_model.sav'
-    pickle.dump(pipe_lr_best, open(output_dir_path + filename, 'wb'))
+    pickle.dump(pipe_lr, open(output_dir + filename, 'wb'))
 
     # to load the model
-    # loaded_model = pickle.load(open(output_dir_path + filename, 'rb'))
+    # loaded_model = pickle.load(open(output_dir + filename, 'rb'))
     # result = loaded_model.score(X_test, Y_test)
 
 if __name__ == "__main__":
-    main(opt["--train_data"], opt["--test_data"], opt["--output_test_file"])
+    main(opt["--train_data"], opt["--test_data"], opt["--output_dir"])
