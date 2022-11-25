@@ -4,7 +4,7 @@
 Usage: pre_process_nyc_rest.py --input_file=<input_file> --output_train_file=<output_train_file> --output_test_file=<output_test_file>
 
 Options:
---input_file=<input_file>                     Path of the input file from doenload
+--input_file=<input_file>                     Path of the input file that contains the raw data
 --output_train_file=<output_train_file>       Path of the output file which will contain the CSV train data 
 --output_test_file=<output_test_file>         Path of the output file which will contain the CSV test data 
 
@@ -28,37 +28,29 @@ from scipy.sparse import csr_matrix
 opt = docopt(__doc__)
 
 def main(input_file, output_train_file, output_test_file):
+    """This function takes an input file and generate train and test data frame
+    Parameters
+    ----------
+    string : input_file
+        Path of the input file that contains the raw data
+    string : output_train_file
+        Path of the output file which will contain the CSV train data 
+    string : output_test_file
+        Path of the output file which will contain the CSV test data 
+    
+    """ 
 
     nyc_df = pd.read_csv(input_file)
     nyc_df.info()
 
 
-    # Clean and modify the data
+    # Clean and drop the NA values (without affecting the imbalance probelm too much)
     nyc_drop_na_df = nyc_df.dropna()
-    nyc_drop_na_df.info()
-    nyc_drop_na_df.head()
-    nyc_drop_na_df.describe(include='all')
     
     nyc_mod_target_df = nyc_drop_na_df.query("grade == ['A', 'B', 'C']")
     nyc_mod_target_df.loc[nyc_mod_target_df['grade'] != 'A', 'grade'] = 'F'
-    nyc_mod_target_df['grade'].value_counts()
     
-    nyc_mod_zipcode_df = nyc_mod_target_df.copy()
-    nyc_mod_zipcode_df['zipcode'] = nyc_mod_target_df['zipcode'].apply(int).apply(str)
-    top_20_zipcode = ['10019', '10003', '10036', '10013', '10001', '10002', '10016', '10022', '10011', '11201', 
-                  '11354', '10012', '11220', '10014', '11372', '10017', '10018', '11215', '11211', '10009' ]
-    nyc_mod_zipcode_df.loc[nyc_mod_zipcode_df.query("zipcode != @top_20_zipcode").index, 'zipcode'] = 'other_zipcode'
-    
-    nyc_mod_cuisine_df = nyc_mod_zipcode_df.copy()
-    nyc_mod_cuisine_df.loc[nyc_mod_cuisine_df[nyc_mod_cuisine_df['cuisine_description'].map(nyc_mod_cuisine_df['cuisine_description'].value_counts()) < 600].index, 'cuisine_description'] = 'Other_cuisine'
-    
-    nyc_mod_violation_des_df = nyc_mod_cuisine_df.copy()
-    nyc_mod_violation_des_df.loc[nyc_mod_violation_des_df[nyc_mod_violation_des_df['violation_description'].map(nyc_mod_violation_des_df['violation_description'].value_counts()) < 500].index, 'violation_description'] = 'Other_violation_des'
-    
-    nyc_mod_violation_code_df = nyc_mod_violation_des_df.copy()
-    nyc_mod_violation_code_df.loc[nyc_mod_violation_code_df[nyc_mod_violation_code_df['violation_code'].map(nyc_mod_violation_code_df['violation_code'].value_counts()) < 1000].index, 'violation_code'] = 'Other_violation_code'
-    
-    nyc_final_df = nyc_mod_violation_code_df
+    nyc_final_df = nyc_mod_target_df
     nyc_final_df.head()
 
     # Train & test split
