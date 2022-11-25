@@ -48,3 +48,8 @@ def main(input_file, output_train_file, output_test_file):
     top_20_zipcode = ['10019', '10003', '10036', '10013', '10001', '10002', '10016', '10022', '10011', '11201', 
                   '11354', '10012', '11220', '10014', '11372', '10017', '10018', '11215', '11211', '10009' ]
     nyc_mod_zipcode_df.loc[nyc_mod_zipcode_df.query("zipcode != @top_20_zipcode").index, 'zipcode'] = 'other_zipcode'
+    
+    nyc_mod_cuisine_df = nyc_mod_zipcode_df.copy()
+    nyc_mod_cuisine_df.loc[nyc_mod_cuisine_df[nyc_mod_cuisine_df['cuisine_description'].map(nyc_mod_cuisine_df['cuisine_description'].value_counts()) < 600].index, 'cuisine_description'] = 'Other_cuisine'
+    
+    
