@@ -30,6 +30,31 @@ alt.data_transformers.disable_max_rows()
 # Initialize doc
 opt = docopt(__doc__)
 
+### HELPER FUNCTIONS
+#  Added from Joel's suggestions
+def save_chart(chart, filename, scale_factor=1):
+    """
+    Save an Altair chart using vl-convert
+    
+    Parameters
+    ----------
+    chart : altair.Chart
+        Altair chart to save
+    filename : str
+        The path to save the chart to
+    scale_factor: int or float
+        The factor to scale the image resolution by.
+        E.g. A value of `2` means two times the default resolution.
+    """
+    if filename.split('.')[-1] == 'svg':
+        with open(filename, "w") as f:
+            f.write(vlc.vegalite_to_svg(chart.to_dict()))
+    elif filename.split('.')[-1] == 'png':
+        with open(filename, "wb") as f:
+            f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
+    else:
+        raise ValueError("Only svg and png formats are supported")
+
 # Define main function
 def main(train_set, visual_dir):
     """
@@ -56,37 +81,15 @@ def main(train_set, visual_dir):
     except Exception as ex:
         print("Exception occurred :" + ex)
         exit()
+    
+    # Creates a table of the counts of Grade A and F in the training set
+    class_table = pd.DataFrame(train_df['grade'].value_counts(), columns=['Number of Inspections'])
+    class_table = class_table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
+    dfi.export(class_table, visual_dir + "/class_table.png")
 
-    class_table(train_df, visual_dir + "/data_partition_table.png")
-    score_boxplot(train_df, visual_dir + "/score_boxplot.png")
-    flags_stacked_bar_chart(train_df, visual_dir + "/critical_flag_stacked.png")
-    borough_bars(train_df, visual_dir + "/borough_bars.png")
-    top_cuisine_table(train_df, visual_dir + "/top_cuisines.png")
-    violation_code_bars(train_df, visual_dir + "/violation_code_bars.png")
-
-    # Run tests to verify that the visuals saved
-    class_table_exists(visual_dir + "/data_partition_table.png")
-    score_boxplot_exists(visual_dir + "/score_boxplot.png")
-    flag_plot_exists(visual_dir + "/critical_flag_stacked.png")
-    borough_bar_plot_exists(visual_dir + "/borough_bars.png")
-    cuisine_table_exists(visual_dir + "/top_cuisines.png")
-    violation_plot_exists(visual_dir + '/violation_code_bars.png')
-
-### HELPER FUNCTIONS
-def class_table(train, path):
-    """
-    Creates a table of the counts of Grade A and F in the training set
-    """
-    table = pd.DataFrame(train['grade'].value_counts(), columns=['Number of Inspections'])
-    table = table.style.set_caption('Table 1. Counts of inspections belonging to each class in the training data')
-    return dfi.export(table, path)
-
-def score_boxplot(train, path):
-    """
-    Creates boxplot of the distribution of scores by grade
-    """
-    boxplot = (
-        alt.Chart(train).mark_boxplot(size=50).encode(
+    # Creates boxplot of the distribution of scores by grade
+    score_boxplot = (
+        alt.Chart(train_df).mark_boxplot(size=50).encode(
         alt.X('score', title='Score'),
         alt.Y('grade', title='Grade'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade')
@@ -101,15 +104,12 @@ def score_boxplot(train, path):
             titleFontSize=20
         )
     )
-    return save_chart(boxplot, path)
+    save_chart(score_boxplot, visual_dir + "/score_boxplot.png")
 
-def flags_stacked_bar_chart(train, path):
-    """
-    Creates stacked bar chart of the proportion of restaurants that received
-    Critical, Non-critical and Not Applicable flags
-    """
-    bar_chart = (
-        alt.Chart(train).mark_bar().encode(
+    # Creates stacked bar chart of the proportion of restaurants that received
+    # Critical, Non-critical and Not Applicable flags
+    flag_bar_chart = (
+        alt.Chart(train_df).mark_bar().encode(
         alt.X('count()', stack='normalize', title='Proportion of Restaurants'),
         alt.Y('grade', title='Grade'),
         alt.Color('critical_flag', scale=alt.Scale(scheme='set1'), title='Critical Flag', sort='-x')
@@ -121,15 +121,12 @@ def flags_stacked_bar_chart(train, path):
             titleFontSize=20
         )
     )
-    return save_chart(bar_chart, path)
+    save_chart(flag_bar_chart, visual_dir + "/critical_flag_stacked.png")
 
-def borough_bars(train, path):
-    """
-    Creates a grouped bar chart of the number of inspections performed in each
-    NYC borough, sorted by grade
-    """
-    bar_chart = (
-        alt.Chart(train).mark_bar().encode(
+    # Creates a grouped bar chart of the number of inspections performed in each
+    # NYC borough, sorted by grade
+    boro_bar_chart = (
+        alt.Chart(train_df).mark_bar().encode(
         alt.X('grade', axis=alt.Axis(labelAngle=0), title='Grade'),
         alt.Y('count()'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade', legend=None),
@@ -143,28 +140,20 @@ def borough_bars(train, path):
             titleFontSize=20
         )
     )
-    return save_chart(bar_chart, path)
+    save_chart(boro_bar_chart, visual_dir + "/borough_bars.png")
 
-def top_cuisine_table(train, path):
-    """
-    Creates a table of the top 10 cuisine types in the training set, in descending
-    order by frequency
-    """
-    top_10_cuisine_df = pd.DataFrame(train['cuisine_description'].value_counts()[:10])
+    # Creates a table of the top 10 cuisine types in the training set, in descending
+    # order by frequency
+    top_10_cuisine_df = pd.DataFrame(train_df['cuisine_description'].value_counts()[:10])
     top_10_cuisine_df.index.name = 'Cuisine Description'
     top_10_cuisine_df.columns = ['Count of Records']
     top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 3. Number of inspections performed for the top 10 most common cuisine types.')
-    return dfi.export(top_10_cuisine_df, path)
+    dfi.export(top_10_cuisine_df, visual_dir + "/top_cuisines.png")
 
-def violation_code_bars(train, path):
-    """
-    Creates a bar plot of the number of inspections categorized under each violation code,
-    sorted by grade
-    """
-    bar_plot = (
-        alt.Chart(
-        train,
-        ).mark_bar().encode(
+    # Creates a bar plot of the number of inspections categorized under each violation code,
+    # sorted by grade
+    vc_bar_plot = (
+        alt.Chart(train_df).mark_bar().encode(
         alt.X('violation_code', sort='-y', axis=alt.Axis(labelAngle=0), title='Violation Code'),
         alt.Y('count()'),
         alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade')
@@ -178,31 +167,15 @@ def violation_code_bars(train, path):
             titleFontSize=20
         )
     )
-    return save_chart(bar_plot, path)
+    save_chart(vc_bar_plot, visual_dir + "/violation_code_bars.png")
 
-#  Added from Joel's suggestions
-def save_chart(chart, filename, scale_factor=1):
-    """
-    Save an Altair chart using vl-convert
-    
-    Parameters
-    ----------
-    chart : altair.Chart
-        Altair chart to save
-    filename : str
-        The path to save the chart to
-    scale_factor: int or float
-        The factor to scale the image resolution by.
-        E.g. A value of `2` means two times the default resolution.
-    """
-    if filename.split('.')[-1] == 'svg':
-        with open(filename, "w") as f:
-            f.write(vlc.vegalite_to_svg(chart.to_dict()))
-    elif filename.split('.')[-1] == 'png':
-        with open(filename, "wb") as f:
-            f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
-    else:
-        raise ValueError("Only svg and png formats are supported")
+    # Run tests to verify that the visuals saved
+    class_table_exists(visual_dir + "/data_partition_table.png")
+    score_boxplot_exists(visual_dir + "/score_boxplot.png")
+    flag_plot_exists(visual_dir + "/critical_flag_stacked.png")
+    borough_bar_plot_exists(visual_dir + "/borough_bars.png")
+    cuisine_table_exists(visual_dir + "/top_cuisines.png")
+    violation_plot_exists(visual_dir + '/violation_code_bars.png')
 
 # Call main
 if __name__ == "__main__":
