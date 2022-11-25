@@ -52,4 +52,8 @@ def main(input_file, output_train_file, output_test_file):
     nyc_mod_cuisine_df = nyc_mod_zipcode_df.copy()
     nyc_mod_cuisine_df.loc[nyc_mod_cuisine_df[nyc_mod_cuisine_df['cuisine_description'].map(nyc_mod_cuisine_df['cuisine_description'].value_counts()) < 600].index, 'cuisine_description'] = 'Other_cuisine'
     
+    nyc_mod_violation_des_df = nyc_mod_cuisine_df.copy()
+    nyc_mod_violation_des_df.loc[nyc_mod_violation_des_df[nyc_mod_violation_des_df['violation_description'].map(nyc_mod_violation_des_df['violation_description'].value_counts()) < 500].index, 'violation_description'] = 'Other_violation_des'
+    
+    
     
