@@ -21,14 +21,15 @@ library(knitr)
 library(kableExtra)
 ```
 
+
 This is a data analysis project for DSCI 522 (Data Science workflows); a course in the Master of Data Science program at the University of British Columbia.
 
 ## Contributors
 
-Nikita Susan Easow
-Sneha Sunil
-Edward (Yukun) Zhang
-Lauren Zung
+- Nikita Susan Easow
+- Sneha Sunil
+- Edward (Yukun) Zhang
+- Lauren Zung
 
 ## Introduction
 
@@ -37,9 +38,9 @@ Now that things are getting back to normal as the restrictions set by government
 The standards that health inspectors use for grading will probably need to be revised because health rules have become more stringent in order to curb the pandemic.
 The overall plan used by health inspection is as follows, though it may vary by state:
 
-GRADE A: The restaurant is clean, up to code, and free of violations.
-GRADE B: The restaurant has some issues that must be fixed.
-GRADE C: The restaurant is a public risk and on verge of closure.
+**GRADE A:** The restaurant is clean, up to code, and free of violations.
+**GRADE B:** The restaurant has some issues that must be fixed.
+**GRADE C:** The restaurant is a public risk and on verge of closure.
 
 (Source: SmartSense, 2018)
 
@@ -53,11 +54,11 @@ We believe that our effort could be useful to the residents or tourists in the N
 
 Besides this main research question, our analysis would also like to address some interesting sub-questions given below:
 
-Which cuisines are more likely to be graded A in NYC?
-Which cuisines are more likely to be graded B or C in NYC?
-Which borough in NYC seems to have the best restaurants?
-Which borough in NYC seems to have the most restaurants with the most severe violations?
-What words in a violation description contribute most to whether a restaurant is graded A or B/C?
+- Which cuisines are more likely to be graded A in NYC?
+- Which cuisines are more likely to be graded B or C in NYC?
+- Which borough in NYC seems to have the best restaurants?
+- Which borough in NYC seems to have the most restaurants with the most severe violations?
+- What words in a violation description contribute most to whether a restaurant is graded A or B/C?
 
 ## Data
 
@@ -65,7 +66,7 @@ The data set that we are using in our analysis for the restaurant grading, DOHMH
 It was obtained from the tidytuesday [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11) by Thomas Mock.
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
 
-**Summary**
+**Summary - **
 
 The data includes all of the violation citation from the restaurant inspections held in New York City from 2012 to 2018.
 Each row represents a restaurant that has undergone a health inspection which has the information about each establishment including the restaurant name, phone number, location (borough, building number, street, zip code), cuisine type, and also the details about the inspection itself which includes date, violation code, description, whether there were any violations cited, whether they were critical, etc.).
@@ -76,9 +77,12 @@ Here is a complete dictionary of the data can be found [here](https://github.com
 
 We performed the exploratory data analysis on the restaurant dataset and we noticed that the total strength of inspections were 3,00,000, out of which only 151,451 had a value filled in for the grade column that we are interested in.
 
+
+
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/class_table.png") 
 ```
+
 
 As we can see from the above table, there is a significant class imbalance of which 79.8% inspections are graded as A.
 Hence, we've chosen to approach our research question as a binary classification problem , where the outcome will determine whether a restaurant should be graded as A(Pass) or F(Fail - clubbing the B and C grades) based on the standards that are set.
@@ -89,11 +93,13 @@ We performed the rest our analysis on the training data where we split the initi
 One important point to note here is that when we grouped the restaurants by `camis` feature, we could see that many restaurants were inspected more than once and we are not sure on whether the restaurants share the same name or if some restaurants have changes their name in between 2012 and 2018.
 Since we could not incorporate this issue while modelling, we have added it to the limitations.
 
+
 **Fig 1 :**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png") 
 ```
+
 
 From the above plot, we can see that the grade F restaurants are associated with higher scores on an average when compared to that of the graded A restaurants even though some of them have low scores.
 We can conclude that the scores are higher for more critical health violations, but we cannot generalize as we do not see a hard cut off for when a restaurant is graded A or not.
@@ -104,8 +110,10 @@ We can conclude that the scores are higher for more critical health violations, 
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacked.png")
 ```
 
+
 In the above figure, the plot suggests that the Grade F restaurants receive proportionally more red flags related to violations than Grade A restaurants do, but it is interesting to see that even grade A restaurants have had some critical violations.
 It will be intriguing to see if our model can determine whether the seriousness of a violation actually counts for grading because it is unclear what the threshold for a "major" violation is.
+
 
 **Fig 3 :**
 
@@ -116,7 +124,7 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 We should be able to dine in any neighborhood of NYC because all of the boroughs have a majority of Grade A restaurants.
 It is clear that the majority of the inspections took place in Manhattan, which also has the highest concentration of restaurants receiving a Grade F rating among the other boroughs.
 
-The complete EDA including the above figures and tables can be found[here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
+The complete EDA including the above figures and tables can be found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
 
 ## Interpretation of the Results & Discussion
 
@@ -127,14 +135,17 @@ and `Support vector machines` (balanced and imbalanced). In addition to this, ou
 
 As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the `Balanced Logistic Regression` as our classifier to train the data set.
 
+
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/mean_scores_table.png")
 ```
+
 **Hyper parameter tuning results on logreg:**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/hyperparam_results.png")
 ```
+
 
 
 By using Random Search CV, we optimized the hyper parameters of the balanced logistic regression model to the following :
@@ -145,6 +156,7 @@ By using Random Search CV, we optimized the hyper parameters of the balanced log
 
 - **max_categories** - 17
 
+
 **Train/validation scores from the best model**
 
 After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.996. Both the precision and recall scores for the validation set is high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not). The model is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade.
@@ -152,17 +164,22 @@ After performing cross validation on the training set using our optimized hyper 
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/best_model_results.png")
 ```
+
 **Classification report from the best model on the test set** 
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/test_classification_report.png")
 ```
 
+
+
 **Confusion matrices from the best model on train and test set**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/confusion_matrices.png")
 ```
+
+
 
 **PR curve from test set**
 
@@ -173,7 +190,8 @@ knitr::include_graphics("../results/PR_curve.png")
 
 ```
 
-**ROC curve from test set**
+
+ROC curve from test set**
 
 The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
 
@@ -181,9 +199,9 @@ The ROC curve is a plot between the False Positive Rate and the True Positive Ra
 knitr::include_graphics("../results/ROC_curve.png")
 ```
 
-**NOTE on high f1 score**
+**NOTE on high f1 score-**
 
-We are aware of the fact that f1 score, precision and recall of our model on the train, validation and test set are quite high. This may be because there are underlying linear relationships between different columns and the target.
+We are aware of the fact that f1 precision and recall score of our model on the train, validation and test sets are quite high. This may be because there are underlying linear relationships between different features and the target.
 
 ## Assumptions
 
