@@ -152,7 +152,7 @@ def main(train_data, test_data, output_dir):
         axis='columns',
         level=1
     ).drop(['fit_time', 'score_time'])
-    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 1. Mean train and validation scores from each model.')
+    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.1. Mean train and validation scores from each model.')
     dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
 
     # Adapted from 573 Lab 1
@@ -164,7 +164,7 @@ def main(train_data, test_data, output_dir):
         axis='columns',
         level=1
     ).drop(['fit_time', 'score_time'])
-    std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2. Standard deviation of train and validation scores for each model.')
+    std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.2. Standard deviation of train and validation scores for each model.')
     dfi.export(std_results_table, output_dir + "/std_scores_table.png")
 
     # fitting the logistic regression model to train data because mean validation score for LR is higher
@@ -184,17 +184,18 @@ def main(train_data, test_data, output_dir):
 
     # Creating hyperparameter tuning table
     random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
-                                                            'param_countvectorizer__max_features', 'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
-    random_cv_df = random_cv_df.style.set_caption('Table 3. Mean train and cross-validation scores (5-fold) for balanced logistici regression, optimizing recall score.')
+                                                            'param_columntransformer__countvectorizer__max_features',
+                                                            'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
+    random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing recall score.')
     dfi.export(random_cv_df, output_dir + "hyperparam_results.png")
 
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
-    best_model_table = best_model_table.style.format(precision=2).background_gradient(axis=None).set_caption(
-        'Table 4. Mean and standard deviation of train and validation scores for the logistic regression model.\nParameters: C = ' +
+    best_model_table = best_model_table.style.set_caption(
+        'Table 2.4. Mean and standard deviation of train and validation scores for the logistic regression model.\nParameters: C = ' +
         str(random_search.best_params_['logisticregression__C']) +
-        'max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
-        'max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
+        ', max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
+        ', max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
     )
     dfi.export(best_model_table, output_dir + "/best_model_results.png")
 
