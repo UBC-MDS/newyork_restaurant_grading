@@ -85,7 +85,7 @@ def main(train_data, test_data, output_dir):
     # downsample the training set
     # as we have a large dataset, we have chosen to apply downsampling since we do not have access to enough resources to run the analysis
     print("Resampling the data, then splitting into X and y...")
-    train_df = resample(train_df, replace=False, n_samples=20000, random_state=123)
+    train_df = resample(train_df, replace=False, n_samples=30000, random_state=123)
 
     # split features and target for train and test data
 
@@ -155,12 +155,12 @@ def main(train_data, test_data, output_dir):
     avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 1. Mean train and test scores of each model.')
     dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
 
-#     # fitting the logistic regression model to train data because validation scores for LR is higher
-#     print("Fitting the logistic regression model to train data because validation scores for LR is higher")
-#     pipe_lr.fit(X_train, y_train)
+    # fitting the logistic regression model to train data because mean validation score for LR is higher
+    print("Fitting the logistic regression model...")
+    pipe_lr.fit(X_train, y_train)
 
-#     # get total length of vocabulary in count vectorizer for 'violation_description' column
-#     len_vocab_1 = len(pipe_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
+    # get total length of vocabulary in count vectorizer for 'violation_description' column
+    len_vocab_1 = len(pipe_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
 
 #     print("\nPerforming hyper parameter tuning for logistic regression model using randomizedsearchcv...")
 #     param_dist = {'logisticregression__C': loguniform(1e-3, 1e3),
