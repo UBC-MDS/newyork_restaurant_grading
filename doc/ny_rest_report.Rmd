@@ -3,11 +3,11 @@ title: "Predicting the Grade of Restaurants in New York City"
 author: "Sneha Sunil"
 date: "2022-11-25"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
     df_print: paged
-  pdf_document:
-    toc: yes
 bibliography: ny_rest_references.bib
 editor_options: 
   markdown: 
@@ -67,10 +67,10 @@ Here is a complete dictionary of the data can be found here.
 
 We performed the exploratory data analysis on the restaurant dataset and we noticed that the total strength of inspections were 3,00,000, out of which only 151,451 had a value filled in for the grade column that we are interested in.
 
-| Data Partition | Grade A | Grade F |
-|---------------:|--------:|--------:|
-|          Train |   89781 |   18781 |
-|           Test |   29866 |    6322 |
+```{r out.width = '100%'}
+knitr::include_graphics("../src/nyc_rest_eda_script_visuals/class_table.png") 
+```
+
 
 As we can see from the above table, there is a significant class imbalance of which 79.8% inspections are graded as A.
 Hence, we've chosen to approach our research question as a binary classification problem , where the outcome will determine whether a restaurant should be graded as A(Pass) or F(Fail - clubbing the B and C grades) based on the standards that are set.
@@ -84,7 +84,7 @@ Since we could not incorporate this issue while modelling, we have added it to t
 Fig 1 :
 
 ```{r out.width = '100%'}
-knitr::include_graphics("../src/nyc_rest_eda_figures/score_boxplot.png") 
+knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png") 
 ```
 
 From the above plot, we can see that the grade F restaurants are associated with higher scores on an average when compared to that of the graded A restaurants even though some of them have low scores.
@@ -93,7 +93,7 @@ We can conclude that the scores are higher for more critical health violations, 
 Fig 2 :
 
 ```{r out.width = '100%'}
-knitr::include_graphics("../src/nyc_rest_eda_figures/violation_stack.png")
+knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacked.png")
 ```
 
 In the above figure, the plot suggests that the Grade F restaurants receive proportionally more red flags related to violations than Grade A restaurants do, but it is interesting to see that even grade A restaurants have had some critical violations.
@@ -102,7 +102,7 @@ It will be intriguing to see if our model can determine whether the seriousness 
 Fig 3 :
 
 ```{r out.width = '100%'}
-knitr::include_graphics("../src/nyc_rest_eda_figures/boro_bars.png")
+knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 ```
 
 We should be able to dine in any neighborhood of NYC because all of the boroughs have a majority of Grade A restaurants.
