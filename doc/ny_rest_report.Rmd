@@ -42,7 +42,7 @@ We believe that our effort could be useful to the residents or tourists in the N
 
 **Research question :**
 
-Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?"
+`Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?`
 
 Besides this main research question, our analysis would also like to address some interesting sub-questions given below:
 
@@ -58,21 +58,20 @@ The data set that we are using in our analysis for the restaurant grading, DOHMH
 It was obtained from the tidytuesday [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11) by Thomas Mock.
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
 
-**SUMMARY**
+**Summary**
 
 The data includes all of the violation citation from the restaurant inspections held in New York City from 2012 to 2018.
 Each row represents a restaurant that has undergone a health inspection which has the information about each establishment including the restaurant name, phone number, location (borough, building number, street, zip code), cuisine type, and also the details about the inspection itself which includes date, violation code, description, whether there were any violations cited, whether they were critical, etc.).
 The restaurants may receive an official grading of A, B, or C; alternatively, they may receive a Z or P for an evaluation that is still pending.
 Here is a complete dictionary of the data can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11#data-dictionary).
 
-## EDA
+## Exploratory Data Analysis
 
 We performed the exploratory data analysis on the restaurant dataset and we noticed that the total strength of inspections were 3,00,000, out of which only 151,451 had a value filled in for the grade column that we are interested in.
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/class_table.png") 
 ```
-
 
 As we can see from the above table, there is a significant class imbalance of which 79.8% inspections are graded as A.
 Hence, we've chosen to approach our research question as a binary classification problem , where the outcome will determine whether a restaurant should be graded as A(Pass) or F(Fail - clubbing the B and C grades) based on the standards that are set.
@@ -128,7 +127,7 @@ In our data analysis, we are making the following assumptions -
 
 The EDA shows that many of the restaurants have undergone inspections more than once, with the help of the `camis` feature. But, it is unclear whether some restaurants share the same name, or if some restaurants have changed their name between 2012 and 2018. Unfortunately, we were unable to parse the data by this feature to ensure that the restaurants that are reviewed more than once are not included both in the training and validation/test sets. Since we aren't sure whether the models are in fact learning the 'features' or the specific restaurant examples, there might be some discrepancies in the prediction results.
 
-## Statement of future directions
+## Statement of Future Directions
 
 - Going forward, we would be considering only unique restaurants for training the model by dropping all duplicate inspections having matching `camis` features and performing predictions using the new model for other cities.
 - As we progress with the research, we intend to use several models to compare different metrics and choose the best-suited model for our research problem.
@@ -138,8 +137,16 @@ The EDA shows that many of the restaurants have undergone inspections more than 
 
 ## References
 
-@Python 3 Reference Manual
-@docopt: Command-Line Interface Specification Language
-@docopt: Command-line interface description language
-
-
+@tidytuesday
+@scikit-learn
+@cortes1995support
+@Python 
+@mckinney2011pandas
+@docopt
+@docoptpython
+@knitr
+@anaconda Software Distribution
+@PER-GRA:2007
+@VanderPlas2018
+@cox1958regression
+@Hunter:2007
