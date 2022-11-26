@@ -83,7 +83,7 @@ Run the following commands at the command line/terminal from the root directory 
 
 6. Run the machine learning analysis and export models
 
-    ```python```
+    ```python src/nyc_rest_analysis.py --train_data='./data/processed/train_df.csv' --test_data='./data/processed/test_df.csv' --output_dir='./results'```
 
 7. Render the final report
 
