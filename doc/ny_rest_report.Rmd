@@ -1,0 +1,80 @@
+---
+title: "Predicting the Grade of Restaurants in New York City"
+author: "Sneha Sunil"
+date: "2022-11-25"
+output:
+  pdf_document:
+    toc: yes
+  html_document:
+    toc: yes
+    df_print: paged
+#bibliography: references.bib
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+```
+
+This is a data analysis project for DSCI 522 (Data Science workflows); a course in the Master of Data Science program at the University of British Columbia.
+
+## Contributors
+
+
+## Introduction
+
+BACKSTORY -
+
+After the state proclaimed the restoration of indoor dining during the COVID 19 era, hundreds of new restaurants have opened throughout New York City (Eater NY, 2020). Now that things are getting back to normal as the restrictions set by government are lifted and people are returning back to dining out as the hotel sector reopens, the general safety of restaurants has taken on utmost importance in light of the current state of affairs of COVID. The standards that health inspectors use for grading will probably need to be revised because health rules have become more stringent in order to curb the pandemic. The overall plan used by health inspection is as follows, though it may vary by state: 
+
+GRADE A: The restaurant is clean, up to code, and free of violations.
+GRADE B: The restaurant has some issues that must be fixed.
+GRADE C: The restaurant is a public risk and on verge of closure.
+
+(Source: SmartSense, 2018)
+
+As data scientists, we're curious about how we can evaluate and predict a restaurant's general level of quality so that we can provide recommendation on the right restaurants which can be dined in safely by classifying the restaurant as "good" or "poor" (in our case, Grade A vs. Grade B/C). As we have access to restaurant data for the New York City, we would like to concentrate our analysis on forecasting the grading of restaurants as Good or Poor for specific NYC locations, with plans to eventually expand to other metropolitan regions. We believe that our effort could be useful to the residents or tourists in the NY city and this could be a one stop solution for people who are  looking to dine in without having to worry about the quality.
+
+Research question : 
+
+Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?"
+
+Which cuisines are more likely to be graded A in NYC?
+Which cuisines are more likely to be graded B or C in NYC?
+Which borough in NYC seems to have the best restaurants?
+Which borough in NYC seems to have the most restaurants with the most severe violations?
+What words in a violation description contribute most to whether a restaurant is graded A or B/C?
+
+
+## Data
+
+The data set that we are using in our analysis for the restaurant grading, DOHMH New York City Restaurant Inspection Results, is sourced from NYC OpenData Portal. It was obtained from the tidytuesday repository by Thomas Mock(add repo). The original data set can be found here.
+
+SUMMARY - 
+
+The data includes all of the violation citation from the restaurant inspections held in New York City from 2012 to 2018. Each row represents a restaurant that has undergone a health inspection which has the information about each establishment including the restaurant name, phone number, location (borough, building number, street, zip code), cuisine type, and also the details about the inspection itself which includes  date, violation code, description, whether there were any violations cited, whether they were critical, etc.). The restaurants may receive an official grading of A, B, or C; alternatively, they may receive a Z or P for an evaluation that is still pending. Here is a complete dictionary of the data can be found here.
+
+
+## EDA
+
+We performed the exploratory data analysis on the restaurant dataset and we noticed that the total strength of inspections were 3,00,000, out of which only 151,451 had a value filled in for the grade column that we are interested in.
+
+As we can see from the above table, there is a significant class imbalance of which 79.8% inspections are graded as A. Hence, we've chosen to approach our research question as a binary classification problem , where the outcome will determine whether a restaurant should be graded as A(Pass) or F(Fail - clubbing the B and C grades) based on the standards that are set. We have excluded the restaurants with "PENDING" grade and will be considering in the deployment data inorder to predict the grade using our model.
+
+We performed the rest our analysis on the training data where we split the initial data set such that 75% of the data will go to our train data and the rest 25% will be for validating the performance of the model on restaurants which hasn't been graded yet based on the inspection features that we have.
+
+Fig 1 : 
+
+From the above plot, we can see that the grade F restaurants are associated with higher scores on an average when compared to that of the graded A restaurants even though some of them have low scores. We can conclude that the scores are higher for more critical health violations, but we cannot generalize as we do not see a hard cut off for when a restaurant is graded A or not. 
+
+Fig 2 : 
+
+In the above figure, the plot suggests that the Grade F restaurants receive proportionally more red flags related to violations than Grade A restaurants do, but it is interesting to see that even grade A restaurants have had some critical violations. It will be intriguing to see if our model can determine whether the seriousness of a violation actually counts for grading because it is unclear what the threshold for a "major" violation is.
+
+Fig 3 : 
+
+We should be able to dine in any neighbourhood of NYC because all of the boroughs have a majority of Grade A restaurants. It is clear that the majority of the inspections took place in Manhattan, which also has the highest concentration of restaurants receiving a Grade F rating among the other boroughs.
+
+## Interpretation of the Results
+
+
