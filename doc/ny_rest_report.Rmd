@@ -115,15 +115,14 @@ The complete EDA including the above figures and tables can be found[here](https
 ## Interpretation of the Results & Discussion
 
 
-
 ## Assumptions
 
 In our data analysis, we are making the following assumptions -
 
--   The restaurants' data set that we have is a good enough representative sample of the restaurant population in New York
+-   The restaurants' data set that we have is a good enough representative sample of the restaurant population in New York.
 -   The data is sourced ethically and is collected in a fair manner.
--   There is no bias in the data that is collected
--   No external factors in grading not captured in the data set
+-   There is no bias in the data that is collected.
+-   Grading is not affected by any external factors during the inspection.
 
 ## Limitations
 
