@@ -93,7 +93,7 @@ def main(train_set, visual_dir):
 
     # Creates a table of the counts of Grade A and F in the training set
     class_table = train_df['grade'].value_counts().rename_axis('Grades').to_frame('Number of Inspections')
-    class_table = class_table.style.set_caption('Table 1. Counts of inspections in the training data by class.')
+    class_table = class_table.style.set_caption('Table 1.1 Counts of inspections in the training data by class.')
     dfi.export(class_table, visual_dir + "/class_table.png")
 
     # Creates boxplot of the distribution of scores by grade
@@ -160,7 +160,7 @@ def main(train_set, visual_dir):
     top_10_cuisine_df = pd.DataFrame(train_df['cuisine_description'].value_counts()[:10])
     top_10_cuisine_df.index.name = 'Cuisine Description'
     top_10_cuisine_df.columns = ['Count of Records']
-    top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 2. Number of inspections performed for the top 10 most common cuisine types.')
+    top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 1.2. Number of inspections performed for the top 10 most common cuisine types.')
     dfi.export(top_10_cuisine_df, visual_dir + "/top_cuisines.png")
 
     # Creates a bar plot of the number of inspections categorized under each violation code,
@@ -193,21 +193,39 @@ def main(train_set, visual_dir):
 
 ### TESTS
 def class_table_exists(file_path):
+    """
+    Checks that the class table has been saved
+    """
     assert os.path.isfile(file_path + "/class_table.png"), "Could not find the class table in the visualizations folder." 
 
 def score_boxplot_exists(file_path):
+    """
+    Checks that the score boxplot has been saved
+    """
     assert os.path.isfile(file_path + "/score_boxplot.png"), "Could not find the score boxplot in the visualizations folder." 
 
 def flag_plot_exists(file_path):
+    """
+    Checks that the critical flag chart has been saved
+    """
     assert os.path.isfile(file_path + "/critical_flag_stacked.png"), "Could not find the critical flag chart in the visualizations folder." 
 
 def borough_bar_plot_exists(file_path):
+    """
+    Checks that the borough bar plot has been saved
+    """
     assert os.path.isfile(file_path + "/borough_bars.png"), "Could not find the borough bar plot in the visualizations folder." 
 
 def cuisine_table_exists(file_path):
+    """
+    Checks that the cuisine table has been saved
+    """
     assert os.path.isfile(file_path + "/top_cuisines.png"), "Could not find the top 10 cuisine table in the visualizations folder." 
 
 def violation_plot_exists(file_path):
+    """
+    Checks that the violation code plot has been saved
+    """
     assert os.path.isfile(file_path + '/violation_code_bars.png'), "Could not find the violation codes chart in the visualizations folder." 
 
 # Call main
