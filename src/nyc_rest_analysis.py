@@ -8,7 +8,7 @@ Usage: src/nyc_rest_analysis.py --train_data=<train_input_file> --test_data=<tes
 
 Options:
 --train_data=<train_input_file>       Path of the input file that contains the train data
---test_data=<test_input_file>       Path of the input file that contains the test data
+--test_data=<test_input_file>         Path of the input file that contains the test data
 --output_dir=<output_directory>       Path of the output file where results of the analysis will be stored 
 
 Command to run the script:
@@ -196,7 +196,7 @@ def main(train_data, test_data, output_dir):
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.')
     dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
-    print("\nDoing cross validation using the best parameters...")
+    print("Doing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     best_model_table = best_model_table.drop(['fit_time', 'score_time'])
     best_model_table = best_model_table.style.set_caption(
@@ -252,6 +252,72 @@ def main(train_data, test_data, output_dir):
     ### TO LOAD THE MODEL
     # loaded_model = pickle.load(open(output_dir + 'best_model.pkl', 'rb'))
     # result = loaded_model.score(X_test, y_test)
+
+    # Run tests to make sure everything has been saved properly
+    avg_score_table_exists(output_dir)
+    std_score_table_exists(output_dir)
+    hp_tuning_table_exists(output_dir)
+    best_model_cv_table_exists(output_dir)
+    classification_report_exists(output_dir)
+    confusion_matrix_exists(output_dir)
+    PR_curve_exists(output_dir)
+    ROC_curve_exists(output_dir)
+    model_exists(output_dir)
+
+### TESTS
+def avg_score_table_exists(file_path):
+    """
+    Checks that the mean score table has been saved
+    """
+    assert os.path.isfile(file_path + "/mean_scores_table.png"), "Could not find the average scores table in the results folder." 
+
+def std_score_table_exists(file_path):
+    """
+    Checks that the score standard deviation table has been saved
+    """
+    assert os.path.isfile(file_path + "/std_scores_table.png"), "Could not find the std scores table in the results folder." 
+
+def hp_tuning_table_exists(file_path):
+    """
+    Checks that the hyperparameter tuning table has been saved
+    """
+    assert os.path.isfile(file_path + "/hyperparam_results.png"), "Could not find the hyperparameter tuning table in the results folder." 
+
+def best_model_cv_table_exists(file_path):
+    """
+    Checks that the best model's cross-validation results has been saved
+    """
+    assert os.path.isfile(file_path + "/best_model_results.png"), "Could not find the best model results table in the results folder." 
+
+def classification_report_exists(file_path):
+    """
+    Checks that the class table has been saved
+    """
+    assert os.path.isfile(file_path + "/test_classification_report.png"), "Could not find the classification report in the results folder." 
+
+def confusion_matrix_exists(file_path):
+    """
+    Checks that the confusion matrices have been saved
+    """
+    assert os.path.isfile(file_path + "/confusion_matrices.png"), "Could not find the confusion matrices in the results folder." 
+
+def PR_curve_exists(file_path):
+    """
+    Checks that the PR curve has been saved
+    """
+    assert os.path.isfile(file_path + "/PR_curve.png"), "Could not find the PR curve in the results folder." 
+
+def ROC_curve_exists(file_path):
+    """
+    Checks that the ROC curve has been saved
+    """
+    assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
+
+def model_exists(file_path):
+    """
+    Checks that the best model has been saved
+    """
+    assert os.path.isfile(file_path + "/best_model.pkl"), "Could not find the model in the results folder." 
 
 if __name__ == "__main__":
     main(opt["--train_data"], opt["--test_data"], opt["--output_dir"])
