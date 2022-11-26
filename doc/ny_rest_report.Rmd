@@ -76,7 +76,7 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/class_table.png")
 
 As we can see from the above table, there is a significant class imbalance of which 79.8% inspections are graded as A.
 Hence, we've chosen to approach our research question as a binary classification problem , where the outcome will determine whether a restaurant should be graded as A(Pass) or F(Fail - clubbing the B and C grades) based on the standards that are set.
-We have excluded the restaurants with "PENDING" grade and will be considering in the deployment data inorder to predict the grade using our model.
+We have excluded the restaurants with "PENDING" grade and will be considering in the deployment data in order to predict the grade using our model.
 
 We performed the rest our analysis on the training data where we split the initial data set such that 75% of the data will go to our train data and the rest 25% will be for validating the performance of the model on restaurants which hasn't been graded yet based on the inspection features that we have.
 
@@ -110,9 +110,11 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 We should be able to dine in any neighborhood of NYC because all of the boroughs have a majority of Grade A restaurants.
 It is clear that the majority of the inspections took place in Manhattan, which also has the highest concentration of restaurants receiving a Grade F rating among the other boroughs.
 
-The complete EDA including the above figures and tables can be found  [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
+The complete EDA including the above figures and tables can be found[here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
 
 ## Interpretation of the Results & Discussion
+
+
 
 ## Assumptions
 
@@ -125,19 +127,23 @@ In our data analysis, we are making the following assumptions -
 
 ## Limitations
 
-The EDA shows that many of the restaurants have undergone inspections more than once, with the help of the 'camis' feature.
-But, it is unclear whether some restaurants share the same name, or if some restaurants have changed their name between 2012 and 2018.
-Unfortunately, we were unable to parse the data by this feature to ensure if the restaurants that are reviewed more than once are not included both in the training and validation/test sets.
-Since, we aren't sure whether the models are in fact learning the 'features' or the specific restaurant examples, there might be some discrepancies in the prediction results.
+- The EDA shows that many of the restaurants have undergone inspections more than once, with the help of the `camis` feature.
+- But, it is unclear whether some restaurants share the same name, or if some restaurants have changed their name between 2012 and 2018.
+- Unfortunately, we were unable to parse the data by this feature to ensure if the restaurants that are reviewed more than once are not included both in the training and validation/test sets.
+- Since, we aren't sure whether the models are in fact learning the 'features' or the specific restaurant examples, there might be some discrepancies in the prediction results.
 
 ## Statement of future directions
 
-Going forward, we would be considering only unique restaurants for training the model by dropping all duplicate inspections having matching `camis` feature and perform predictions using the new model for other cities.
-As we progress with the research, we intend to use several models to compare different metrics and choose the best suited model for our research problem.
-Additionally, we are also planning to make use of the deployment data and predict the grade of the restaurants using our model and compare this to the actual grading by the inspection team.
-In addition to Newyork, we could also generalize our model to predict the restaurant grading across other metropolitan cities.
-Lastly, we would like to incorporate certain feature engineering techniques like text based engineering so that our model can be trained with the best features and yield better results.
+- Going forward, we would be considering only unique restaurants for training the model by dropping all duplicate inspections having matching `camis` feature and perform predictions using the new model for other cities.
+- As we progress with the research, we intend to use several models to compare different metrics and choose the best suited model for our research problem.
+- Additionally, we are also planning to make use of the deployment data and predict the grade of the restaurants using our model and compare this to the actual grading by the inspection team.
+- In addition to Newyork, we could also generalize our model to predict the restaurant grading across other metropolitan cities.
+- Lastly, we would like to incorporate certain feature engineering techniques like text based engineering so that our model can be trained with the best features and yield better results.
 
 ## References
 
 @Python 3 Reference Manual
+@docopt: Command-Line Interface Specification Language
+@docopt: Command-line interface description language
+
+
