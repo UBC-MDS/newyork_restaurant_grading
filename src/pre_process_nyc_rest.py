@@ -20,7 +20,7 @@ python src/pre_process_nyc_rest.py --input_file="./data/raw/nyc_restaurants.csv"
 from docopt import docopt
 import pandas as pd
 from sklearn.model_selection import train_test_split
-
+import os.path
 
 opt = docopt(__doc__)
 
@@ -36,6 +36,16 @@ def main(input_file, output_train_file, output_test_file):
         Path of the output file which will contain the CSV test data 
     
     """ 
+    # Check if the data processed directory exists. If it doesn't, create the new folder
+    try:
+        isDirExist = os.path.isdir(os.path.dirname(output_train_file))
+        if not isDirExist:
+          print("Directory does not exist! Creating the path!")
+          os.makedirs(os.path.dirname(output_train_file))
+    
+    except Exception as ex:
+        print("Exception occurred :" + ex)
+        exit()
         
     # Read the data from input
     nyc_df = pd.read_csv(input_file)
@@ -57,6 +67,10 @@ def main(input_file, output_train_file, output_test_file):
     # Transform outputs into csv file
     train_df.to_csv(output_train_file, index = False)
     test_df.to_csv(output_test_file, index = False)
+    
+    # Run tests to verify that the train_df and the test_df are correctly saved
+    assert os.path.isfile(output_train_file), "Could not find the train_df in the data processed directory." 
+    assert os.path.isfile(output_test_file), "Could not find the test_df in the data processed directory." 
     
 
 if __name__ == "__main__":
