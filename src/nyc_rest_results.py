@@ -26,7 +26,7 @@ from sklearn.pipeline import make_pipeline
 from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
-from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
+from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score, classification_report, ConfusionMatrixDisplay, PrecisionRecallDisplay, RocCurveDisplay
 from sklearn.model_selection import cross_validate
 from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
@@ -49,11 +49,15 @@ def main(train_data, test_data, output_dir):
     unseen data (test_data)
 
     Outputs:
-        - the model saved as a pickle file
-        - results table of mean train/test scores from all models
+        - results table of mean train/validation scores from all models
+        - results table of standard deviation in train/validation scores from all models
+        - hyperparameter tuning results on optimal classifier
+        - train/validation scores from the best model
+        - classification report from the best model on the test set
+        - confusion matrices from the best model on train and test set
         - PR curve
-        - AOC curve
-        - confusion matrix from the best model
+        - ROC curve
+        - the model saved as a pickle file
     
     Parameters
     ----------
@@ -86,6 +90,7 @@ def main(train_data, test_data, output_dir):
     # as we have a large dataset, we have chosen to apply downsampling since we do not have access to enough resources to run the analysis
     print("Resampling the data, then splitting into X and y...")
     train_df = resample(train_df, replace=False, n_samples=30000, random_state=123)
+    test_df = resample(test_df, replace=False, n_samples=10000, random_state=123)
 
     # split features and target for train and test data
 
@@ -187,7 +192,7 @@ def main(train_data, test_data, output_dir):
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing recall score.')
-    dfi.export(random_cv_df, output_dir + "hyperparam_results.png")
+    dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
@@ -199,27 +204,35 @@ def main(train_data, test_data, output_dir):
     )
     dfi.export(best_model_table, output_dir + "/best_model_results.png")
 
-#     score = pipe_lr_best.score(X_test, y_test)
-#     print("Score on test data : ", score)
+    # Create classification report
+    print('Creating classification report for the test set...')
+    class_report = pd.DataFrame(classification_report(y_test, random_search.best_estimator_.predict(X_test), output_dict=True, digits=3)).T
+    class_report = class_report.style.set_caption('Table 2.5. Classification report on the test set.')
+    dfi.export(class_report, output_dir + "/test_classification_report.png")
 
-#     # create and save PR curve for the best model
+    # Create confusion matrices for the train and test sets
+    print('Creating confusion matrices...')
+    cm_plot = plt.figure()
+    cm_ax1 = cm_plot.add_subplot(1,2,1)
+    cm_ax2 = cm_plot.add_subplot(1,2,2)
+    cm_ax1.title.set_text('Train Set')
+    cm_ax2.title.set_text('Test Set')
+    ConfusionMatrixDisplay.from_predictions(y_train, random_search.best_estimator_.predict(X_train), ax=cm_ax1, colorbar=False)
+    ConfusionMatrixDisplay.from_predictions(y_test, random_search.best_estimator_.predict(X_test), ax=cm_ax2, colorbar=False)
+    cm_plot.savefig(output_dir + '/confusion_matrices.png')
 
-#     print("\nCreating and saving PR curve plot...")
-#     precision, recall, thresholds = precision_recall_curve(
-#     y_test, pipe_lr.predict_proba(X_test)[:, 1], pos_label="F"
-#     )
-#     plt.plot(precision, recall, label="logistic regression: PR curve")
-#     plt.xlabel("Precision")
-#     plt.ylabel("Recall")
-#     plt.plot(
-#         precision_score(y_test, pipe_lr.predict(X_test), pos_label="F"),
-#         recall_score(y_test, pipe_lr.predict(X_test), pos_label="F"),
-#         "or",
-#         markersize=10,
-#         label="threshold 0.5",
-#     )
-#     plt.legend(loc="best");
-#     plt.savefig(output_dir + 'logistic_regression_PR_curve.png')
+    # Create and save PR curve for the best model
+    pr_curve, pr_ax = plt.subplots()
+    PrecisionRecallDisplay.from_estimator(random_search.best_estimator_, X_test, y_test, pos_label='F', ax=pr_ax)
+    pr_ax.plot(
+        recall_score(y_test, random_search.best_estimator_.predict(X_test), pos_label="F"),
+        precision_score(y_test, random_search.best_estimator_.predict(X_test), pos_label="F"),
+        "or",
+        markersize=10,
+        label="0.5 Threshold",
+    )
+    pr_ax.legend(loc="best")
+    pr_curve.savefig(output_dir + '/PR_curve.png')
     
 #     # saving the model
 #     filename = 'finalized_model.sav'
