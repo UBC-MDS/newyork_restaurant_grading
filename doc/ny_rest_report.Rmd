@@ -3,11 +3,11 @@ title: "Predicting the Grade of Restaurants in New York City"
 author: "Sneha Sunil"
 date: "2022-11-25"
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     df_print: paged
+  pdf_document:
+    toc: yes
 bibliography: ny_rest_references.bib
 ---
 
@@ -35,7 +35,7 @@ GRADE C: The restaurant is a public risk and on verge of closure.
 
 (Source: SmartSense, 2018)
 
-As data scientists, we're curious about how we can evaluate and predict a restaurant's general level of quality so that we can provide recommendation on the right restaurants which can be dined in safely by classifying the restaurant as "good" or "poor" (in our case, Grade A vs. Grade B/C). As we have access to restaurant data for the New York City, we would like to concentrate our analysis on forecasting the grading of restaurants as Good or Poor for specific NYC locations, with plans to eventually expand to other metropolitan regions. We believe that our effort could be useful to the residents or tourists in the NY city and this could be a one stop solution for people who are  looking to dine in without having to worry about the quality.
+As data scientists, we're curious about how we can evaluate and predict a restaurant's general level of quality so that we can provide recommendation on the right restaurants which can be dined in safely by classifying the restaurant as "good" or "poor" (in our case, Grade A vs.Grade B/C). As we have access to restaurant data for the New York City, we would like to concentrate our analysis on forecasting the grading of restaurants as Good or Poor for specific NYC locations, with plans to eventually expand to other metropolitan regions. We believe that our effort could be useful to the residents or tourists in the NY city and this could be a one stop solution for people who are looking to dine in without having to worry about the quality.
 
 Research question : 
 
@@ -67,7 +67,7 @@ We performed the rest our analysis on the training data where we split the initi
 
 Fig 1 : 
 
-```{r}
+```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_figures/score_boxplot.png") 
 ```
 
@@ -76,7 +76,7 @@ From the above plot, we can see that the grade F restaurants are associated with
 
 Fig 2 : 
 
-```{r}
+```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_figures/violation_stack.png")
 ```
 
@@ -95,6 +95,8 @@ We should be able to dine in any neighbourhood of NYC because all of the borough
 ## Interpretation of the Results & DIscussion
 
 
+
+## Limitations and Assumptions
 
 ## References
 
