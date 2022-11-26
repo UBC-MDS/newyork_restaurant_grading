@@ -13,7 +13,7 @@ Options:
 --visual_dir=<visual_dir>         Path to the output directory for the tables and plots (src/nyc_rest_eda_script_visuals)
 
 Command to run the script:
-python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir="src/nyc_rest_eda_script_visuals"
+python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir='src/nyc_rest_eda_script_visuals'
 """
 
 # Import libraries and packages
@@ -73,10 +73,9 @@ def main(train_set, visual_dir):
     Parameters
     ----------
     train_set : string
-        The relative path (.csv) that contains the training datag
+        The relative path (.csv) that contains the training data
     visual_dir : string
         The name of the directory that will contain the EDA plots and tables
-
     """
     # Check if the visualization directory exists; if it doesn't, create new folder
     try:
@@ -141,7 +140,7 @@ def main(train_set, visual_dir):
         alt.Chart(train_df).mark_bar().encode(
         alt.X('grade', axis=alt.Axis(labelAngle=0), title='Grade'),
         alt.Y('count()'),
-        alt.Color('grade', scale=alt.Scale(scheme='dark2'), title='Grade', legend=None),
+        alt.Color('grade', scale=alt.Scale(scheme='dark2'), legend=None),
         alt.Column('boro', title=None, header=alt.Header(titleFontSize=12), sort=["BRONX", "BROOKLYN", "MANHATTAN", "QUEENS", "STATEN ISLAND", "Missing"])
         ).properties(
             height=300,

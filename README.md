@@ -79,13 +79,14 @@ Run the following commands at the command line/terminal from the root directory 
 
 5. Create exploratory data analysis figures and tables
 
-    ```python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir="src/nyc_rest_eda_script_visuals"```
+    ```python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir='src/nyc_rest_eda_script_visuals'```
 
 6. Run the machine learning analysis and export models
 
     ```python```
 
 7. Render the final report
+
     ```Rscript -e "rmarkdown::render()"```
 
 ## Dependencies
