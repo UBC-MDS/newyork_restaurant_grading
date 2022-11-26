@@ -68,19 +68,20 @@ def main(train_data, test_data, output_dir):
     X_test = test_df.drop(columns=["grade"])
     y_test = test_df["grade"]
 
-    # feature transformation
-    # camis: dropped, these are unique identifiers
-    # dba: dropped
-    # boro: OHE on categorical variable 
-    # zipcode: OHE on categorical variable
-    # cuisine_description: OHE on categorical variable
-    # inspection_date: dropped, not relevant
-    # action: OHE on categorical variable
-    # violation_code: OHE on categorical variable
-    # violation_description: text with CountVectorizer()
-    # critical_flag: OHEon categorical variable
-    # score: passthrough feature
-    # inspection_type: dropped, not relevant - may introduce noise
+    # Feature Transformations :
+    
+    # camis: We drop this feature because these are unique identifiers
+    # dba: We would drop the 'dba' since we expect the words in name feature of the restaurants to be unrealted to the grading.
+    # boro: We will use OHE on the restaurant regions which is a categorical variable 
+    # zipcode: Since there are so many restaurants with the same zipcodes, we would OHE it (with appropriate values for max_categories to select the most frequent 20)
+    # cuisine_description: OHE on the descriptions (there are not many words) which is a categorical variable
+    # inspection_date: We would assume that the date of the inspection is unrealted to how restaurants are graded, so we drop the 'inspection_date' feature.
+    # action: We would use OHE on categorical variable
+    # violation_code: We would use OHE on categorical variable
+    # violation_description: We would use Bag of Words for the text with CountVectorizer()
+    # critical_flag: We would use OHE on categorical variable
+    # score: Since 'score' is the ONLY numeric feature, We would not apply any transformation on it (no need to do scaling).
+    # inspection_type: We would drop the 'inspection_type' feature since we expect it does not relate to the grading target.
 
     categorical_features = ['boro', 'zipcode', 'cuisine_description', 'action', 'violation_code', 'violation_description', 'critical_flag']
     passthrough_features = ['score']
@@ -100,11 +101,11 @@ def main(train_data, test_data, output_dir):
     print("Performing cross validations for dummy, logistic regression and svm classifier...")
     cross_val_results = {}
     dc = DummyClassifier()
-    cross_val_results['dummy'] = pd.DataFrame(cross_validate(dc, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))).agg(['mean', 'std']).round(3).T
-    pipe_lr = make_pipeline(preprocessor, LogisticRegression(random_state=123, max_iter=1000))
-    cross_val_results['logreg'] = pd.DataFrame(cross_validate(pipe_lr, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))).agg(['mean', 'std']).round(3).T
+    cross_val_results['dummy'] = cross_validate(dc, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
+    pipe_lr = make_pipeline(preprocessor, LogisticRegression(random_state=123, max_iter=2000))
+    cross_val_results['logreg'] = cross_validate(pipe_lr, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
     pip_svc = make_pipeline(preprocessor, SVC(random_state=123))
-    cross_val_results['svc'] = pd.DataFrame(cross_validate(pip_svc, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))).agg(['mean', 'std']).round(3).T
+    cross_val_results['svc'] = cross_validate(pip_svc, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
 
     print(cross_val_results)
 
@@ -115,12 +116,13 @@ def main(train_data, test_data, output_dir):
     # get total length of vocabulary in count vectorizer for 'violation_description' column
     len_vocab_1 = len(pipe_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
 
-    # hyper parameter tuning for logistic regression model using randomizedsearchcv
     print("\nPerforming hyper parameter tuning for logistic regression model using randomizedsearchcv...")
     param_dist = {'logisticregression__C': loguniform(1e-3, 1e3),
     'columntransformer__countvectorizer__max_features': randint(1, len_vocab_1),
-    'logisticregression__class_weight':['balanced', None]}
-    random_search = RandomizedSearchCV(pipe_lr, param_dist, n_iter=50, n_jobs=-1, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
+    'logisticregression__class_weight':['balanced', None],
+    "logisticregression__solver" : ["sag"]}
+    random_search = RandomizedSearchCV(pipe_lr, param_dist, n_iter=10, n_jobs=-1, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
+    print("Fitting the optimized model")
     random_search.fit(X_train, y_train)
 
     # obtaining the best parameters
@@ -130,19 +132,23 @@ def main(train_data, test_data, output_dir):
 
     # transform data using parameters found from randomized cross validation
     preprocessor = make_column_transformer( 
-        ("passthrough", passthrough_features),  
+        #("passthrough", passthrough_features),  
         (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=20), categorical_features),  
         (CountVectorizer(max_features=best_parameters["columntransformer__countvectorizer__max_features"], stop_words="english"), text_features),
         ("drop", drop_features)
     )
-    pipe_lr_best = make_pipeline(preprocessor, LogisticRegression(C=best_parameters["logisticregression__C"], class_weight=best_parameters["logisticregression__class_weight"], random_state=123, max_iter=2000))
+    pipe_lr_best = make_pipeline(preprocessor, LogisticRegression(C=best_parameters["logisticregression__C"], class_weight=best_parameters["logisticregression__class_weight"], random_state=123, max_iter=2500, solver='sag'))
 
     # cross validation on the best logistic regression model
 
     print("\nDoing cross validation using the best parameters...")
-    cross_val_results['logreg_best'] = pd.DataFrame(cross_validate(pipe_lr_best, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))).agg(['mean', 'std']).round(3).T
+    cross_val_results['logreg_best'] = cross_validate(pipe_lr_best, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
 
-    print(pd.concat(cross_val_results, axis=1))
+    for i, j in cross_val_results.items():
+        for l,m in j.items():
+            j[l] = m.mean()
+    final_cross_val_results = pd.DataFrame(cross_val_results)
+    print(final_cross_val_results)
 
     # fit the best model on the training data
 
