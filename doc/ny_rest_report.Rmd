@@ -85,7 +85,7 @@ In the above figure, the plot suggests that the Grade F restaurants receive prop
 
 Fig 3 : 
 
-```{r}
+```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_figures/boro_bars.png")
 ```
 
