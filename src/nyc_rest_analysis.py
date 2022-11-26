@@ -69,6 +69,7 @@ def main(train_data, test_data, output_dir):
     Confusion matrices from the best model on train and test set
     PR curve from test set
     ROC curve from test set
+    Top 20 positive/negative oefficient plot from the best model
     Best model saved as a pickle file
     """ 
     # Verify that results directory exists; if not, creates a new folder
