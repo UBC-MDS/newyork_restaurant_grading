@@ -107,7 +107,7 @@ In our data analysis, we are making the following assumptions -
 
 ## Statement of future directions 
 
-
+Going forward, we would be considering only unique restaurants for training the model by dropping all duplicate inspections having matching `camis` feature and perform predictions using the new model for other cities. As we progress with the research, we intend to use several models to compare different metrics and choose the best suited model for our research problem. Additionally, we are also planning  to make use of the deployment data and predict the grade of the restaurants using our model and compare this to the actual grading by the inspection team. In addition to Newyork, we could also generalize our model to predict the restaurant grading across other metropolitan cities. Lastly, we would like to incorporate certain feature engineering techniques like text based engineering so that our model can be trained with the best features and yield better results.
 
 
 ## References
