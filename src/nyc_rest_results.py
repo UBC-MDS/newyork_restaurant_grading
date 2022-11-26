@@ -28,9 +28,9 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
 from sklearn.model_selection import cross_validate
-from sklearn.model_selection import RandomizedSearchCV
 from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
+from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
 import pickle
 import matplotlib.pyplot as plt
@@ -100,7 +100,7 @@ def main(train_data, test_data, output_dir):
     camis: We drop this feature because these are unique identifiers
     dba: We would drop the 'dba' since we expect the words in name feature of the restaurants to be unrelated to the grading.
     boro: We will use OHE on the restaurant regions which is categorical in nature 
-    zipcode: Since there are so many restaurants with the same zipcodes, we would OHE it (with appropriate values for max_categories to select the most frequent 20)
+    zipcode: Since there are so many restaurants with the same zipcodes, we would OHE it
     cuisine_description: We will OHE the cuisine types as they are categorical in nature
     inspection_date: We would assume that the date of the inspection is unrelated to how restaurants are graded, so we drop the 'inspection_date' feature.
     action: We will use OHE since there are a fixed number of actions.
@@ -119,7 +119,7 @@ def main(train_data, test_data, output_dir):
     # column transformer
     preprocessor = make_column_transformer( 
         ("passthrough", passthrough_features),  
-        (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=20), categorical_features),  
+        (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=100), categorical_features),  # limit categories to gauge baseline performance
         (CountVectorizer(stop_words="english"), text_features),
         ("drop", drop_features)
     )
@@ -130,7 +130,7 @@ def main(train_data, test_data, output_dir):
                               "recall" : make_scorer(recall_score, pos_label='F'),
                               "f1" : make_scorer(f1_score, pos_label='F')}
 
-    print("Performing cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced)...")
+    print("Performing cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced (this may take up to 5 minutes)...")
     cross_val_results = {}
     dc = DummyClassifier()
     cross_val_results['dummy'] = pd.DataFrame(cross_validate(dc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
@@ -152,56 +152,52 @@ def main(train_data, test_data, output_dir):
         axis='columns',
         level=1
     ).drop(['fit_time', 'score_time'])
-    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 1. Mean train and test scores of each model.')
+    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 1. Mean train and validation scores from each model.')
     dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
 
+    # Adapted from 573 Lab 1
+    std_results_table = pd.concat(
+        cross_val_results,
+        axis='columns'
+    ).xs(
+        'std',
+        axis='columns',
+        level=1
+    ).drop(['fit_time', 'score_time'])
+    std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2. Standard deviation of train and validation scores for each model.')
+    dfi.export(std_results_table, output_dir + "/std_scores_table.png")
+
     # fitting the logistic regression model to train data because mean validation score for LR is higher
-    print("Fitting the logistic regression model...")
-    pipe_lr.fit(X_train, y_train)
+    print("Fitting the balanced logistic regression model...")
+    pipe_bal_lr.fit(X_train, y_train)
 
     # get total length of vocabulary in count vectorizer for 'violation_description' column
-    len_vocab_1 = len(pipe_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
+    len_vocab = len(pipe_bal_lr.named_steps["columntransformer"].named_transformers_["countvectorizer"].get_feature_names_out())
 
-#     print("\nPerforming hyper parameter tuning for logistic regression model using randomizedsearchcv...")
-#     param_dist = {'logisticregression__C': loguniform(1e-3, 1e3),
-#     'columntransformer__countvectorizer__max_features': randint(1, len_vocab_1),
-#     'logisticregression__class_weight':['balanced', None],
-#     "logisticregression__solver" : ["sag"]}
-#     random_search = RandomizedSearchCV(pipe_lr, param_dist, n_iter=10, n_jobs=-1, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
-#     print("Fitting the optimized model")
-#     random_search.fit(X_train, y_train)
+    print("\nPerforming hyperparameter tuning for logistic regression model using RandomizedSearchCV...")
+    param_dist = {'logisticregression__C' : loguniform(1e-3, 1e3),
+                  'columntransformer__countvectorizer__max_features' : randint(1, len_vocab),
+                  'columntransformer__onehotencoder__max_categories' : randint(10, 50)}
+    random_search = RandomizedSearchCV(pipe_bal_lr, param_dist, n_iter=20, n_jobs=-1, random_state=123, return_train_score=True, scoring=make_scorer(recall_score, pos_label='F'))
+    print("Fitting the optimized model")
+    random_search.fit(X_train, y_train)
 
-#     # obtaining the best parameters
-#     best_parameters = random_search.best_params_
+    # Creating hyperparameter tuning table
+    random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
+                                                            'param_countvectorizer__max_features', 'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
+    random_cv_df = random_cv_df.style.set_caption('Table 3. Mean train and cross-validation scores (5-fold) for balanced logistici regression, optimizing recall score.')
+    dfi.export(random_cv_df, output_dir + "hyperparam_results.png")
 
-#     print("Best parameters found to be: ", best_parameters)
+    print("\nDoing cross validation using the best parameters...")
+    best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    best_model_table = best_model_table.style.format(precision=2).background_gradient(axis=None).set_caption(
+        'Table 4. Mean and standard deviation of train and validation scores for the logistic regression model.\nParameters: C = ' +
+        str(random_search.best_params_['logisticregression__C']) +
+        'max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
+        'max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
+    )
+    dfi.export(best_model_table, output_dir + "/best_model_results.png")
 
-#     # transform data using parameters found from randomized cross validation
-#     preprocessor = make_column_transformer( 
-#         #("passthrough", passthrough_features),  
-#         (OneHotEncoder(handle_unknown="ignore", sparse=False, max_categories=20), categorical_features),  
-#         (CountVectorizer(max_features=best_parameters["columntransformer__countvectorizer__max_features"], stop_words="english"), text_features),
-#         ("drop", drop_features)
-#     )
-#     pipe_lr_best = make_pipeline(preprocessor, LogisticRegression(C=best_parameters["logisticregression__C"], class_weight=best_parameters["logisticregression__class_weight"], random_state=123, max_iter=2500, solver='sag'))
-
-#     # cross validation on the best logistic regression model
-
-#     print("\nDoing cross validation using the best parameters...")
-#     cross_val_results['logreg_best'] = cross_validate(pipe_lr_best, X_train, y_train, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
-
-#     for i, j in cross_val_results.items():
-#         for l,m in j.items():
-#             j[l] = m.mean()
-#     final_cross_val_results = pd.DataFrame(cross_val_results)
-#     print(final_cross_val_results)
-
-#     # fit the best model on the training data
-
-#     print("\nFitting the best model on training data...")
-#     pipe_lr_best.fit(X_train, y_train)
-
-#     # score the best model on the test data
 #     score = pipe_lr_best.score(X_test, y_test)
 #     print("Score on test data : ", score)
 
