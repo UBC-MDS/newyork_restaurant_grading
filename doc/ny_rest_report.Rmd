@@ -8,12 +8,14 @@ output:
   html_document:
     toc: yes
     df_print: paged
-#bibliography: references.bib
+bibliography: ny_rest_references.bib
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(tidyverse)
+library(knitr)
+library(kableExtra)
 ```
 
 This is a data analysis project for DSCI 522 (Data Science workflows); a course in the Master of Data Science program at the University of British Columbia.
@@ -65,9 +67,16 @@ We performed the rest our analysis on the training data where we split the initi
 
 Fig 1 : 
 
+```{r}
+knitr::include_graphics("../src/nyc_rest_eda_figures/score_boxplot.png") 
+```
+
+
 From the above plot, we can see that the grade F restaurants are associated with higher scores on an average when compared to that of the graded A restaurants even though some of them have low scores. We can conclude that the scores are higher for more critical health violations, but we cannot generalize as we do not see a hard cut off for when a restaurant is graded A or not. 
 
 Fig 2 : 
+
+
 
 In the above figure, the plot suggests that the Grade F restaurants receive proportionally more red flags related to violations than Grade A restaurants do, but it is interesting to see that even grade A restaurants have had some critical violations. It will be intriguing to see if our model can determine whether the seriousness of a violation actually counts for grading because it is unclear what the threshold for a "major" violation is.
 
@@ -75,6 +84,9 @@ Fig 3 :
 
 We should be able to dine in any neighbourhood of NYC because all of the boroughs have a majority of Grade A restaurants. It is clear that the majority of the inspections took place in Manhattan, which also has the highest concentration of restaurants receiving a Grade F rating among the other boroughs.
 
-## Interpretation of the Results
+## Interpretation of the Results & DIscussion
 
+## References
+
+@Python 3 Reference Manual
 
