@@ -30,37 +30,20 @@ alt.data_transformers.disable_max_rows()
 # Initialize doc
 opt = docopt(__doc__)
 
-### HELPER FUNCTIONS
-#  Added from Joel's suggestions
-def save_chart(chart, filename, scale_factor=1):
-    """
-    Save an Altair chart using vl-convert
-    
-    Parameters
-    ----------
-    chart : altair.Chart
-        Altair chart to save
-    filename : str
-        The path to save the chart to
-    scale_factor: int or float
-        The factor to scale the image resolution by.
-        E.g. A value of `2` means two times the default resolution.
-    """
-    if filename.split('.')[-1] == 'svg':
-        with open(filename, "w") as f:
-            f.write(vlc.vegalite_to_svg(chart.to_dict()))
-    elif filename.split('.')[-1] == 'png':
-        with open(filename, "wb") as f:
-            f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
-    else:
-        raise ValueError("Only svg and png formats are supported")
-
 # Define main function
 def main(train_set, visual_dir):
     """
     Creates and saves all tables and figures from the EDA
 
-    Includes:
+    Parameters
+    ----------
+    train_set : string
+        The relative path (.csv) that contains the training data
+    visual_dir : string
+        The name of the directory that will contain the EDA plots and tables
+    
+    Returns
+    -------
     TABLES
         - Counts of each class in the training set
         - Most common cuisine descriptions in the training set
@@ -69,13 +52,7 @@ def main(train_set, visual_dir):
         - Stacked bar chart of the critical flags by grade (normalized)
         - Grouped bar chart of the boroughs in NYC and number of inspections performed in each by grade
         - Stacked bar chart of the violation codes by grade
-
-    Parameters
-    ----------
-    train_set : string
-        The relative path (.csv) that contains the training data
-    visual_dir : string
-        The name of the directory that will contain the EDA plots and tables
+    
     """
     # Check if the visualization directory exists; if it doesn't, create new folder
     try:
@@ -190,6 +167,31 @@ def main(train_set, visual_dir):
     borough_bar_plot_exists(visual_dir)
     cuisine_table_exists(visual_dir)
     violation_plot_exists(visual_dir)
+
+### HELPER FUNCTIONS
+#  Added from Joel's suggestions
+def save_chart(chart, filename, scale_factor=1):
+    """
+    Save an Altair chart using vl-convert
+    
+    Parameters
+    ----------
+    chart : altair.Chart
+        Altair chart to save
+    filename : str
+        The path to save the chart to
+    scale_factor: int or float
+        The factor to scale the image resolution by.
+        E.g. A value of `2` means two times the default resolution.
+    """
+    if filename.split('.')[-1] == 'svg':
+        with open(filename, "w") as f:
+            f.write(vlc.vegalite_to_svg(chart.to_dict()))
+    elif filename.split('.')[-1] == 'png':
+        with open(filename, "wb") as f:
+            f.write(vlc.vegalite_to_png(chart.to_dict(), scale=scale_factor))
+    else:
+        raise ValueError("Only svg and png formats are supported")
 
 ### TESTS
 def class_table_exists(file_path):
