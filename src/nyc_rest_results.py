@@ -192,7 +192,7 @@ def main(train_data, test_data, output_dir):
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     best_model_table = best_model_table.style.set_caption(
-        'Table 2.4. Mean and standard deviation of train and validation scores for the logistic regression model.\nParameters: C = ' +
+        'Table 2.4. Mean and standard deviation of train and validation scores for the balanced logistic regression model.\nParameters: C = ' +
         str(random_search.best_params_['logisticregression__C']) +
         ', max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
         ', max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
