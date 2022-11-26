@@ -4,14 +4,15 @@
 """
 Takes the preprocessed training and test data and does cross validation with logistic regression and svm classifier - finds logistic regression to be the better model and does hyperparameter tuning to get the best hyperparameters. It then fits this trained model on the unseen data (test dataset).
    
-Usage: src/nyc_rest_results.py --train_data=<train_input_file> --test_data=<test_input_file> --output_dir=<output_directory>
+Usage: src/nyc_rest_analysis.py --train_data=<train_input_file> --test_data=<test_input_file> --output_dir=<output_directory>
 
 Options:
 --train_data=<train_input_file>       Path of the input file that contains the train data
 --test_data=<test_input_file>       Path of the input file that contains the test data
 --output_dir=<output_directory>       Path of the output file where results of the analysis will be stored 
+
 Command to run the script:
-python src/nyc_rest_results.py --train_data='./data/processed/train_df.csv' --test_data='./data/processed/test_df.csv' --output_dir='./results'
+python src/nyc_rest_analysis.py --train_data='./data/processed/train_df.csv' --test_data='./data/processed/test_df.csv' --output_dir='./results'
 """
 
 # REFERENCE : code to plot PR curve referenced from 573 lecture 1 notes
@@ -48,17 +49,6 @@ def main(train_data, test_data, output_dir):
     to get the best hyperparameter values. It then fits this trained model on the
     unseen data (test_data)
 
-    Outputs:
-        - results table of mean train/validation scores from all models
-        - results table of standard deviation in train/validation scores from all models
-        - hyperparameter tuning results on optimal classifier
-        - train/validation scores from the best model
-        - classification report from the best model on the test set
-        - confusion matrices from the best model on train and test set
-        - PR curve
-        - ROC curve
-        - the model saved as a pickle file
-    
     Parameters
     ----------
     train_data : string
@@ -67,6 +57,18 @@ def main(train_data, test_data, output_dir):
         Relative path of the file which contains the preprocessed testing data
     output_dir : string
         Relative path of the directory where results will be shared
+    
+    Returns
+    --------
+    Results table of mean train/validation scores from all models
+    Results table of standard deviation in train/validation scores from all models
+    Hyperparameter tuning results on optimal classifier
+    Train/validation scores from the best model
+    Classification report from the best model on the test set
+    Confusion matrices from the best model on train and test set
+    PR curve from test set
+    ROC curve from test set
+    Best model saved as a pickle file
     
     """ 
     # Verify that results directory exists; if not, creates a new folder
@@ -183,7 +185,7 @@ def main(train_data, test_data, output_dir):
     param_dist = {'logisticregression__C' : loguniform(1e-3, 1e3),
                   'columntransformer__countvectorizer__max_features' : randint(1, len_vocab),
                   'columntransformer__onehotencoder__max_categories' : randint(10, 50)}
-    random_search = RandomizedSearchCV(pipe_bal_lr, param_dist, n_iter=20, n_jobs=-1, random_state=123, return_train_score=True, scoring=make_scorer(recall_score, pos_label='F'))
+    random_search = RandomizedSearchCV(pipe_bal_lr, param_dist, n_iter=20, n_jobs=-1, random_state=123, return_train_score=True, scoring=make_scorer(f1_score, pos_label='F'))
     print("Fitting the optimized model")
     random_search.fit(X_train, y_train)
 
@@ -191,11 +193,12 @@ def main(train_data, test_data, output_dir):
     random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
-    random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing recall score.')
+    random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.')
     dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    best_model_table = best_model_table.drop(['fit_time', 'score_time'])
     best_model_table = best_model_table.style.set_caption(
         'Table 2.4. Mean and standard deviation of train and validation scores for the balanced logistic regression model.\nParameters: C = ' +
         str(random_search.best_params_['logisticregression__C']) +
@@ -222,6 +225,7 @@ def main(train_data, test_data, output_dir):
     cm_plot.savefig(output_dir + '/confusion_matrices.png')
 
     # Create and save PR curve for the best model
+    print('Creating PR curve...')
     pr_curve, pr_ax = plt.subplots()
     PrecisionRecallDisplay.from_estimator(random_search.best_estimator_, X_test, y_test, pos_label='F', ax=pr_ax)
     pr_ax.plot(
@@ -233,14 +237,21 @@ def main(train_data, test_data, output_dir):
     )
     pr_ax.legend(loc="best")
     pr_curve.savefig(output_dir + '/PR_curve.png')
-    
-#     # saving the model
-#     filename = 'finalized_model.sav'
-#     pickle.dump(pipe_lr, open(output_dir + filename, 'wb'))
 
-#     # to load the model
-#     # loaded_model = pickle.load(open(output_dir + filename, 'rb'))
-#     # result = loaded_model.score(X_test, Y_test)
+    # Create and save ROC curve for the best model
+    print('Creating ROC curve...')
+    roc_curve, roc_ax = plt.subplots()
+    RocCurveDisplay.from_estimator(random_search.best_estimator_, X_test, y_test, pos_label='F', ax=roc_ax)
+    roc_ax.legend(loc="best")
+    roc_curve.savefig(output_dir + '/ROC_curve.png')
+    
+    # saving the model
+    print('Exporting the best model...')
+    pickle.dump(random_search.best_estimator_, open(output_dir + '/best_model.pkl', 'wb'))
+
+    ### TO LOAD THE MODEL
+    # loaded_model = pickle.load(open(output_dir + 'best_model.pkl', 'rb'))
+    # result = loaded_model.score(X_test, y_test)
 
 if __name__ == "__main__":
     main(opt["--train_data"], opt["--test_data"], opt["--output_dir"])
