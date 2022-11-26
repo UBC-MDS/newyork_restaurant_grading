@@ -23,6 +23,13 @@ library(kableExtra)
 
 This is a data analysis project for DSCI 522 (Data Science workflows); a course in the Master of Data Science program at the University of British Columbia.
 
+## Contributors
+
+Nikita Susan Easow
+Sneha Sunil
+Edward (Yukun) Zhang
+Lauren Zung
+
 ## Introduction
 
 After the state proclaimed the restoration of indoor dining during the COVID 19 era, hundreds of new restaurants have opened throughout New York City (Eater NY, 2020).
@@ -113,6 +120,70 @@ The complete EDA including the above figures and tables can be found[here](https
 
 ## Interpretation of the Results & Discussion
 
+Considering our research question is a binary classification model, we picked two different models to perform training using our data - `Logistic regression` (balanced and imbalanced)
+and `Support vector machines` (balanced and imbalanced). In addition to this, our trained models are also compared against a baseline model `Dummy classifier ` so we could measure how our models performed.
+
+**Note** - We downsampled our data from 150,000 observations to 30,000 data points in order to reduce the training time. 
+
+As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the `Balanced Logistic Regression` as our classifier to train the data set.
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/mean_scores_table.png")
+```
+**Hyper parameter tuning results on logreg:**
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/hyperparam_results.png")
+```
+
+
+By using Random Search CV, we optimized the hyper parameters of the balanced logistic regression model to the following :
+
+- **C** - 22.219381
+
+- **max_features** - 177 
+
+- **max_categories** - 17
+
+**Train/validation scores from the best model**
+
+After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.996. Both the precision and recall scores for the validation set is high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not). The model is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade.
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/best_model_results.png")
+```
+**Classification report from the best model on the test set** 
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/test_classification_report.png")
+```
+
+**Confusion matrices from the best model on train and test set**
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/confusion_matrices.png")
+```
+
+**PR curve from test set**
+
+The below PR curve depicts that if we keep the threshold as 0.5, we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/PR_curve.png")
+
+```
+
+**ROC curve from test set**
+
+The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
+
+```{r out.width = '100%'}
+knitr::include_graphics("../results/ROC_curve.png")
+```
+
+**NOTE on high f1 score**
+
+We are aware of the fact that f1 score, precision and recall of our model on the train, validation and test set are quite high. This may be because there are underlying linear relationships between different columns and the target.
 
 ## Assumptions
 
@@ -125,7 +196,7 @@ In our data analysis, we are making the following assumptions -
 
 ## Limitations
 
-The EDA shows that many of the restaurants have undergone inspections more than once, with the help of the `camis` feature. But, it is unclear whether some restaurants share the same name, or if some restaurants have changed their name between 2012 and 2018. Unfortunately, we were unable to parse the data by this feature to ensure that the restaurants that are reviewed more than once are not included both in the training and validation/test sets. Since we aren't sure whether the models are in fact learning the 'features' or the specific restaurant examples, there might be some discrepancies in the prediction results.
+The EDA shows that many of the restaurants have undergone inspections more than once, with the help of the `camis` feature. But, it is unclear whether some restaurants share the same name, or if some restaurants have changed their name between 2012 and 2018. Unfortunately, we were unable to parse the data by this feature to ensure that the restaurants that are reviewed more than once are not included both in the training and validation/test sets. Since we aren't sure whether the models are in fact learning the 'features' or the specific restaurant examples, there might be some discrepancies in the prediction results. We also had to downsample our training data set in order to reduce the training time as we are in short of computational resources.
 
 ## Statement of Future Directions
 
