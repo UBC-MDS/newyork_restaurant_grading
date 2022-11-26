@@ -44,6 +44,8 @@ We believe that our effort could be useful to the residents or tourists in the N
 
 Can we predict the grade for a restaurant (Grade A or F) given different metrics describing their health violations during a routine inspection?"
 
+Besides this main research question, our analysis would also like to address some interesting sub-questions given below:
+
 Which cuisines are more likely to be graded A in NYC?
 Which cuisines are more likely to be graded B or C in NYC?
 Which borough in NYC seems to have the best restaurants?
@@ -56,12 +58,12 @@ The data set that we are using in our analysis for the restaurant grading, DOHMH
 It was obtained from the tidytuesday [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11) by Thomas Mock.
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
 
-SUMMARY -
+**SUMMARY**
 
 The data includes all of the violation citation from the restaurant inspections held in New York City from 2012 to 2018.
 Each row represents a restaurant that has undergone a health inspection which has the information about each establishment including the restaurant name, phone number, location (borough, building number, street, zip code), cuisine type, and also the details about the inspection itself which includes date, violation code, description, whether there were any violations cited, whether they were critical, etc.).
 The restaurants may receive an official grading of A, B, or C; alternatively, they may receive a Z or P for an evaluation that is still pending.
-Here is a complete dictionary of the data can be found here.
+Here is a complete dictionary of the data can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11#data-dictionary).
 
 ## EDA
 
@@ -81,7 +83,7 @@ We performed the rest our analysis on the training data where we split the initi
 One important point to note here is that when we grouped the restaurants by `camis` feature, we could see that many restaurants were inspected more than once and we are not sure on whether the restaurants share the same name or if some restaurants have changes their name in between 2012 and 2018.
 Since we could not incorporate this issue while modelling, we have added it to the limitations.
 
-Fig 1 :
+**Fig 1 :**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png") 
@@ -90,7 +92,7 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png")
 From the above plot, we can see that the grade F restaurants are associated with higher scores on an average when compared to that of the graded A restaurants even though some of them have low scores.
 We can conclude that the scores are higher for more critical health violations, but we cannot generalize as we do not see a hard cut off for when a restaurant is graded A or not.
 
-Fig 2 :
+**Fig 2 :**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacked.png")
@@ -99,7 +101,7 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacke
 In the above figure, the plot suggests that the Grade F restaurants receive proportionally more red flags related to violations than Grade A restaurants do, but it is interesting to see that even grade A restaurants have had some critical violations.
 It will be intriguing to see if our model can determine whether the seriousness of a violation actually counts for grading because it is unclear what the threshold for a "major" violation is.
 
-Fig 3 :
+**Fig 3 :**
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
@@ -107,6 +109,8 @@ knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 
 We should be able to dine in any neighborhood of NYC because all of the boroughs have a majority of Grade A restaurants.
 It is clear that the majority of the inspections took place in Manhattan, which also has the highest concentration of restaurants receiving a Grade F rating among the other boroughs.
+
+The complete EDA including the above figures and tables can be found  [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/src/nyc_rest_eda.ipynb).
 
 ## Interpretation of the Results & Discussion
 
