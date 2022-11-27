@@ -3,11 +3,11 @@ title: "Predicting the Grade of Restaurants in New York City"
 author: "Sneha Sunil"
 date: "2022-11-25"
 output:
+  pdf_document:
+    toc: yes
   html_document:
     toc: yes
     df_print: paged
-  pdf_document:
-    toc: yes
 bibliography: ny_rest_references.bib
 editor_options: 
   markdown: 
@@ -96,7 +96,7 @@ Since we could not incorporate this issue while modelling, we have added it to t
 
 **Fig 1 :**
 
-```{r out.width = '60%', out.height = '25%'}
+```{r out.width = '60%', out.height = '25%', fig.cap = "Figure 1. Distribution of Scores by Grade"}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png") 
 ```
 
@@ -106,7 +106,7 @@ We can conclude that the scores are higher for more critical health violations, 
 
 **Fig 2 :**
 
-```{r out.width = '60%', out.height = '25%'}
+```{r out.width = '60%', out.height = '25%', fig.cap = "Figure 2. Severity of Violations"}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacked.png")
 ```
 
@@ -117,7 +117,7 @@ It will be intriguing to see if our model can determine whether the seriousness 
 
 **Fig 3 :**
 
-```{r out.width = '60%', out.height = '25%'}
+```{r out.width = '60%', out.height = '25%', fig.cap = "Figure 3. Number of inspections conducted by NYC Borough"}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 ```
 
@@ -184,7 +184,7 @@ knitr::include_graphics("../results/test_classification_report.png")
 
 **Confusion matrices from the best model on train and test set**
 
-```{r out.width = '50%', out.height = '30%'}
+```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 4. Confusion matrices from the best model on train and test set"}
 knitr::include_graphics("../results/confusion_matrices.png")
 ```
 
@@ -194,7 +194,7 @@ knitr::include_graphics("../results/confusion_matrices.png")
 
 The below PR curve depicts that if we keep the threshold as 0.5, we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
 
-```{r out.width = '50%', out.height = '30%'}
+```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 5. PR curve from test set"}
 knitr::include_graphics("../results/PR_curve.png")
 
 ```
@@ -204,7 +204,7 @@ knitr::include_graphics("../results/PR_curve.png")
 
 The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
 
-```{r out.width = '50%', out.height = '30%'}
+```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 6. ROC curve from test set"}
 knitr::include_graphics("../results/ROC_curve.png")
 ```
 
