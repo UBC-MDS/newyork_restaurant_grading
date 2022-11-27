@@ -131,7 +131,7 @@ The complete EDA including the above figures and tables can be found [here](http
 Considering our research question is a binary classification model, we picked two different models to perform training using our data - `Logistic regression` (balanced and imbalanced)
 and `Support vector machines` (balanced and imbalanced). In addition to this, our trained models are also compared against a baseline model `Dummy classifier ` so we could measure how our models performed.
 
-**Note** - We downsampled our data from 150,000 observations to 30,000 data points in order to reduce the training time. 
+**Note** - We downsampled our data in order to reduce the training time. 
 
 As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the `Balanced Logistic Regression` as our classifier to train the data set.
 
@@ -207,6 +207,7 @@ The ROC curve is a plot between the False Positive Rate and the True Positive Ra
 ```{r out.width = '50%', out.height = '30%'}
 knitr::include_graphics("../results/ROC_curve.png")
 ```
+
 
 **NOTE on high f1 score - **
 
