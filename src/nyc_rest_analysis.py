@@ -2,7 +2,11 @@
 # date: 2022-11-24
 
 """
-Takes the preprocessed training and test data and does cross validation with logistic regression and svm classifier - finds logistic regression to be the better model and does hyperparameter tuning to get the best hyperparameters. It then fits this trained model on the unseen data (test dataset).
+Takes the preprocessed training and test data and does cross validation with logistic regression and svm classifiers.
+Finds logistic regression to be the better model and does hyperparameter tuning to get the best hyperparameters.
+Fits the best model on the unseen data (test dataset).
+
+Due to the size of the dataset, this analysis may take up to 5 minutes to run.
    
 Usage: src/nyc_rest_analysis.py --train_data=<train_input_file> --test_data=<test_input_file> --output_dir=<output_directory>
 
@@ -14,9 +18,6 @@ Options:
 Command to run the script:
 python src/nyc_rest_analysis.py --train_data='./data/processed/train_df.csv' --test_data='./data/processed/test_df.csv' --output_dir='./results'
 """
-
-# REFERENCE : code to plot PR curve referenced from 573 lecture 1 notes
-
 from docopt import docopt
 import pandas as pd
 from sklearn.utils import resample
@@ -33,9 +34,9 @@ from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
+import mglearn
 import pickle
 import matplotlib.pyplot as plt
-from sklearn.metrics import precision_recall_curve
 import os
 
 opt = docopt(__doc__)
@@ -68,8 +69,8 @@ def main(train_data, test_data, output_dir):
     Confusion matrices from the best model on train and test set
     PR curve from test set
     ROC curve from test set
+    Top 20 positive/negative oefficient plot from the best model
     Best model saved as a pickle file
-    
     """ 
     # Verify that results directory exists; if not, creates a new folder
     try:
@@ -245,6 +246,13 @@ def main(train_data, test_data, output_dir):
     roc_ax.legend(loc="best")
     roc_curve.savefig(output_dir + '/ROC_curve.png')
     
+    # Create coefficient figure
+    print('Visualizing the top 20 positive and negative coefficients...')
+    feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
+    coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
+    mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
+    plt.savefig(output_dir + '/violation_coefs.png')
+
     # saving the model
     print('Exporting the best model...')
     pickle.dump(random_search.best_estimator_, open(output_dir + '/best_model.pkl', 'wb'))
