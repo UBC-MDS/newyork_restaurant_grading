@@ -3,11 +3,11 @@ title: "Predicting the Grade of Restaurants in New York City"
 author: "Sneha Sunil"
 date: "2022-11-25"
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     df_print: paged
+  pdf_document:
+    toc: yes
 bibliography: ny_rest_references.bib
 editor_options: 
   markdown: 
@@ -38,9 +38,9 @@ Now that things are getting back to normal as the restrictions set by government
 The standards that health inspectors use for grading will probably need to be revised because health rules have become more stringent in order to curb the pandemic.
 The overall plan used by health inspection is as follows, though it may vary by state:
 
-**GRADE A:** The restaurant is clean, up to code, and free of violations.
-**GRADE B:** The restaurant has some issues that must be fixed.
-**GRADE C:** The restaurant is a public risk and on verge of closure.
+- **GRADE A:** The restaurant is clean, up to code, and free of violations.
+- **GRADE B:** The restaurant has some issues that must be fixed.
+- **GRADE C:** The restaurant is a public risk and on verge of closure.
 
 (Source: SmartSense, 2018)
 
@@ -79,7 +79,7 @@ We performed the exploratory data analysis on the restaurant dataset and we noti
 
 
 
-```{r out.width = '100%'}
+```{r out.width = '35%', out.height = '25%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/class_table.png") 
 ```
 
@@ -96,7 +96,7 @@ Since we could not incorporate this issue while modelling, we have added it to t
 
 **Fig 1 :**
 
-```{r out.width = '100%'}
+```{r out.width = '60%', out.height = '25%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/score_boxplot.png") 
 ```
 
@@ -106,7 +106,7 @@ We can conclude that the scores are higher for more critical health violations, 
 
 **Fig 2 :**
 
-```{r out.width = '100%'}
+```{r out.width = '60%', out.height = '25%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/critical_flag_stacked.png")
 ```
 
@@ -117,7 +117,7 @@ It will be intriguing to see if our model can determine whether the seriousness 
 
 **Fig 3 :**
 
-```{r out.width = '100%'}
+```{r out.width = '60%', out.height = '25%'}
 knitr::include_graphics("../src/nyc_rest_eda_script_visuals/borough_bars.png")
 ```
 
@@ -136,9 +136,10 @@ and `Support vector machines` (balanced and imbalanced). In addition to this, ou
 As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the `Balanced Logistic Regression` as our classifier to train the data set.
 
 
-```{r out.width = '100%'}
+```{r '60%', out.height = '25%'}
 knitr::include_graphics("../results/mean_scores_table.png")
 ```
+
 
 **Hyper parameter tuning results on logreg:**
 
@@ -157,25 +158,33 @@ By using Random Search CV, we optimized the hyper parameters of the balanced log
 - **max_categories** - 17
 
 
+
 **Train/validation scores from the best model**
 
 After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.996. Both the precision and recall scores for the validation set is high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not). The model is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade.
 
-```{r out.width = '100%'}
+```{r out.width = '30%', out.height = '25%'}
 knitr::include_graphics("../results/best_model_results.png")
 ```
 
+
+
+
+
+
 **Classification report from the best model on the test set** 
 
-```{r out.width = '100%'}
+
+```{r out.width = '50%', out.height = '25%'}
 knitr::include_graphics("../results/test_classification_report.png")
 ```
 
 
 
+
 **Confusion matrices from the best model on train and test set**
 
-```{r out.width = '100%'}
+```{r out.width = '50%', out.height = '30%'}
 knitr::include_graphics("../results/confusion_matrices.png")
 ```
 
@@ -185,17 +194,17 @@ knitr::include_graphics("../results/confusion_matrices.png")
 
 The below PR curve depicts that if we keep the threshold as 0.5, we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
 
-```{r out.width = '100%'}
+```{r out.width = '50%', out.height = '30%'}
 knitr::include_graphics("../results/PR_curve.png")
 
 ```
 
 
-ROC curve from test set**
+**ROC curve from test set**
 
 The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
 
-```{r out.width = '100%'}
+```{r out.width = '50%', out.height = '30%'}
 knitr::include_graphics("../results/ROC_curve.png")
 ```
 
