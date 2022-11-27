@@ -88,7 +88,8 @@ Run the following commands at the command line/terminal from the root directory 
 
 7. Render the final report
 
-    ```Rscript -e "rmarkdown::render()"```
+    ```Rscript -e "rmarkdown::render('doc/ny_rest_report.Rmd', output_format = 'pdf_document')"```
+    ```Rscript -e "rmarkdown::render('doc/ny_rest_report.Rmd', output_format = 'html_document')"```
 
 ## Dependencies
 
