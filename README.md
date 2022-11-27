@@ -37,7 +37,7 @@ After multiple rounds of training between different classifiers, we chose a bala
 
 ## Report
 
-[Here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/doc/ny_rest_report.html) is the link to the Project Report. 
+[Here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/doc/ny_rest_report.pdf) is the link to the Project Report. 
 
 ## Usage
 
