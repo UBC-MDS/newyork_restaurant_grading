@@ -141,7 +141,7 @@ knitr::include_graphics("../results/mean_scores_table.png")
 ```
 
 
-**Hyper parameter tuning results on logreg:**
+**Hyper parameter tuning results on logreg - **
 
 ```{r out.width = '100%'}
 knitr::include_graphics("../results/hyperparam_results.png")
@@ -159,7 +159,7 @@ By using Random Search CV, we optimized the hyper parameters of the balanced log
 
 
 
-**Train/validation scores from the best model**
+**Train/validation scores from the best model - **
 
 After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.996. Both the precision and recall scores for the validation set is high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not). The model is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade.
 
@@ -172,7 +172,7 @@ knitr::include_graphics("../results/best_model_results.png")
 
 
 
-**Classification report from the best model on the test set** 
+**Classification report from the best model on the test set - ** 
 
 
 ```{r out.width = '50%', out.height = '25%'}
@@ -190,7 +190,7 @@ knitr::include_graphics("../results/confusion_matrices.png")
 
 
 
-**PR curve from test set**
+**PR curve from test set - **
 
 The below PR curve depicts that if we keep the threshold as 0.5, we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
 
@@ -200,7 +200,7 @@ knitr::include_graphics("../results/PR_curve.png")
 ```
 
 
-**ROC curve from test set**
+**ROC curve from test set - **
 
 The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
 
@@ -208,7 +208,7 @@ The ROC curve is a plot between the False Positive Rate and the True Positive Ra
 knitr::include_graphics("../results/ROC_curve.png")
 ```
 
-**NOTE on high f1 score-**
+**NOTE on high f1 score - **
 
 We are aware of the fact that f1 precision and recall score of our model on the train, validation and test sets are quite high. This may be because there are underlying linear relationships between different features and the target.
 
