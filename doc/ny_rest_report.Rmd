@@ -204,7 +204,7 @@ knitr::include_graphics("../results/PR_curve.png")
 
 The ROC curve is a plot between the False Positive Rate and the True Positive Rate. Through this graph we find the area under the curve (AUC) is 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
 
-```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 4. ROC curve from test set"}
+```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 6. ROC curve from test set"}
 knitr::include_graphics("../results/ROC_curve.png")
 ```
 
