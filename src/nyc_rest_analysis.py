@@ -111,7 +111,7 @@ def main(train_data, test_data, output_dir):
     zipcode: Since there are so many restaurants with the same zipcodes, we would OHE it
     cuisine_description: We will OHE the cuisine types as they are categorical in nature
     inspection_date: We would assume that the date of the inspection is unrelated to how restaurants are graded, so we drop the 'inspection_date' feature.
-    action: We will use OHE since there are a fixed number of actions.
+    action: We will drop this column since it is not relevant to the target.
     violation_code: We would use OHE on since there are a fixed number of codes (with appropriate values for max_categories to select the most frequent 20)
     violation_description: We would use Bag of Words for the text with CountVectorizer()
     critical_flag: We would use OHE since a flag can only be Critical, Non-Critical or Not Applicable
@@ -119,9 +119,9 @@ def main(train_data, test_data, output_dir):
     inspection_type: We would drop the 'inspection_type' feature since we expect that it does not relate to the target.
     """
 
-    categorical_features = ['boro', 'zipcode', 'cuisine_description', 'action', 'violation_code', 'violation_description', 'critical_flag']
+    categorical_features = ['boro', 'zipcode', 'cuisine_description', 'violation_code', 'violation_description', 'critical_flag']
     passthrough_features = ['score']
-    drop_features = ['camis', 'dba', 'inspection_date', 'inspection_type']
+    drop_features = ['camis', 'dba', 'inspection_date', 'action', 'inspection_type']
     text_features = 'violation_description'
 
     # column transformer
@@ -234,7 +234,7 @@ def main(train_data, test_data, output_dir):
         precision_score(y_test, random_search.best_estimator_.predict(X_test), pos_label="F"),
         "or",
         markersize=10,
-        label="0.5 Threshold",
+        label="Current Threshold",
     )
     pr_ax.legend(loc="best")
     pr_curve.savefig(output_dir + '/PR_curve.png')
@@ -270,6 +270,7 @@ def main(train_data, test_data, output_dir):
     confusion_matrix_exists(output_dir)
     PR_curve_exists(output_dir)
     ROC_curve_exists(output_dir)
+    coef_plot_exists(output_dir)
     model_exists(output_dir)
 
 ### TESTS
@@ -318,6 +319,12 @@ def PR_curve_exists(file_path):
 def ROC_curve_exists(file_path):
     """
     Checks that the ROC curve has been saved
+    """
+    assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
+
+def coef_plot_exists(file_path):
+    """
+    Checks that the coefficient plot has been saved
     """
     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 

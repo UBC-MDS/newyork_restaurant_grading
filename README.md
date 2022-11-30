@@ -14,26 +14,11 @@ URL of the project repo: https://github.com/UBC-MDS/newyork_restaurant_grading.g
 
 ## Project Summary
 
-Since the start of the pandemic, hundreds of new restaurants have opened across New York City after the state announced the return of indoor dining (Eater NY, 2020). As government restrictions lift and the hospitality industry opens its doors once again, more and more people are choosing to dine out. Considering the uncertainty of the current time, the overall safety of restaurants has become of paramount importance. Health regulations have become stricter, and it will likely be necessary for health inspectors to reassess the standards that they apply for grading. Although they can differ by state, the general scheme applied by health agencies is as follows:
+In this project, we build a classification model using logistic regression and support vector machines which uses health inspection data to predict whether a restaurant will be graded A (i.e., the restaurant is clean, up to code, and free of violations.) or F (i.e., the restaurant has some issues that must be fixed or is a public risk on the verge of closure).
 
->>>
-GRADE A: The restaurant is clean, up to code, and free of violations.
-<br/>
-GRADE B: The restaurant has some issues that must be fixed.
-<br/>
-GRADE C: The restaurant is a public risk and on verge of closure.
-<br/>
-(Source: SmartSense, 2018)
->>>
-  
-We chose the dataset, DOHMH New York City Restaurant Inspection Results sourced from 
-NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, 
-and can be sourced [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11).
-The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
+Our best model was a balanced logistic regressor with a C value of 22.219381, 117 text features and 17 categorical features. On a test set of 10000 samples, we returned an F1 score of 0.999 and precision and recall scores of 0.999 and 0.999 respectively, indicating that our model is highly effective at classifying both grade A and F restaurants. We also computed the area under a receiver operating characteristic curve which was found to be 1.00. This is the optimum value which also supports that the predictions from our model are close to 100% correct.
 
-It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location (borough, building number, street, zip code) and type of cuisine, as well as the details about their inspection (e.g. date, violation code, description, whether there were any violations cited, whether they were critical, etc.). The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review. A comprehensive dictionary of the data can be found [here](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11#data-dictionary).
-
-After multiple rounds of training between different classifiers, we chose a balanced logistic regression model to train our dataset. We also downsampled our data in order to reduce the training time. Using Randomized Search CV to perform hyperparameter optimization, we found the optimum hyperparameters for C, max_features and max_categories of our logistic regression model. With this best fit model we got an f1 score of 0.996 on the validation data. Both the precision and recall scores for the validation set was high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not) but is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade. The AUC for the ROC plot was found to be 1.00. This is the optimum value for an AUC and tells us that the predictions from our model are 100% correct.
+We chose the dataset, DOHMH New York City Restaurant Inspection Results sourced from NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, and can be sourced here. The original data set can be found here. It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location and type of cuisine, as well as the details about their inspection. The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
 
 ## Report
 

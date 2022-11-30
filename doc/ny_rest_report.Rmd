@@ -128,12 +128,12 @@ The complete EDA including the above figures and tables can be found [here](http
 
 ## Interpretation of the Results & Discussion
 
-Considering our research question is a binary classification model, we picked two different models to perform training using our data - `Logistic regression` (balanced and imbalanced)
-and `Support vector machines` (balanced and imbalanced). In addition to this, our trained models are also compared against a baseline model `Dummy classifier ` so we could measure how our models performed.
+Considering our research question is a binary classification model, we picked two different models to perform training using our data - logistic regression (balanced and imbalanced)
+and support vector machines (balanced and imbalanced). In addition to this, our trained models are also compared against a baseline model dummy classifier ` so we could measure how our models performed.
 
 **Note** - We downsampled our data in order to reduce the training time. 
 
-As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the `Balanced Logistic Regression` as our classifier to train the data set.
+As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the balanced logistic regression as our classifier to train the data set.
 
 
 ```{r '60%', out.height = '25%'}
@@ -151,17 +151,17 @@ knitr::include_graphics("../results/hyperparam_results.png")
 
 By using Random Search CV, we optimized the hyper parameters of the balanced logistic regression model to the following :
 
-- **C** - 22.219381
+- **C** - 0.024947
 
-- **max_features** - 177 
+- **max_features** - 130 
 
-- **max_categories** - 17
+- **max_categories** - 47
 
 
 
 **Train/validation scores from the best model - **
 
-After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.996. Both the precision and recall scores for the validation set is high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not). The model is also able to identify all the restaurants (or 99% of the restaurants) that actually have received an F grade.
+After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.975. Both the precision and recall scores for the validation set are high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not).
 
 ```{r out.width = '30%', out.height = '25%'}
 knitr::include_graphics("../results/best_model_results.png")
@@ -192,7 +192,7 @@ knitr::include_graphics("../results/confusion_matrices.png")
 
 **PR curve from test set - **
 
-The below PR curve depicts that if we keep the threshold as 0.5, we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
+The below PR curve depicts that if we keep our new threshold (after balancing), we have an optimum solution with high precision and high recall value. If this threshold is lowered, the recall score also could get lesser and we may not be successful in classifying the restaurants correctly to the GRADE F class. 
 
 ```{r out.width = '50%', out.height = '30%', fig.cap = "Figure 5. PR curve from test set"}
 knitr::include_graphics("../results/PR_curve.png")
