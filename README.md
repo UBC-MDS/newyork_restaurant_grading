@@ -22,7 +22,7 @@ We chose the dataset, DOHMH New York City Restaurant Inspection Results sourced 
 
 ## Report
 
-[Here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/doc/ny_rest_report.pdf) is the link to the Project Report. 
+[Here](https://ubc-mds.github.io/newyork_restaurant_grading/doc/ny_rest_report.html) is the link to the Project Report.
 
 ## Usage
 
