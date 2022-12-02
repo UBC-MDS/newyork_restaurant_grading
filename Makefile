@@ -7,6 +7,11 @@ all : doc/ny_rest_report.html
 data/raw/nyc_restaurants.csv : src/download_csv.py
 	python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raw/nyc_restaurants.csv"
 
+data/processed/test_df.csv data/processed/train_df.csv : src/pre_process_nyc_rest.py ./data/raw/nyc_restaurants.csv
+	python src/pre_process_nyc_rest.py --input_file="./data/raw/nyc_restaurants.csv" --output_train_file="./data/processed/train_df.csv" --output_test_file="./data/processed/test_df.csv"
+
+src/nyc_rest_eda_script_visuals/borough_bars.png src/nyc_rest_eda_script_visuals/class_table.png src/nyc_rest_eda_script_visuals/critical_flag_stacked.png src/nyc_rest_eda_script_visuals/score_boxplot.png src/nyc_rest_eda_script_visuals/top_cuisines.png src/nyc_rest_eda_script_visuals/violation_code_bars.png : src/nyc_rest_eda.py ./data/processed/train_df.csv 
+	python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir='src/nyc_rest_eda_script_visuals'
 
 clean :
     rm -f results/*
