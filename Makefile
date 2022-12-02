@@ -2,6 +2,14 @@
 # Author: Nikita Susan Easow, Sneha Sunil, Edward (Yukun) Zhang, Lauren Zung
 # Date: 2022-12-01
 
+# This driver script completes the analysis of grading prediction for restaurants in NYC
+# and creates 6 figures and tables for the EDA and 9 plots for the results to generate the final html report. 
+# This script takes no arguments.
+
+# example usage:
+# make all
+# make clean
+
 all : doc/ny_rest_report.html
 
 data/raw/nyc_restaurants.csv : src/download_csv.py
