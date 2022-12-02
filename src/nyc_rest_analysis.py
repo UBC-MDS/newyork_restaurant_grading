@@ -38,6 +38,8 @@ import mglearn
 import pickle
 import matplotlib.pyplot as plt
 import os
+import warnings
+from sklearn.exceptions import ConvergenceWarning, UndefinedMetricWarning
 
 opt = docopt(__doc__)
 
@@ -69,9 +71,14 @@ def main(train_data, test_data, output_dir):
     Confusion matrices from the best model on train and test set
     PR curve from test set
     ROC curve from test set
-    Top 20 positive/negative oefficient plot from the best model
+    Top 20 positive/negative coefficient plot from the best model
     Best model saved as a pickle file
-    """ 
+    """
+    # suppress all warning messages
+    warnings.filterwarnings("ignore")
+    warnings.filterwarnings("ignore", category=ConvergenceWarning)
+    warnings.filterwarnings("ignore", category=UndefinedMetricWarning)
+
     # Verify that results directory exists; if not, creates a new folder
     try:
         isDirExist = os.path.isdir(output_dir)
@@ -83,15 +90,26 @@ def main(train_data, test_data, output_dir):
         print("Exception occurred :" + ex)
         exit()
 
-    # read train and test data from csv files
+    # Verify that train and test data have been loaded
+    isTrainExist = os.path.exists(train_data)
+    if not isTrainExist:
+        print('Training data has not been added.')
+        exit()
 
-    print("Reading data from CSV files...", train_data, test_data)
+    isTestExist = os.path.exists(test_data)
+    if not isTestExist:
+        print('Testing data has not been added')
+        exit()
+
+
+    # read train and test data from csv files
+    print("\nReading data from CSV files...", train_data, test_data)
     train_df = pd.read_csv(train_data)
     test_df = pd.read_csv(test_data)
 
     # downsample the training set
     # as we have a large dataset, we have chosen to apply downsampling since we do not have access to enough resources to run the analysis
-    print("Resampling the data, then splitting into X and y...")
+    print("\nResampling the data, then splitting into X and y...")
     train_df = resample(train_df, replace=False, n_samples=30000, random_state=123)
     test_df = resample(test_df, replace=False, n_samples=10000, random_state=123)
 
@@ -138,7 +156,7 @@ def main(train_data, test_data, output_dir):
                               "recall" : make_scorer(recall_score, pos_label='F'),
                               "f1" : make_scorer(f1_score, pos_label='F')}
 
-    print("Performing cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced (this may take up to 5 minutes)...")
+    print("\nPerforming cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced (this may take up to 5 minutes)...")
     cross_val_results = {}
     dc = DummyClassifier()
     cross_val_results['dummy'] = pd.DataFrame(cross_validate(dc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
@@ -150,6 +168,10 @@ def main(train_data, test_data, output_dir):
     cross_val_results['logreg_bal'] = pd.DataFrame(cross_validate(pipe_bal_lr, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     pipe_bal_svc = make_pipeline(preprocessor, SVC(class_weight="balanced", random_state=123))
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    
+    # Style of the header for the tables
+    styles = [dict(selector="caption", props=[("font-size", "120%"),
+                                          ("font-weight", "bold")])]
 
     # Adapted from 573 Lab 1
     avg_results_table = pd.concat(
@@ -160,7 +182,7 @@ def main(train_data, test_data, output_dir):
         axis='columns',
         level=1
     ).drop(['fit_time', 'score_time'])
-    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.1. Mean train and validation scores from each model.')
+    avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.1. Mean train and validation scores from each model.').set_table_styles(styles)
     dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
 
     # Adapted from 573 Lab 1
@@ -172,11 +194,11 @@ def main(train_data, test_data, output_dir):
         axis='columns',
         level=1
     ).drop(['fit_time', 'score_time'])
-    std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.2. Standard deviation of train and validation scores for each model.')
+    std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.2. Standard deviation of train and validation scores for each model.').set_table_styles(styles)
     dfi.export(std_results_table, output_dir + "/std_scores_table.png")
 
     # fitting the logistic regression model to train data because mean validation score for LR is higher
-    print("Fitting the balanced logistic regression model...")
+    print("\nFitting the balanced logistic regression model...")
     pipe_bal_lr.fit(X_train, y_train)
 
     # get total length of vocabulary in count vectorizer for 'violation_description' column
@@ -194,10 +216,10 @@ def main(train_data, test_data, output_dir):
     random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
-    random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.')
+    random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.').set_table_styles(styles)
     dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
-    print("Doing cross validation using the best parameters...")
+    print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     best_model_table = best_model_table.drop(['fit_time', 'score_time'])
     best_model_table = best_model_table.style.set_caption(
@@ -205,13 +227,13 @@ def main(train_data, test_data, output_dir):
         str(random_search.best_params_['logisticregression__C']) +
         ', max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
         ', max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
-    )
+    ).set_table_styles(styles)
     dfi.export(best_model_table, output_dir + "/best_model_results.png")
 
     # Create classification report
     print('Creating classification report for the test set...')
     class_report = pd.DataFrame(classification_report(y_test, random_search.best_estimator_.predict(X_test), output_dict=True, digits=3)).T
-    class_report = class_report.style.set_caption('Table 2.5. Classification report on the test set.')
+    class_report = class_report.style.set_caption('Table 2.5. Classification report on the test set.').set_table_styles(styles)
     dfi.export(class_report, output_dir + "/test_classification_report.png")
 
     # Create confusion matrices for the train and test sets

@@ -23,6 +23,7 @@ import vl_convert as vlc
 import dataframe_image as dfi
 import os
 from docopt import docopt
+import warnings
 
 # Render figures given large data set
 alt.data_transformers.disable_max_rows()
@@ -54,6 +55,9 @@ def main(train_set, visual_dir):
         - Stacked bar chart of the violation codes by grade
     
     """
+    # Suppress warning messages
+    warnings.filterwarnings("ignore")
+
     # Check if the visualization directory exists; if it doesn't, create new folder
     try:
         isDirExist = os.path.isdir(visual_dir)
@@ -64,13 +68,24 @@ def main(train_set, visual_dir):
     except Exception as ex:
         print("Exception occurred :" + ex)
         exit()
+
+    # Verify that training data has been loaded
+    isTrainExist = os.path.exists(train_set)
+    if not isTrainExist:
+        print('Training data has not been added.')
+        exit()
     
     # read in the training data
+    print('Training data has been partitioned.')
     train_df = pd.read_csv(train_set)
+
+    # Style of the header for the tables
+    styles = [dict(selector="caption", props=[("font-size", "120%"),
+                                          ("font-weight", "bold")])]
 
     # Creates a table of the counts of Grade A and F in the training set
     class_table = train_df['grade'].value_counts().rename_axis('Grades').to_frame('Number of Inspections')
-    class_table = class_table.style.set_caption('Table 1.1 Counts of inspections in the training data by class.')
+    class_table = class_table.style.set_caption('Table 1.1 Counts of inspections in the training data by class.').set_table_styles(styles)
     dfi.export(class_table, visual_dir + "/class_table.png")
 
     # Creates boxplot of the distribution of scores by grade
@@ -137,7 +152,7 @@ def main(train_set, visual_dir):
     top_10_cuisine_df = pd.DataFrame(train_df['cuisine_description'].value_counts()[:10])
     top_10_cuisine_df.index.name = 'Cuisine Description'
     top_10_cuisine_df.columns = ['Count of Records']
-    top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 1.2. Number of inspections performed for the top 10 most common cuisine types.')
+    top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 1.2. Number of inspections performed for the top 10 most common cuisine types.').set_table_styles(styles)
     dfi.export(top_10_cuisine_df, visual_dir + "/top_cuisines.png")
 
     # Creates a bar plot of the number of inspections categorized under each violation code,
