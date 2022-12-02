@@ -53,28 +53,13 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
     ```conda activate nyc_rest```
 
-Run the following commands at the command line/terminal from the root directory of this project:
+Run the following command at the command line/terminal from the root directory of this project:
 
-4. Download the data
+    make all
+    
+To reset the repo to a clean state, with no intermediate or results files, run the following command at the command line/terminal from the root directory of this project:
 
-    ```python src/download_csv.py --input_url="https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2018/2018-12-11/nyc_restaurants.csv" --output_file="./data/raw/nyc_restaurants.csv"```
-
-4. Process the data
-
-    ```python src/pre_process_nyc_rest.py --input_file="./data/raw/nyc_restaurants.csv" --output_train_file="./data/processed/train_df.csv" --output_test_file="./data/processed/test_df.csv"```
-
-5. Create exploratory data analysis figures and tables
-
-    ```python src/nyc_rest_eda.py --train_set='./data/processed/train_df.csv' --visual_dir='src/nyc_rest_eda_script_visuals'```
-
-6. Run the machine learning analysis and export models
-
-    ```python src/nyc_rest_analysis.py --train_data='./data/processed/train_df.csv' --test_data='./data/processed/test_df.csv' --output_dir='./results'```
-
-7. Render the final report
-
-    ```Rscript -e "rmarkdown::render('doc/ny_rest_report.Rmd', output_format = 'pdf_document')"```
-    ```Rscript -e "rmarkdown::render('doc/ny_rest_report.Rmd', output_format = 'html_document')"```
+    make clean
 
 ## Dependencies
 
