@@ -10,6 +10,7 @@
 # make all
 # make clean
 
+# export the report
 all : doc/ny_rest_report.html
 
 # download the data via url
@@ -32,9 +33,10 @@ results/PR_curve.png results/ROC_curve.png results/best_model.pkl results/best_m
 doc/ny_rest_report.html : doc/ny_rest_report.Rmd src/nyc_rest_eda_script_visuals/borough_bars.png src/nyc_rest_eda_script_visuals/class_table.png src/nyc_rest_eda_script_visuals/critical_flag_stacked.png src/nyc_rest_eda_script_visuals/score_boxplot.png src/nyc_rest_eda_script_visuals/top_cuisines.png src/nyc_rest_eda_script_visuals/violation_code_bars.png results/PR_curve.png results/ROC_curve.png results/best_model.pkl results/best_model_results.png results/confusion_matrices.png results/hyperparam_results.png results/mean_scores_table.png results/std_scores_table.png results/test_classification_report.png results/violation_coefs.png
 	Rscript -e "rmarkdown::render('doc/ny_rest_report.Rmd', output_format = 'html_document')"
 
+# remove all exported files
 clean :
-    rm -f results/*
-    rm -f data/processed/*.csv
-    rm -f data/raw/*.csv
-    rm -f src/nyc_rest_eda_script_visuals/*
-    rm -f doc/*.html
+	rm -f results/*
+	rm -f data/processed/*.csv
+	rm -f data/raw/*.csv
+	rm -f src/nyc_rest_eda_script_visuals/*
+	rm -f doc/*.html
