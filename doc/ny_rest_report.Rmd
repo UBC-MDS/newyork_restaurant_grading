@@ -133,7 +133,7 @@ and support vector machines (balanced and imbalanced). In addition to this, our 
 
 **Note** - We downsampled our data in order to reduce the training time. 
 
-As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the balanced logistic regression as our classifier to train the data set.
+As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. We choose the logistic regression model and not the support vector machine model because both are doing equivalently well and we wanted to explore the hyperparameters of a logistic regression model.
 
 
 ```{r '60%', out.height = '25%'}
