@@ -1,4 +1,4 @@
-name: 'nyc_rest'
+name: nyc_rest
 channels:
   - conda-forge
   - defaults
