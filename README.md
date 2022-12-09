@@ -62,7 +62,7 @@ To reset the repo to a clean state, with no intermediate or results files, run t
 
 ## Makefile Dependency Diagram
 Click the image to enlarge for better visability:
-![Makefile](nyc_rest.png)
+![Makefile](Makefile.png)
 
 ## Dependencies
 

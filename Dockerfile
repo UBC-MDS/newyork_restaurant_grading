@@ -3,10 +3,6 @@ FROM continuumio/miniconda3:4.12.0
 # Update list of available software packages & install make
 RUN apt update && apt install -y make
 
-# Add fonts
-RUN conda install -c conda-forge -y mscorefonts
-RUN rm -fr ~/.cache/matplotlib
-
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
     'python=3.9.*' \
@@ -20,9 +16,14 @@ RUN conda install -c conda-forge -c defaults \
     'requests>=2.24.0' \
     'dataframe_image=0.1.1' \
     'scipy=1.9.3' \
-    'matplotlib=3.6.2' \ 
-    'matplotlib-base=3.6.2' \
+    'matplotlib==3.6.2' \ 
+    'matplotlib-base==3.6.2' \
     'matplotlib-inline=0.1.6'
+
+# Fix fonts
+RUN rm -fr ~/.cache/matplotlib
+RUN conda install -c conda-forge -y mscorefonts
+RUN apt install font-manager -y
 
 RUN pip install \
     'docopt-ng==0.8.*' \
@@ -35,15 +36,13 @@ RUN pip install \
 # R pre-requisites
 RUN apt-get install r-base r-base-dev -y
 
-RUN Rscript -e "install.packages('tidyverse')"
-
 RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
 
-RUN Rscript -e "install.packages('kableExtra')"
-
-RUN apt -y install libfontconfig1-dev
+RUN apt install -y libfontconfig1-dev
 
 # Install R packages
 RUN Rscript -e \
+    "install.packages('tidyverse')" \
+    "install.packages('kableExtra')" \
     "install.packages(c('rmarkdown', 'here'), repos = 'https://mran.revolutionanalytics.com/snapshot/2022-12-05')" \
     "install.packages('knitr', version = '1.29.*')"
