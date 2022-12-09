@@ -29,11 +29,6 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
 
 1. Clone the repository
-    ```
-    git clone git@github.com:UBC-MDS/newyork_restaurant_grading.git
-    ```
-    
-    or
     
     ```
     git clone https://github.com/UBC-MDS/newyork_restaurant_grading.git
@@ -83,8 +78,6 @@ Click the image to enlarge for better visibility:
 ![Makefile](nyc_rest.png)
 
 ## Dependencies
-
-Note: more packages are likely to be added in future updates/milestones.
 
 The associated environment with all dependencies required for this project can be found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/environment.yaml).
 
