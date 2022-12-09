@@ -24,7 +24,8 @@ RUN pip install \
     'joblib==1.1.*' \
     'mglearn' \
     'psutil>=5.7.2' \
-    'vl-convert-python==0.5.*'
+    'vl-convert-python==0.5.*' \
+    'lxml'
 
 # R pre-requisites
 RUN apt-get install r-base r-base-dev -y
