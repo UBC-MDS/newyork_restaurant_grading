@@ -76,25 +76,24 @@ Note: more packages are likely to be added in future updates/milestones.
 
 The associated environment with all dependencies required for this project can be found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/environment.yaml).
 
-Python 3.11.0 and the following packages:
-
-- docopt=0.6.2
-- ipykernel=6.17
-- ipython=8.6.0
+- python==3.9.*
+- ipykernel
+- ipython>=7.15
 - vega_datasets=0.9.0
-- altair_saver=0.5.0
-- selenium=4.2.0
-- scikit-learn=1.1.3
-- pandas=1.5.2
-- requests=2.28.1
+- altair_saver
+- selenium<4.3.0
+- scikit-learn>=1.0
+- pandas>=1.3.*
+- requests>=2.24.0
 - dataframe_image=0.1.1
 - scipy=1.9.3
 - matplotlib=3.6.2
 - matplotlib-base=3.6.2
 - matplotlib-inline=0.1.6
 - pip:
+  - docopt-ng==0.8.*
   - joblib==1.1.0
-  - mglearn==0.1.9
+  - mglearn
   - psutil>=5.7.2
   - vl-convert-python==0.5.0
 
