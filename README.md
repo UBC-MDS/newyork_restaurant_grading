@@ -47,6 +47,8 @@ To replicate this analysis, clone this GitHub repository and download the enviro
     
 ##Run the Analysis using MAKE file 
 
+To run the analysis using MAKE file, follow the below instructions -
+
 1. Create the environment
 
     ```conda env create -f environment.yaml```
@@ -65,12 +67,19 @@ To replicate this analysis, clone this GitHub repository and download the enviro
     
 ##Run the Analysis using Docker
 
-To run the analysis using a docker 
+To run the analysis using a docker image, follow the below instructions -
+
+(Note : Replace the `your_file_path` with the absolute path to the project in your local system.)
+
+1. 
+
+2. To clean up the analysis
 
 
 ## Makefile Dependency Diagram
 
 Click the image to enlarge for better visibility:
+
 ![Makefile](nyc_rest.png)
 
 ## Dependencies
