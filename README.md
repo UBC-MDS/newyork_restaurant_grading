@@ -18,7 +18,7 @@ In this project, we build a classification model using logistic regression and s
 
 Our best model was a balanced logistic regressor with a C value of 0.024947, 1 numeric feature, 130 text features and 47 categorical features. On a test set of 10000 samples, we returned an F1 score of 0.999 and precision and recall scores of 0.999 and 0.999 respectively, indicating that our model is highly effective at classifying both grade A and F restaurants. We also computed the area under a receiver operating characteristic curve which was found to be 1.00. This is the optimum value which also supports that the predictions from our model are close to 100% correct.
 
-We chose the dataset, DOHMH New York City Restaurant Inspection Results sourced from NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, and can be sourced here. The original data set can be found here. It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location and type of cuisine, as well as the details about their inspection. The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
+We chose the data set, DOHMH New York City Restaurant Inspection Results sourced from NYC OpenData Portal. It is retrieved from the tidytuesday repository by Thomas Mock, and can be sourced here. The original data set can be found here. It contains the violation citations from every inspection conducted for restaurants in New York City from 2012 to 2018. Each row represents a restaurant that has been assessed by a health inspector, including information about their business such as the restaurant name, phone number, location and type of cuisine, as well as the details about their inspection. The restaurants can be assigned an official grade of A, B, or C, otherwise they are assigned Z or P for pending review.
 ## Report
 
 [Here](https://ubc-mds.github.io/newyork_restaurant_grading/doc/ny_rest_report.html) is the link to the Project Report.
@@ -51,6 +51,8 @@ To replicate this analysis, clone this GitHub repository and download the enviro
     Assuming that the environment was created successfully, you can activate the environment as follows:
 
     ```conda activate nyc_rest```
+    
+##Run the Analysis using MAKE file 
 
 Run the following command at the command line/terminal from the root directory of this project:
 
@@ -59,6 +61,10 @@ Run the following command at the command line/terminal from the root directory o
 To reset the repo to a clean state, with no intermediate or results files, run the following command at the command line/terminal from the root directory of this project:
 
     make clean
+    
+##Run the Analysis using Docker
+
+
 
 ## Makefile Dependency Diagram
 Click the image to enlarge for better visability:
