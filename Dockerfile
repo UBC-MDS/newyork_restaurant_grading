@@ -4,7 +4,7 @@ FROM continuumio/miniconda3:4.12.0
 RUN apt update && apt install -y make
 
 # Add fonts
-RUN apt install msttcorefonts -qq
+# RUN apt install msttcorefonts -qq
 RUN rm -fr ~/.cache/matplotlib
 
 # Override miniconda python installation
