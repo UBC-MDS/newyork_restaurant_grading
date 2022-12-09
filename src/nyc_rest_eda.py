@@ -21,6 +21,7 @@ import pandas as pd
 import altair as alt
 import vl_convert as vlc
 import dataframe_image as dfi
+import matplotlib
 import os
 from docopt import docopt
 import warnings
@@ -80,8 +81,10 @@ def main(train_set, visual_dir):
     train_df = pd.read_csv(train_set)
 
     # Style of the header for the tables
-    styles = [dict(selector="caption", props=[("font-size", "120%"),
-                                          ("font-weight", "bold")])]
+    styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold"), ("font-family", 'DejaVu Sans')]),
+              dict(selector="table", props=[("font-family" , 'DejaVu Sans')])]
+    matplotlib.rcParams['font.sans-serif'] = 'DejaVu Sans'
+    matplotlib.rcParams['font.family'] = 'sans-serif'
 
     # Creates a table of the counts of Grade A and F in the training set
     class_table = train_df['grade'].value_counts().rename_axis('Grades').to_frame('Number of Inspections')

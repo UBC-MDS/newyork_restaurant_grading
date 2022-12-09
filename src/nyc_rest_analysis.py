@@ -36,6 +36,7 @@ from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
 # from mglearn.tools import visualize_coefficients
 import pickle
+import matplotlib
 import matplotlib.pyplot as plt
 import os
 import warnings
@@ -175,8 +176,10 @@ def main(train_data, test_data, output_dir):
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     
     # Style of the header for the tables
-    styles = [dict(selector="caption", props=[("font-size", "120%"),
-                                          ("font-weight", "bold")])]
+    styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold"), ("font-family", 'sans-serif')]),
+              dict(selector="table", props=[("font-family" , 'sans-serif')])]
+    matplotlib.rcParams['font.sans-serif'] = 'DejaVu Sans'
+    matplotlib.rcParams['font.family'] = 'sans-serif'
 
     # Adapted from 573 Lab 1
     avg_results_table = pd.concat(

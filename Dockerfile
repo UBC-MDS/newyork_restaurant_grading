@@ -14,7 +14,7 @@ RUN conda install -c conda-forge -c defaults \
     'scikit-learn>=1.0' \
     'pandas>=1.3.*' \
     'requests>=2.24.0' \
-    'dataframe_image=0.1.1' \
+    'dataframe_image' \
     'scipy=1.9.3' \
     'matplotlib==3.6.2' \ 
     'matplotlib-base==3.6.2' \
