@@ -176,10 +176,11 @@ def main(train_data, test_data, output_dir):
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     
     # Style of the header for the tables
-    styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold"), ("font-family", 'sans-serif')]),
-              dict(selector="table", props=[("font-family" , 'sans-serif')])]
-    matplotlib.rcParams['font.sans-serif'] = 'DejaVu Sans'
-    matplotlib.rcParams['font.family'] = 'sans-serif'
+    styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold")])]
+    # styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold"), ("font-family", 'sans-serif')]),
+    #           dict(selector="table", props=[("font-family" , 'sans-serif')])]
+    # matplotlib.rcParams['font.sans-serif'] = 'DejaVu Sans'
+    # matplotlib.rcParams['font.family'] = 'sans-serif'
 
     # Adapted from 573 Lab 1
     avg_results_table = pd.concat(
@@ -191,7 +192,7 @@ def main(train_data, test_data, output_dir):
         level=1
     ).drop(['fit_time', 'score_time'])
     avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.1. Mean train and validation scores from each model.').set_table_styles(styles)
-    dfi.export(avg_results_table, output_dir + "/mean_scores_table.png", table_conversion='matplotlib')
+    dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
 
     # Adapted from 573 Lab 1
     std_results_table = pd.concat(
@@ -203,7 +204,7 @@ def main(train_data, test_data, output_dir):
         level=1
     ).drop(['fit_time', 'score_time'])
     std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.2. Standard deviation of train and validation scores for each model.').set_table_styles(styles)
-    dfi.export(std_results_table, output_dir + "/std_scores_table.png", table_conversion='matplotlib')
+    dfi.export(std_results_table, output_dir + "/std_scores_table.png")
 
     # fitting the logistic regression model to train data because mean validation score for LR is higher
     print("\nFitting the balanced logistic regression model...")
@@ -225,7 +226,7 @@ def main(train_data, test_data, output_dir):
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.').set_table_styles(styles)
-    dfi.export(random_cv_df, output_dir + "/hyperparam_results.png", table_conversion='matplotlib')
+    dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
@@ -236,13 +237,13 @@ def main(train_data, test_data, output_dir):
         ', max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
         ', max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
     ).set_table_styles(styles)
-    dfi.export(best_model_table, output_dir + "/best_model_results.png", table_conversion='matplotlib')
+    dfi.export(best_model_table, output_dir + "/best_model_results.png")
 
     # Create classification report
     print('Creating classification report for the test set...')
     class_report = pd.DataFrame(classification_report(y_test, random_search.best_estimator_.predict(X_test), output_dict=True, digits=3)).T
     class_report = class_report.style.set_caption('Table 2.5. Classification report on the test set.').set_table_styles(styles)
-    dfi.export(class_report, output_dir + "/test_classification_report.png", table_conversion='matplotlib')
+    dfi.export(class_report, output_dir + "/test_classification_report.png")
 
     # Create confusion matrices for the train and test sets
     print('Creating confusion matrices...')

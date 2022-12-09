@@ -3,6 +3,9 @@ FROM continuumio/miniconda3:4.12.0
 # Update list of available software packages & install make
 RUN apt update && apt install -y make
 
+# install dev tools
+RUN apt-get install gcc python3-dev chromium-driver -y
+
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
     'python=3.9.*' \
@@ -21,9 +24,9 @@ RUN conda install -c conda-forge -c defaults \
     'matplotlib-inline=0.1.6'
 
 # Fix fonts
-RUN rm -fr ~/.cache/matplotlib
-RUN conda install -c conda-forge -y mscorefonts
-RUN apt install font-manager -y
+# RUN rm -fr ~/.cache/matplotlib
+# RUN conda install -c conda-forge -y mscorefonts
+# RUN apt install font-manager -y
 
 RUN pip install \
     'docopt-ng==0.8.*' \
