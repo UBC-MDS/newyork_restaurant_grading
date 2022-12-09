@@ -4,7 +4,11 @@ FROM continuumio/miniconda3:4.12.0
 RUN apt update && apt install -y make
 
 # install dev tools
+RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
+RUN apt install -y libfontconfig1-dev
 RUN apt-get install gcc python3-dev chromium-driver -y
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install ./google-chrome-stable_current_amd64.deb -y
 
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
@@ -38,10 +42,6 @@ RUN pip install \
 
 # R pre-requisites
 RUN apt-get install r-base r-base-dev -y
-
-RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
-
-RUN apt install -y libfontconfig1-dev
 
 # Install R packages
 RUN Rscript -e \

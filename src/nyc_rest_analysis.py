@@ -225,6 +225,9 @@ def main(train_data, test_data, output_dir):
     random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
+    random_cv_df = random_cv_df.rename(columns={'param_logisticregression__C': 'C',
+                                                'param_columntransformer__countvectorizer__max_features': 'max_features',
+                                                'param_columntransformer__onehotencoder__max_categories': 'max_categories'})
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.').set_table_styles(styles)
     dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
 
