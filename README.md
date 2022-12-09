@@ -27,6 +27,7 @@ We chose the data set, DOHMH New York City Restaurant Inspection Results sourced
 
 To replicate this analysis, clone this GitHub repository and download the environment found [here](https://github.com/UBC-MDS/newyork_restaurant_grading/blob/main/environment.yaml) to install the necessary [dependencies](#dependencies).
 
+
 1. Clone the repository
     ```
     git clone git@github.com:UBC-MDS/newyork_restaurant_grading.git
@@ -43,8 +44,10 @@ To replicate this analysis, clone this GitHub repository and download the enviro
     ```
     cd newyork_restaurant_grading
     ```
+    
+##Run the Analysis using MAKE file 
 
-3. Create the environment
+1. Create the environment
 
     ```conda env create -f environment.yaml```
 
@@ -52,22 +55,22 @@ To replicate this analysis, clone this GitHub repository and download the enviro
 
     ```conda activate nyc_rest```
     
-##Run the Analysis using MAKE file 
+2. To run the entire data analysis easily, use the following commands at the command line/terminal from the root directory of this project:
 
-Run the following command at the command line/terminal from the root directory of this project:
-
-    make all
+    ```make all```
     
-To reset the repo to a clean state, with no intermediate or results files, run the following command at the command line/terminal from the root directory of this project:
+   To reset the repository to a clean state, with no intermediate or results files, run the following command :
 
-    make clean
+    ```make clean```
     
 ##Run the Analysis using Docker
 
+To run the analysis using a docker 
 
 
 ## Makefile Dependency Diagram
-Click the image to enlarge for better visability:
+
+Click the image to enlarge for better visibility:
 ![Makefile](nyc_rest.png)
 
 ## Dependencies
