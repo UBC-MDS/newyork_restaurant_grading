@@ -3,6 +3,12 @@ FROM continuumio/miniconda3:4.12.0
 # Update list of available software packages & install make
 RUN apt update && apt install -y make
 
+# Add fonts
+RUN apt-get install -y fontconfig
+
+# refresh system font cache
+RUN fc-cache -f -v
+
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
     'python=3.9.*' \
@@ -16,6 +22,7 @@ RUN conda install -c conda-forge -c defaults \
     'requests>=2.24.0' \
     'dataframe_image=0.1.1' \
     'scipy=1.9.3' \
+    'matplotlib=3.6.2' \ 
     'matplotlib-base=3.6.2' \
     'matplotlib-inline=0.1.6'
 

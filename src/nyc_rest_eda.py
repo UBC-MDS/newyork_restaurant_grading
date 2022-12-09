@@ -58,7 +58,7 @@ def main(train_set, visual_dir):
     # Suppress warning messages
     warnings.filterwarnings("ignore")
 
-    # Check if the visualization directory exists; if it doesn't, create new folder
+    # Check if the visualization directory exists; if it doesn't, create new folder.
     try:
         isDirExist = os.path.isdir(visual_dir)
         if not isDirExist:

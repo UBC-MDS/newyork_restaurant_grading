@@ -34,7 +34,7 @@ from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
-import mglearn
+# from mglearn.tools import visualize_coefficients
 import pickle
 import matplotlib.pyplot as plt
 import os
@@ -159,13 +159,18 @@ def main(train_data, test_data, output_dir):
     print("\nPerforming cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced (this may take up to 5 minutes)...")
     cross_val_results = {}
     dc = DummyClassifier()
+    print('Dummy')
     cross_val_results['dummy'] = pd.DataFrame(cross_validate(dc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('LogisticRegression')
     pipe_lr = make_pipeline(preprocessor, LogisticRegression(random_state=123, max_iter=1000))
     cross_val_results['logreg'] = pd.DataFrame(cross_validate(pipe_lr, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('SVC')
     pipe_svc = make_pipeline(preprocessor, SVC(random_state=123))
     cross_val_results['svc'] = pd.DataFrame(cross_validate(pipe_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('LogisticRegression balanced')
     pipe_bal_lr = make_pipeline(preprocessor, LogisticRegression(class_weight="balanced", random_state=123, max_iter=1000))
     cross_val_results['logreg_bal'] = pd.DataFrame(cross_validate(pipe_bal_lr, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('SVC balanced')
     pipe_bal_svc = make_pipeline(preprocessor, SVC(class_weight="balanced", random_state=123))
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     
@@ -268,12 +273,12 @@ def main(train_data, test_data, output_dir):
     roc_ax.legend(loc="best")
     roc_curve.savefig(output_dir + '/ROC_curve.png')
     
-    # Create coefficient figure
-    print('Visualizing the top 20 positive and negative coefficients...')
-    feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
-    coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
-    mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
-    plt.savefig(output_dir + '/violation_coefs.png')
+    # Create coefficient figure - mglearn apparently relies on load_boston() which has been depreciated from scikit-learn since version 1.2.0
+    # print('Visualizing the top 20 positive and negative coefficients...')
+    # feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
+    # coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
+    # mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
+    # plt.savefig(output_dir + '/violation_coefs.png')
 
     # saving the model
     print('Exporting the best model...')
@@ -292,7 +297,7 @@ def main(train_data, test_data, output_dir):
     confusion_matrix_exists(output_dir)
     PR_curve_exists(output_dir)
     ROC_curve_exists(output_dir)
-    coef_plot_exists(output_dir)
+    # coef_plot_exists(output_dir)
     model_exists(output_dir)
 
 ### TESTS
@@ -344,11 +349,11 @@ def ROC_curve_exists(file_path):
     """
     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 
-def coef_plot_exists(file_path):
-    """
-    Checks that the coefficient plot has been saved
-    """
-    assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
+# def coef_plot_exists(file_path):
+#     """
+#     Checks that the coefficient plot has been saved
+#     """
+#     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 
 def model_exists(file_path):
     """
