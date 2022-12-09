@@ -4,10 +4,8 @@ FROM continuumio/miniconda3:4.12.0
 RUN apt update && apt install -y make
 
 # Add fonts
-RUN apt-get install -y fontconfig
-
-# refresh system font cache
-RUN fc-cache -f -v
+RUN apt install msttcorefonts -qq
+RUN rm -fr ~/.cache/matplotlib
 
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
@@ -37,8 +35,15 @@ RUN pip install \
 # R pre-requisites
 RUN apt-get install r-base r-base-dev -y
 
+RUN Rscript -e "install.packages('tidyverse')"
+
+RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
+
+RUN Rscript -e "install.packages('kableExtra')"
+
+RUN apt -y install libfontconfig1-dev
+
 # Install R packages
 RUN Rscript -e \
     "install.packages(c('rmarkdown', 'here'), repos = 'https://mran.revolutionanalytics.com/snapshot/2022-12-05')" \
-    "install.packages('tidyverse', version = '1.3.*')" \
     "install.packages('knitr', version = '1.29.*')"
