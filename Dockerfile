@@ -31,8 +31,7 @@ RUN pip install \
 RUN apt-get install r-base r-base-dev -y
 
 # Install R packages
-RUN conda install -c conda-forge --quiet --yes \
-    'r-base=4.0.3' \
-    'r-tidyverse=1.3*' \
-    'r-rmarkdown=2.5*' \
-    'r-knitr=1.29.*'
+RUN Rscript -e \
+    "install.packages(c('rmarkdown', 'here'), repos = 'https://mran.revolutionanalytics.com/snapshot/2022-12-05')" \
+    "install.packages('tidyverse', version = '1.3.*')" \
+    "install.packages('knitr', version = '1.29.*')"
