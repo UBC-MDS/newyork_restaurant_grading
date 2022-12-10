@@ -74,11 +74,11 @@ To run the analysis using a docker image, follow the below instructions -
 
   For `Windows` OS :
   
-  ```docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all```
+         docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
   
   To reset the results which are already present, run the following command :
   
-  ```docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean```
+         docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean```
   
   For `Mac` OS : 
   
@@ -90,6 +90,8 @@ To run the analysis using a docker image, follow the below instructions -
 
 
 ## Makefile Dependency Diagram
+
+
 Click the image to enlarge for better visibility:
 ![Makefile](Makefile.png)
 
