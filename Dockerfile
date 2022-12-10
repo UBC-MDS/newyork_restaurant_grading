@@ -9,6 +9,13 @@ FROM continuumio/miniconda3:4.12.0
 # Update list of available software packages & install make
 RUN apt update && apt install -y make
 
+# install dev tools
+RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
+RUN apt install -y libfontconfig1-dev
+RUN apt-get install gcc python3-dev chromium-driver -y
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install ./google-chrome-stable_current_amd64.deb -y
+
 # Override miniconda python installation
 RUN conda install -c conda-forge -c defaults \
     'python=3.9.*' \
@@ -22,8 +29,8 @@ RUN conda install -c conda-forge -c defaults \
     'requests>=2.24.0' \
     'dataframe_image=0.1.1' \
     'scipy=1.9.3' \
-    'matplotlib==3.6.2' \ 
-    'matplotlib-base==3.6.2' \
+    'matplotlib=3.6.2' \ 
+    'matplotlib-base=3.6.2' \
     'matplotlib-inline=0.1.6'
 
 # Install dependecies for fixing fonts
@@ -42,8 +49,6 @@ RUN pip install \
 
 # Install base R and other pre-requisites
 RUN apt-get install r-base r-base-dev -y
-RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
-RUN apt install -y libfontconfig1-dev
 
 # Install R packages
 RUN Rscript -e \
