@@ -1,5 +1,8 @@
 # Docker file for newyork_restaurant_grading
 
+# author: Lauren Zung
+# date: 2022-12-09
+
 FROM continuumio/miniconda3:4.12.0
 
 # Update list of available software packages & install make
