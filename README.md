@@ -72,21 +72,21 @@ To run the analysis using a docker image, follow the below instructions -
    
 3. After pulling the image, run the below command depending on your Operating system :
 
-   For `Windows` OS :
+    For `Windows` OS :
   
-    docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
+       docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
   
-   To reset the results which are already present, run the following command :
+    To reset the results which are already present, run the following command :
   
-    docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean
+       docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean
   
-   For `Mac` OS : 
+    For `Mac` OS : 
   
-    docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
+       docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
   
-   To reset the results which are already present, run the following command :
+    To reset the results which are already present, run the following command :
   
-    docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
+       docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
 
 
 ## Makefile Dependency Diagram
