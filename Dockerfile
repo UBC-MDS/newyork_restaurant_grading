@@ -1,3 +1,5 @@
+# Docker file for newyork_restaurant_grading
+
 FROM continuumio/miniconda3:4.12.0
 
 # Update list of available software packages & install make
@@ -20,11 +22,12 @@ RUN conda install -c conda-forge -c defaults \
     'matplotlib-base==3.6.2' \
     'matplotlib-inline=0.1.6'
 
-# Fix fonts
+# Install dependecies for fixing fonts
 RUN rm -fr ~/.cache/matplotlib
 RUN conda install -c conda-forge -y mscorefonts
 RUN apt install font-manager -y
 
+# Install pip depedencies 
 RUN pip install \
     'docopt-ng==0.8.*' \
     'joblib==1.1.*' \
@@ -33,7 +36,7 @@ RUN pip install \
     'vl-convert-python==0.5.*' \
     'lxml'
 
-# R pre-requisites
+# Install base R and other pre-requisites
 RUN apt-get install r-base r-base-dev -y
 
 RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev

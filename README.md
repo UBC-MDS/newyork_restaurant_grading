@@ -117,6 +117,7 @@ The associated environment with all dependencies required for this project can b
   - mglearn
   - psutil>=5.7.2
   - vl-convert-python==0.5.0
+  - lxml
 
 ## License
 
