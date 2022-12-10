@@ -34,7 +34,6 @@ from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
-# from mglearn.tools import visualize_coefficients
 import pickle
 import matplotlib
 import matplotlib.pyplot as plt
@@ -279,21 +278,10 @@ def main(train_data, test_data, output_dir):
     RocCurveDisplay.from_estimator(random_search.best_estimator_, X_test, y_test, pos_label='F', ax=roc_ax)
     roc_ax.legend(loc="best")
     roc_curve.savefig(output_dir + '/ROC_curve.png')
-    
-    # Create coefficient figure - mglearn apparently relies on load_boston() which has been depreciated from scikit-learn since version 1.2.0
-    # print('Visualizing the top 20 positive and negative coefficients...')
-    # feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
-    # coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
-    # mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
-    # plt.savefig(output_dir + '/violation_coefs.png')
 
     # saving the model
     print('Exporting the best model...')
     pickle.dump(random_search.best_estimator_, open(output_dir + '/best_model.pkl', 'wb'))
-
-    ### TO LOAD THE MODEL
-    # loaded_model = pickle.load(open(output_dir + 'best_model.pkl', 'rb'))
-    # result = loaded_model.score(X_test, y_test)
 
     # Run tests to make sure everything has been saved properly
     avg_score_table_exists(output_dir)
@@ -304,7 +292,6 @@ def main(train_data, test_data, output_dir):
     confusion_matrix_exists(output_dir)
     PR_curve_exists(output_dir)
     ROC_curve_exists(output_dir)
-    # coef_plot_exists(output_dir)
     model_exists(output_dir)
 
 ### TESTS
@@ -355,12 +342,6 @@ def ROC_curve_exists(file_path):
     Checks that the ROC curve has been saved
     """
     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
-
-# def coef_plot_exists(file_path):
-#     """
-#     Checks that the coefficient plot has been saved
-#     """
-#     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 
 def model_exists(file_path):
     """
