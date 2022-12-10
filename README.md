@@ -40,7 +40,7 @@ To replicate this analysis, clone this GitHub repository and download the enviro
     cd newyork_restaurant_grading
     ```
     
-##Run the Analysis using MAKE file 
+## Run the Analysis using MAKE file 
 
 To run the analysis using MAKE file, follow the below instructions -
 
@@ -60,11 +60,11 @@ To run the analysis using MAKE file, follow the below instructions -
 
     ```make clean```
     
-##Run the Analysis using Docker
+## Run the Analysis using Docker
 
 To run the analysis using a docker image, follow the below instructions -
 
-1. Install Docker 
+1. Install [Docker](https://docs.docker.com/get-docker/)
 
 2. Pull the docker image
 
