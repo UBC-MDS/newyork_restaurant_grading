@@ -79,6 +79,14 @@ To run the analysis using a docker image, follow the below instructions -
   To reset the results which are already present, run the following command :
   
   ```docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean```
+  
+  For `Mac` OS : 
+  
+  ```docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all```
+  
+  To reset the results which are already present, run the following command :
+  
+  ```docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean```
 
 
 ## Makefile Dependency Diagram
