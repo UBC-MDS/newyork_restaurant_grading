@@ -1,8 +1,9 @@
-# Docker file for newyork_restaurant_grading
+# Docker file for newyork_restaurant_grading project
 
 # author: Lauren Zung
 # date: 2022-12-09
 
+#use continuumio/miniconda3 as the base image
 FROM continuumio/miniconda3:4.12.0
 
 # Update list of available software packages & install make
@@ -41,9 +42,7 @@ RUN pip install \
 
 # Install base R and other pre-requisites
 RUN apt-get install r-base r-base-dev -y
-
 RUN apt-get install -y libxml2-dev libcurl4-openssl-dev libssl-dev
-
 RUN apt install -y libfontconfig1-dev
 
 # Install R packages
