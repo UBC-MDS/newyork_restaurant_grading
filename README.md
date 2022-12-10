@@ -46,19 +46,27 @@ To run the analysis using MAKE file, follow the below instructions -
 
 1. Create the environment
 
-    ```conda env create -f environment.yaml```
+    ```
+    conda env create -f environment.yaml
+    ```
 
     Assuming that the environment was created successfully, you can activate the environment as follows:
 
-    ```conda activate nyc_rest```
+    ```
+    conda activate nyc_rest
+    ```
     
 2. To run the entire data analysis easily, use the below command at the command line/terminal from the root directory of this project:
 
-    ```make all```
+    ```
+    make all
+    ```
     
    To reset the repository to a clean state, with no intermediate or results files, run the following command :
 
-    ```make clean```
+    ```
+    make clean
+    ```
     
 ### Run the analysis using Docker
 
@@ -68,7 +76,9 @@ To run the analysis using a docker image, follow the below instructions -
 
 2. Pull the docker image
 
-    ```docker pull lzung/newyork_restaurant_grading```
+    ```
+    docker pull lzung/newyork_restaurant_grading
+    ```
    
 3. After pulling the image, run the below command depending on your Operating system :
 
