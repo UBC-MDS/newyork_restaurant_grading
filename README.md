@@ -72,10 +72,8 @@ To run the analysis using a docker image, follow the below instructions -
 
 
 ## Makefile Dependency Diagram
-
-Click the image to enlarge for better visibility:
-
-![Makefile](nyc_rest.png)
+Click the image to enlarge for better visability:
+![Makefile](Makefile.png)
 
 ## Dependencies
 

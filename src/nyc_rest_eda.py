@@ -58,7 +58,7 @@ def main(train_set, visual_dir):
     # Suppress warning messages
     warnings.filterwarnings("ignore")
 
-    # Check if the visualization directory exists; if it doesn't, create new folder
+    # Check if the visualization directory exists; if it doesn't, create new folder.
     try:
         isDirExist = os.path.isdir(visual_dir)
         if not isDirExist:
@@ -86,7 +86,7 @@ def main(train_set, visual_dir):
     # Creates a table of the counts of Grade A and F in the training set
     class_table = train_df['grade'].value_counts().rename_axis('Grades').to_frame('Number of Inspections')
     class_table = class_table.style.set_caption('Table 1.1 Counts of inspections in the training data by class.').set_table_styles(styles)
-    dfi.export(class_table, visual_dir + "/class_table.png")
+    dfi.export(class_table, visual_dir + "/class_table.png", table_conversion='matplotlib')
 
     # Creates boxplot of the distribution of scores by grade
     score_boxplot = (
@@ -153,7 +153,7 @@ def main(train_set, visual_dir):
     top_10_cuisine_df.index.name = 'Cuisine Description'
     top_10_cuisine_df.columns = ['Count of Records']
     top_10_cuisine_df = top_10_cuisine_df.style.set_caption('Table 1.2. Number of inspections performed for the top 10 most common cuisine types.').set_table_styles(styles)
-    dfi.export(top_10_cuisine_df, visual_dir + "/top_cuisines.png")
+    dfi.export(top_10_cuisine_df, visual_dir + "/top_cuisines.png", table_conversion='matplotlib')
 
     # Creates a bar plot of the number of inspections categorized under each violation code,
     # sorted by grade

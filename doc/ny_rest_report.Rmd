@@ -3,11 +3,11 @@ title: "Predicting the Grade of Restaurants in New York City"
 author: "Sneha Sunil"
 date: "2022-11-25"
 output:
-  pdf_document:
-    toc: yes
   html_document:
     toc: yes
     df_print: paged
+  pdf_document:
+    toc: yes
 bibliography: ny_rest_references.bib
 editor_options: 
   markdown: 
@@ -16,9 +16,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
-library(tidyverse)
 library(knitr)
-library(kableExtra)
 ```
 
 

@@ -34,7 +34,7 @@ from sklearn.utils.fixes import loguniform
 from scipy.stats import randint
 from sklearn.model_selection import RandomizedSearchCV
 import dataframe_image as dfi
-import mglearn
+# from mglearn.tools import visualize_coefficients
 import pickle
 import matplotlib.pyplot as plt
 import os
@@ -159,13 +159,18 @@ def main(train_data, test_data, output_dir):
     print("\nPerforming cross validations for dummy, logistic regression and svm classifier (balanced and unbalanced (this may take up to 5 minutes)...")
     cross_val_results = {}
     dc = DummyClassifier()
+    print('Dummy')
     cross_val_results['dummy'] = pd.DataFrame(cross_validate(dc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('LogisticRegression')
     pipe_lr = make_pipeline(preprocessor, LogisticRegression(random_state=123, max_iter=1000))
     cross_val_results['logreg'] = pd.DataFrame(cross_validate(pipe_lr, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('SVC')
     pipe_svc = make_pipeline(preprocessor, SVC(random_state=123))
     cross_val_results['svc'] = pd.DataFrame(cross_validate(pipe_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('LogisticRegression balanced')
     pipe_bal_lr = make_pipeline(preprocessor, LogisticRegression(class_weight="balanced", random_state=123, max_iter=1000))
     cross_val_results['logreg_bal'] = pd.DataFrame(cross_validate(pipe_bal_lr, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
+    print('SVC balanced')
     pipe_bal_svc = make_pipeline(preprocessor, SVC(class_weight="balanced", random_state=123))
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     
@@ -183,7 +188,7 @@ def main(train_data, test_data, output_dir):
         level=1
     ).drop(['fit_time', 'score_time'])
     avg_results_table = avg_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.1. Mean train and validation scores from each model.').set_table_styles(styles)
-    dfi.export(avg_results_table, output_dir + "/mean_scores_table.png")
+    dfi.export(avg_results_table, output_dir + "/mean_scores_table.png", table_conversion='matplotlib')
 
     # Adapted from 573 Lab 1
     std_results_table = pd.concat(
@@ -195,7 +200,7 @@ def main(train_data, test_data, output_dir):
         level=1
     ).drop(['fit_time', 'score_time'])
     std_results_table = std_results_table.style.format(precision=2).background_gradient(axis=None).set_caption('Table 2.2. Standard deviation of train and validation scores for each model.').set_table_styles(styles)
-    dfi.export(std_results_table, output_dir + "/std_scores_table.png")
+    dfi.export(std_results_table, output_dir + "/std_scores_table.png", table_conversion='matplotlib')
 
     # fitting the logistic regression model to train data because mean validation score for LR is higher
     print("\nFitting the balanced logistic regression model...")
@@ -217,7 +222,7 @@ def main(train_data, test_data, output_dir):
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.').set_table_styles(styles)
-    dfi.export(random_cv_df, output_dir + "/hyperparam_results.png")
+    dfi.export(random_cv_df, output_dir + "/hyperparam_results.png", table_conversion='matplotlib')
 
     print("\nDoing cross validation using the best parameters...")
     best_model_table = pd.DataFrame(cross_validate(random_search.best_estimator_, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
@@ -228,13 +233,13 @@ def main(train_data, test_data, output_dir):
         ', max_features = ' + str(random_search.best_params_['columntransformer__countvectorizer__max_features']) +
         ', max_categories = ' + str(random_search.best_params_['columntransformer__onehotencoder__max_categories'])
     ).set_table_styles(styles)
-    dfi.export(best_model_table, output_dir + "/best_model_results.png")
+    dfi.export(best_model_table, output_dir + "/best_model_results.png", table_conversion='matplotlib')
 
     # Create classification report
     print('Creating classification report for the test set...')
     class_report = pd.DataFrame(classification_report(y_test, random_search.best_estimator_.predict(X_test), output_dict=True, digits=3)).T
     class_report = class_report.style.set_caption('Table 2.5. Classification report on the test set.').set_table_styles(styles)
-    dfi.export(class_report, output_dir + "/test_classification_report.png")
+    dfi.export(class_report, output_dir + "/test_classification_report.png", table_conversion='matplotlib')
 
     # Create confusion matrices for the train and test sets
     print('Creating confusion matrices...')
@@ -268,12 +273,12 @@ def main(train_data, test_data, output_dir):
     roc_ax.legend(loc="best")
     roc_curve.savefig(output_dir + '/ROC_curve.png')
     
-    # Create coefficient figure
-    print('Visualizing the top 20 positive and negative coefficients...')
-    feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
-    coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
-    mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
-    plt.savefig(output_dir + '/violation_coefs.png')
+    # Create coefficient figure - mglearn apparently relies on load_boston() which has been depreciated from scikit-learn since version 1.2.0
+    # print('Visualizing the top 20 positive and negative coefficients...')
+    # feature_names = random_search.best_estimator_.named_steps["columntransformer"].get_feature_names_out().tolist()
+    # coeffs = random_search.best_estimator_.named_steps["logisticregression"].coef_.flatten()
+    # mglearn.tools.visualize_coefficients(coeffs, feature_names, n_top_features=20)
+    # plt.savefig(output_dir + '/violation_coefs.png')
 
     # saving the model
     print('Exporting the best model...')
@@ -292,7 +297,7 @@ def main(train_data, test_data, output_dir):
     confusion_matrix_exists(output_dir)
     PR_curve_exists(output_dir)
     ROC_curve_exists(output_dir)
-    coef_plot_exists(output_dir)
+    # coef_plot_exists(output_dir)
     model_exists(output_dir)
 
 ### TESTS
@@ -344,11 +349,11 @@ def ROC_curve_exists(file_path):
     """
     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 
-def coef_plot_exists(file_path):
-    """
-    Checks that the coefficient plot has been saved
-    """
-    assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
+# def coef_plot_exists(file_path):
+#     """
+#     Checks that the coefficient plot has been saved
+#     """
+#     assert os.path.isfile(file_path + "/ROC_curve.png"), "Could not find the ROC curve in the results folder." 
 
 def model_exists(file_path):
     """
