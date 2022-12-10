@@ -64,15 +64,25 @@ To run the analysis using MAKE file, follow the below instructions -
 
 To run the analysis using a docker image, follow the below instructions -
 
-(Note : Replace the `your_file_path` with the absolute path to the project in your local system.)
+1. Install Docker 
 
-1. 
+2. Pull the docker image
 
-2. To clean up the analysis
+   ```docker pull lzung/newyork_restaurant_grading```
+   
+3. After pulling the image, run the below command depending on your Operating system :
+
+  For `Windows` OS :
+  
+  ```docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all```
+  
+  To reset the results which are already present, run the following command :
+  
+  ```docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean```
 
 
 ## Makefile Dependency Diagram
-Click the image to enlarge for better visability:
+Click the image to enlarge for better visibility:
 ![Makefile](Makefile.png)
 
 ## Dependencies
