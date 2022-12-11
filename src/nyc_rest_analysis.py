@@ -174,8 +174,7 @@ def main(train_data, test_data, output_dir):
     cross_val_results['svc_bal'] = pd.DataFrame(cross_validate(pipe_bal_svc, X_train, y_train, return_train_score=True, scoring=classification_metrics)).agg(['mean', 'std']).round(3).T
     
     # Style of the header for the tables
-    styles = [dict(selector="caption", props=[("font-size", "120%"),
-                                          ("font-weight", "bold")])]
+    styles = [dict(selector="caption", props=[("font-size", "120%"), ("font-weight", "bold")])]
 
     # Adapted from 573 Lab 1
     avg_results_table = pd.concat(
@@ -220,6 +219,9 @@ def main(train_data, test_data, output_dir):
     random_cv_df = pd.DataFrame(random_search.cv_results_)[['mean_train_score', 'mean_test_score', 'param_logisticregression__C',
                                                             'param_columntransformer__countvectorizer__max_features',
                                                             'param_columntransformer__onehotencoder__max_categories', 'rank_test_score']].set_index("rank_test_score").sort_index()
+    random_cv_df = random_cv_df.rename(columns={'param_logisticregression__C': 'C',
+                                                'param_columntransformer__countvectorizer__max_features': 'max_features',
+                                                'param_columntransformer__onehotencoder__max_categories': 'max_categories'})
     random_cv_df = random_cv_df.style.set_caption('Table 2.3. Mean train and cross-validation scores (5-fold) for balanced logistic regression, optimizing F1 score.').set_table_styles(styles)
     dfi.export(random_cv_df, output_dir + "/hyperparam_results.png", table_conversion='matplotlib')
 
