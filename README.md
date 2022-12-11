@@ -90,7 +90,7 @@ To run the analysis using a docker image, follow the below instructions -
        docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean
 
     Then, run the following command to replicate the analysis 
-    (note: this may take some time and the warning "findfont: Font family ‘Helvetica’ not found." can't be compressed now):
+    (note: this may take some time)**:
 
        docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
 
@@ -101,9 +101,11 @@ To run the analysis using a docker image, follow the below instructions -
        docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
        
     Then, run the following command to replicate the analysis 
-    (note: this may take some time and the warning "findfont: Font family ‘Helvetica’ not found." can't be compressed now):
+    (note: this may take some time)**:
 
        docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
+
+**There is currently a warning, "findfont: Font family ‘Helvetica’ not found." which impacts the tables; the release of `dataframe_image` v0.1.3 is not currently available for linux/amd64, thus the tables are exported without headers.
 
 ## Makefile Dependency Diagram
 
