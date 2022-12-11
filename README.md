@@ -41,9 +41,9 @@ To replicate this analysis, clone the GitHub repository and download the environ
     cd newyork_restaurant_grading
     ```
 
-### Run the analysis using MAKE file 
+### Run the analysis using Make
 
-To run the analysis using MAKE file, follow the below instructions -
+To run the analysis using the Makefile, follow the instructions below:
 
 1. Create the environment
 
@@ -57,13 +57,13 @@ To run the analysis using MAKE file, follow the below instructions -
     conda activate nyc_rest
     ```
 
-2. To run the entire data analysis easily, use the below command at the command line/terminal from the root directory of this project:
+2. To run the entire data analysis, use the command below at the command line/terminal from the root directory of this project:
 
     ```
     make all
     ```
 
-   To reset the repository to a clean state, with no intermediate or results files, run the following command :
+   To reset the repository to a clean state, with no intermediate or results files, run the following command:
 
     ```
     make clean
@@ -84,21 +84,24 @@ To run the analysis using a docker image, follow the below instructions -
 3. After pulling the image, run the below command depending on your Operating system :
 
     For `Windows` OS :
-
-       docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
-
-    To reset the results which are already present, run the following command :
+    
+    Run the following command to reset the repository to a clean state with no intermediate or results files:
 
        docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean
 
+    Then, run the following command to replicate the analysis (note: this may take some time):
+
+       docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
+
     For `Mac` OS : 
+    
+    Run the following command to reset the repository to a clean state with no intermediates or results files:
 
-       docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
+       docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
+       
+    Then, run the following command to replicate the analysis (note: this may take some time):
 
-    To reset the results which are already present, run the following command :
-
-       docker run --rm --platform -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
-
+       docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
 
 ## Makefile Dependency Diagram
 
