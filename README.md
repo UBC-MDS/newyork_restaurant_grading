@@ -89,7 +89,8 @@ To run the analysis using a docker image, follow the below instructions -
 
        docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading clean
 
-    Then, run the following command to replicate the analysis (note: this may take some time):
+    Then, run the following command to replicate the analysis 
+    (note: this may take some time and the warning "findfont: Font family ‘Helvetica’ not found." can't be compressed now):
 
        docker run --rm -v "/$(pwd)://home//newyork_restaurant_grading" lzung/newyork_restaurant_grading:latest make -C //home//newyork_restaurant_grading all
 
@@ -99,7 +100,8 @@ To run the analysis using a docker image, follow the below instructions -
 
        docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading clean
        
-    Then, run the following command to replicate the analysis (note: this may take some time):
+    Then, run the following command to replicate the analysis 
+    (note: this may take some time and the warning "findfont: Font family ‘Helvetica’ not found." can't be compressed now):
 
        docker run --rm -it --platform linux/amd64 -v /$(pwd):/home/newyork_restaurant_grading lzung/newyork_restaurant_grading make -C /home/newyork_restaurant_grading all
 
