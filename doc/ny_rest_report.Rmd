@@ -10,6 +10,7 @@ output:
     fig_caption: yes
     toc: yes
     df_print: paged
+csl: apa-tr.csl
 bibliography: ny_rest_references.bib
 editor_options: 
   markdown: 
@@ -28,7 +29,7 @@ This is a data analysis project for DSCI 522 (Data Science workflows); a course 
 
 - Nikita Susan Easow
 - Sneha Sunil
-- Edward (Yukun) Zhang
+- Yukun Edward Zhang
 - Lauren Zung
 
 ## Introduction
@@ -63,7 +64,7 @@ Besides this main research question, our analysis would also like to address som
 ## Data
 
 The data set that we are using in our analysis for the restaurant grading, DOHMH New York City Restaurant Inspection Results, is sourced from NYC OpenData Portal.
-It was obtained from the tidytuesday [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11) by Thomas Mock.
+It was obtained from the tidytuesday [@tidytuesday] [repository](https://github.com/rfordatascience/tidytuesday/tree/master/data/2018/2018-12-11) by Thomas Mock.
 The original data set can be found [here](https://data.cityofnewyork.us/Health/DOHMH-New-York-City-Restaurant-Inspection-Results/43nn-pn8j/data).
 
 **Summary - **
@@ -132,7 +133,7 @@ Considering our research question is a binary classification model, we picked tw
 and support vector machines (balanced and imbalanced). In addition to this, our trained models are also compared against a baseline model dummy classifier ` so we could measure how our models performed.
 **Note** - We downsampled our data in order to reduce the training time. 
 As we can see from the below table, all models are performing better than the baseline model. In light of our data set's class imbalance, we expected the balanced models to perform better in cross validation. Comparing the scores of each model, we can see that the balanced are doing much better than their counterparts. In addition to that, the validation scores of the logistic regression model is higher than that of the support vector model. Hence we choose the balanced logistic regression as our classifier to train the dataset. Additionally, the logistic regression model's validation scores are higher than that of the support vector model. Hence, we chose the balanced logistic regression as our classifier to train the data set.
-```{r '60%', out.height = '25%', fig.align = 'center', fig.cap = 'Table 2.1. Mean train and validation scores from each model.'}
+```{r out.width = '60%', out.height = '25%', fig.align = 'center', fig.cap = 'Table 2.1. Mean train and validation scores from each model.'}
 knitr::include_graphics("../results/mean_scores_table.png")
 ```
 
@@ -147,6 +148,7 @@ knitr::include_graphics("../results/hyperparam_results.png")
 
 By using Random Search CV, we optimized the hyper parameters of the balanced logistic regression model to the following :
 
+
 - **C** - 0.024947
 
 - **max_features** - 130 
@@ -159,7 +161,7 @@ By using Random Search CV, we optimized the hyper parameters of the balanced log
 
 After performing cross validation on the training set using our optimized hyper parameters for our model, we got a good f1 score of 0.975. Both the precision and recall scores for the validation set are high, indicating that the model is accurate about its prediction (whether a restaurant will receive an F grade or not).
 
-```{r out.width = '30%', out.height = '25%', fig.align = 'center', fig.cap='Table 2.4. Mean and standard deviation of train and validation scores for the balanced logistic regression model.\nParameters: C = 0.024947, max_features = 130, max_categories = 47.'}
+```{r out.width = '30%', out.height = '25%', fig.align = 'center', fig.cap='Table 2.4. Mean and standard deviation of train and validation scores for the balanced logistic regression model.'}
 knitr::include_graphics("../results/best_model_results.png")
 ```
 
@@ -231,7 +233,7 @@ The EDA shows that many of the restaurants have undergone inspections more than 
 
 ## References
 
-@tidytuesday
+
 @scikit-learn
 @cortes1995support
 @Python 
@@ -244,6 +246,7 @@ The EDA shows that many of the restaurants have undergone inspections more than 
 @VanderPlas2018
 @cox1958regression
 @Hunter:2007
+
 Footer
 © 2022 GitHub, Inc.
 Footer navigation
